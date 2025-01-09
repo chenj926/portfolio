@@ -9,8 +9,9 @@ const FullScreenSection = ({ children, isDarkBackground, ...boxProps }) => {
     <VStack
       backgroundColor={boxProps.backgroundColor}
       color={isDarkBackground ? "white" : "black"}
+      overflow="hidden" // Ensures proper clipping
     >
-      <VStack maxWidth="1280px" minHeight="100vh" {...boxProps}>
+      <VStack maxWidth="1280px" minHeight="calc(100vh - 80px)" width="100%" {...boxProps}>
         {children}
       </VStack>
     </VStack>

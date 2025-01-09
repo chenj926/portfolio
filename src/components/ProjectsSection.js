@@ -1,61 +1,92 @@
 import React from "react";
 import FullScreenSection from "./FullScreenSection";
-import { Box, Heading } from "@chakra-ui/react";
-import Card from "./Card";
+import { Box, Heading, Button } from "@chakra-ui/react";
+// import Card from "./Card";
+// import { useState } from "react";
+// import { useEffect } from "react";
+// import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import Carousel from "./Carousel";
+
 
 const projects = [
   {
-    title: "React Space",
+    title: "Personal ExpenseTracker",
     description:
-      "Handy tool belt to create amazing AR components in a React app, with redux integration via middleware️",
-    getImageSrc: () => require("../images/photo1.jpg"),
+      "full-stack web application to help users track their expenses and income, and provide insights on their spending habits",
+    // getImageSrc: () => require("../images/photo1.jpg"),
+    url: "https://github.com/chenj926/Accounting_System",
   },
   {
-    title: "React Infinite Scroll",
+    title: "Porfolio Website",
     description:
-      "A scrollable bottom sheet with virtualisation support, native animations at 60 FPS and fully implemented in JS land 🔥️",
-    getImageSrc: () => require("../images/photo2.jpg"),
+      "A personal website to showcase my projects, skills, and experiences to potential employers and collaborators",
+    // getImageSrc: () => require("../images/photo2.jpg"),
+    url: "https://github.com/chenj926/portfolio",
   },
   {
-    title: "Photo Gallery",
+    title: "WeedOut Website",
     description:
-      "A One-stop shop for photographers to share and monetize their photos, allowing them to have a second source of income",
-    getImageSrc: () => require("../images/photo3.jpg"),
+      "todo",
+    // getImageSrc: () => require("../images/photo3.jpg"),
+    url: "https://github.com/uoftweb-admin/weedout-project",
   },
   {
-    title: "Event planner",
+    title: "sketchToFace",
     description:
-      "A mobile application for leisure seekers to discover unique events and activities in their city with a few taps",
-    getImageSrc: () => require("../images/photo4.jpg"),
+      "todo",
+    // getImageSrc: () => require("../images/photo4.jpg"),
+    url: "https://github.com/chenj926/Line2Live",
+  },
+];
+
+const hobbies = [
+  {
+    title: "Tenis",
+    description: "Play tennis since I was 12 years old. I love the sport.",
+    url: "https://example.com/tennis",
+  },
+  {
+    title: "Soccer",
+    description: "Huge soccer fan. I love watching and playing soccer.",
+    url: "https://example.com/soccer",
+  },
+  {
+    title: "Art",
+    description: "Art is a great way to express myself and relax.",
+    url: "https://example.com/art",
   },
 ];
 
 const ProjectsSection = () => {
+
   return (
     <FullScreenSection
-      backgroundColor="#14532d"
+      backgroundColor="#DBD8CF"
       isDarkBackground
       p={8}
-      alignItems="flex-start"
+      // alignItems="flex-start"
+      alignItems="center" // Centers the entire section horizontally
+      justifyContent="center" // Centers the entire section vertically
       spacing={8}
     >
-      <Heading as="h1" id="projects-section">
-        Featured Projects
-      </Heading>
-      <Box
-        display="grid"
-        gridTemplateColumns="repeat(2,minmax(0,1fr))"
-        gridGap={8}
-      >
-        {projects.map((project) => (
-          <Card
-            key={project.title}
-            title={project.title}
-            description={project.description}
-            imageSrc={project.getImageSrc()}
-          />
-        ))}
+      {/* --- Top Section: My Projects --- */}
+      <Box width="100%" textAlign="center" >
+        <Heading as="h1" mb={6} color="#303030">
+          My Projects
+        </Heading>
+        <Carousel items={projects}/>
       </Box>
+
+      {/* --- Bottom Section: My Hobbies --- */}
+      <Box mb={16} width="100%" textAlign="center">
+        <Heading as="h1" mb={6} color="#303030">
+          My Hobbies
+        </Heading>
+        <Carousel items={hobbies} />
+      </Box>
+
+      
+      
     </FullScreenSection>
   );
 };
