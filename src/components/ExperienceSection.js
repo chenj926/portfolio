@@ -20,6 +20,16 @@ const experiences = [
     title: "Centivizer",
     description: "22",
   },
+  {
+    year: "November, 2024",
+    title: "WebDec Club UofT",
+    description: "33",
+  },
+  {
+    year: "January, 2025",
+    title: "JB Research Group",
+    description: "44",
+  }
 ];
 
 const ExperienceSection = () => {
