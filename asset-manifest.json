@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/portfolio/static/css/main.df6a7eab.css",
+    "main.js": "/portfolio/static/js/main.142a61bf.js",
+    "static/js/488.9561f9b8.chunk.js": "/portfolio/static/js/488.9561f9b8.chunk.js",
+    "static/media/profile pic.jpg": "/portfolio/static/media/profile pic.0ad34ef349b1816f49d8.jpg",
+    "static/media/Jialuo_Chen_Resume.pdf": "/portfolio/static/media/Jialuo_Chen_Resume.f78183e15fbca39a48fe.pdf",
+    "index.html": "/portfolio/index.html",
+    "main.df6a7eab.css.map": "/portfolio/static/css/main.df6a7eab.css.map",
+    "main.142a61bf.js.map": "/portfolio/static/js/main.142a61bf.js.map",
+    "488.9561f9b8.chunk.js.map": "/portfolio/static/js/488.9561f9b8.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.df6a7eab.css",
+    "static/js/main.142a61bf.js"
+  ]
+}
