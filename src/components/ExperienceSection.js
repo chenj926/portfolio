@@ -102,7 +102,9 @@ const ExperienceSection = () => {
                   <Card
                     title={experience.title}
                     description={experience.description}
-                    url="#"
+                    url="https://www.linkedin.com/in/ericjialuochen/"
+                    target="_blank" // Opens in a new tab
+                    rel="noopener noreferrer" // Security best practice
                     bgClr="#4B6B8A"
                   />
                 </Box>
