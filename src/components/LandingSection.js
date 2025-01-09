@@ -4,11 +4,7 @@ import FullScreenSection from "./FullScreenSection";
 import profilePic from "../assets/images/profile pic.jpg";
 
 const greeting = "Hello, I am Eric!";
-const bio = "\t A third-year Industrial Engineering student \
-              at the University of Toronto. Specialised in Software \
-              Engineering and Machine Learning Engineering. \n Seeking \
-              2025 PEY Co-op opportunities in Software Engineering and \
-              Machine Learning Engineering.";
+const bio = `\t A third-year Industrial Engineering student at the University of Toronto. Specialised in Software Engineering and Machine Learning Engineering. \n Seeking 2025 PEY Co-op opportunities in Software Engineering and Machine Learning Engineering.`;
 
 const LandingSection = () => {
 
