@@ -49,7 +49,7 @@ const LandingSection = () => {
       py={16}
       spacing={8}
     >
-      <VStack p={{ base: 4, md: 32 }} alignItems="center">
+      <VStack p={{ base: 4, md: 32 }} alignItems="center" width="80%">
         <Heading as="h1" id="contactme-section" color="#DBD8CF">
           Contact me
         </Heading>

@@ -10,32 +10,40 @@ import Carousel from "./Carousel";
 
 const projects = [
   {
-    title: "Personal ExpenseTracker",
+    title: "Personal WealthTracker",
     description:
-      "full-stack web application to help users track their expenses and income, and provide insights on their spending habits",
-    // getImageSrc: () => require("../images/photo1.jpg"),
+      "Co-led the design and development of a full-stack web application for tracking user expenses and income. Built using React.js, Spring Boot, and Clean Architecture principles, it includes features like transaction management and joint accounts, with 93% unit test coverage.",
     url: "https://github.com/chenj926/Accounting_System",
   },
   {
-    title: "Porfolio Website",
+    title: "Portfolio Website",
     description:
-      "A personal website to showcase my projects, skills, and experiences to potential employers and collaborators",
-    // getImageSrc: () => require("../images/photo2.jpg"),
+      "Created a personal portfolio website using React.js and Chakra UI. Features an interactive design, animated text, and CI/CD automation for seamless updates and error checks.",
     url: "https://github.com/chenj926/portfolio",
   },
   {
     title: "WeedOut Website",
     description:
-      "todo",
-    // getImageSrc: () => require("../images/photo3.jpg"),
+      "Contributed to the WeedOut open-source library by developing a documentation platform with React.js and Flask. Implemented responsive UI and backend logic for real-time documentation updates.",
     url: "https://github.com/uoftweb-admin/weedout-project",
   },
   {
-    title: "sketchToFace",
+    title: "SketchToFace",
     description:
-      "todo",
-    // getImageSrc: () => require("../images/photo4.jpg"),
+      "Developed a GAN-based model for sketch-to-face generation, designed to assist in criminal investigations by converting hand-drawn sketches into realistic face images.",
     url: "https://github.com/chenj926/Line2Live",
+  },
+  {
+    title: "Course Management System",
+    description:
+      "Designed and implemented a Java-based course management system using SQL, Hibernate, and Docker. Integrated complex SQL queries for data analysis and established seamless connectivity between the Java application and the database.",
+    url: "https://github.com/chenj926/Accounting_System", // Replace with the appropriate URL if different
+  },
+  {
+    title: "Traveling Salesman Optimization",
+    description:
+      "Implemented optimized greedy algorithms such as Nearest Neighbor and Node Insertion to solve the Traveling Salesman Problem efficiently. Achieved a 20% reduction in computation time for large datasets of over 1,000 nodes.",
+    url: "https://github.com/chenj926/Travelling_Salesman",
   },
 ];
 
@@ -61,6 +69,7 @@ const ProjectsSection = () => {
 
   return (
     <FullScreenSection
+      id="projects-section"
       backgroundColor="#DBD8CF"
       isDarkBackground
       p={8}

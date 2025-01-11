@@ -6,24 +6,21 @@ import Card from "./Card";
 const experiences = [
   {
     year: "September, 2022",
-    title: "University Of Toronto",
+    title: "University of Toronto",
     description:
-      "I'm pursuing a Bachelor of Applied Science and Industrial Engineering, with specialization in AI, minor in CS.",
+      "Pursuing a Bachelor of Applied Science in Industrial Engineering with minors in Computer Science, Artificial Intelligence, and Engineering Business. Relevant courses include Data Structures, Database Systems, and Machine Learning.",
   },
   {
     year: "May, 2023",
-    title: "Hangzhou",
-    description: "11",
+    title: "Cellinemory Brand Management Co., LTD",
+    description:
+      "Revamped the company's Shopify site with a custom domain and visual redesign, enhancing global e-commerce readiness. Optimized Stable Diffusion hyperparameters for product visualization, improving image quality by 8%.",
   },
   {
     year: "May, 2024",
     title: "Centivizer",
-    description: "22",
-  },
-  {
-    year: "November, 2024",
-    title: "WebDec Club UofT",
-    description: "33",
+    description:
+      "Enhanced the usability of a research game by refining user login functionality, packaging data into JSON objects for backend storage, and improving interface navigation, increasing user ratings by 15%.",
   },
   {
     year: "January, 2025",

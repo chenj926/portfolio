@@ -40,6 +40,7 @@ const Card = ({ title, description, url, bgClr="#303030", txtClr="#DBD8CF" }) =>
         <Text
           color={txtClr}
           fontFamily="Times New Roman, serif"
+          textAlign="left" // Aligns the text to the left
         >
           {description}
         </Text>
