@@ -63,6 +63,21 @@ const hobbies = [
     description: "Art is a great way to express myself and relax.",
     url: "https://example.com/art",
   },
+  {
+    title: "Music",
+    description: "Guqin (chinese culture music instrument), Guitar",
+    url: "https://example.com/art",
+  },
+  {
+    title: "Work-out",
+    description: "Hit the gym.",
+    url: "https://example.com/art",
+  },
+  {
+    title: "Video Game",
+    description: "Mobile games.",
+    url: "https://example.com/art",
+  },
 ];
 
 const ProjectsSection = () => {
