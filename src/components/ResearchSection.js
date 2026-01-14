@@ -27,6 +27,7 @@ const ResearchSection = () => {
       alignItems="stretch"
       spacing={8}
     >
+      {/* 同project */}
       <VStack align="flex-start" spacing={4}>
         <Heading size="lg">Research & Publications</Heading>
         <Text maxW="640px" color="#5d564d">

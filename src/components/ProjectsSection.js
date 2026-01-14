@@ -55,6 +55,7 @@ const ProjectsSection = () => {
       alignItems="stretch"
       spacing={8}
     >
+      {/* 要点击有特效, 有show all 这个option 如果大于三个 */}
       <VStack align="flex-start" spacing={4}>
         <Heading size="lg">Projects</Heading>
         <Text maxW="640px" color="#5d564d">

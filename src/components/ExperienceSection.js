@@ -59,6 +59,7 @@ const ExperienceSection = () => {
         opacity={0.55}
         pointerEvents="none"
       />
+      {/* 要能动, 要加图片 */}
       <VStack align="flex-start" spacing={4}>
         <Heading size="lg">Experience Timeline</Heading>
         <Text maxW="640px" color="#5d564d">

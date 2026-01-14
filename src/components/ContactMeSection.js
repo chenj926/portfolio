@@ -48,6 +48,7 @@ const ContactMeSection = () => {
       spacing={8}
       alignItems="stretch"
     >
+      {/* 像一个怎么做一个好看的 有特效的吧 做成国画卷轴展开 */}
       <VStack align="flex-start" spacing={4}>
         <Heading size="lg">Let&apos;s Connect</Heading>
         <Text maxW="640px" color="#5d564d">

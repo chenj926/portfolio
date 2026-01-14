@@ -77,7 +77,7 @@ const LandingSection = () => {
             Portfolio
           </Text>
           <Heading size={{ base: "xl", md: "2xl" }} lineHeight="1.1">
-            Jialuo (Eric) Chen
+            Jialuo (Eric) Chen 陈佳洛
           </Heading>
           <Text fontSize={{ base: "md", md: "lg" }} maxW="520px">
             Industrial Engineering student focused on software engineering and machine learning.
@@ -136,6 +136,7 @@ const LandingSection = () => {
             padding={{ base: 6, md: 10 }}
             boxShadow="0 24px 40px rgba(61, 59, 54, 0.1)"
           >
+            {/* put pic in middle make the avatar 点击可以有特效 */}
             <Avatar
               size="2xl"
               name="Jialuo (Eric) Chen"
@@ -143,7 +144,7 @@ const LandingSection = () => {
               boxSize={{ base: "180px", md: "240px" }}
             />
             <Text mt={4} fontWeight="600">
-              Software & ML Engineer
+              Software & AI/ML Engineer & Researcher
             </Text>
             <Text fontSize="sm" color="#6f675d">
               Industrial Engineering · University of Toronto

@@ -41,8 +41,9 @@ const StatusSection = () => {
         opacity={0.5}
         pointerEvents="none"
       />
+      {/* status做的像2.那个一样 简约, 然后每一个status做一个组件*/}
       <VStack align="flex-start" spacing={4} width="100%">
-        <Heading size="lg">Availability Status</Heading>
+        <Heading size="lg">Status</Heading>
         <Text maxW="640px" color="#5d564d">
           Here is a quick snapshot of how I can collaborate right now. If none are
           highlighted, I&apos;m likely at full capacity.

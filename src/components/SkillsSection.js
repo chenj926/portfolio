@@ -18,6 +18,7 @@ const SkillsSection = () => {
       alignItems="stretch"
       spacing={8}
     >
+      {/* 同2. */}
       <VStack align="flex-start" spacing={4}>
         <Heading size="lg">Skills</Heading>
         <Text maxW="640px" color="#5d564d">

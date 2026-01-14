@@ -40,6 +40,7 @@ const NewsSection = () => {
       alignItems="stretch"
       spacing={8}
     >
+      {/* lastest news 一条条的 */}
       <VStack align="flex-start" spacing={4}>
         <Heading size="lg">Latest News</Heading>
         <Text maxW="640px" color="#5d564d">
