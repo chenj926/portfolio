@@ -1,116 +1,93 @@
 import React from "react";
+import {
+  Box,
+  Heading,
+  HStack,
+  Link,
+  Image,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import FullScreenSection from "./FullScreenSection";
-import { Box, Heading } from "@chakra-ui/react";
-// import Card from "./Card";
-// import { useState } from "react";
-// import { useEffect } from "react";
-// import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import Carousel from "./Carousel";
-
 
 const projects = [
   {
     title: "Personal WealthTracker",
     description:
-      "Co-led the design and development of a full-stack web application for tracking user expenses and income. Built using React.js, Spring Boot, and Clean Architecture principles, it includes features like transaction management and joint accounts, with 93% unit test coverage.",
+      "Full-stack expense tracker with Spring Boot + React. Built for shared accounts, audit-ready reports, and clean architecture testing.",
+    image:
+      "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80",
     url: "https://github.com/chenj926/Accounting_System",
   },
   {
     title: "Portfolio Website",
     description:
-      "Created a personal portfolio website using React.js and Chakra UI. Features an interactive design, animated text, and CI/CD automation for seamless updates and error checks.",
+      "A calm, editorial portfolio layout with storytelling sections, timelines, and project cards.",
+    image:
+      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80",
     url: "https://github.com/chenj926/portfolio",
   },
   {
-    title: "WeedOut Website",
+    title: "WeedOut Documentation",
     description:
-      "Contributed to the WeedOut open-source library by developing a documentation platform with React.js and Flask. Implemented responsive UI and backend logic for real-time documentation updates.",
+      "Documentation platform with responsive UI, live updates, and polished content workflows for open-source contributors.",
+    image:
+      "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80",
     url: "https://github.com/uoftweb-admin/weedout-project",
   },
   {
     title: "SketchToFace",
     description:
-      "Developed a GAN-based model for sketch-to-face generation, designed to assist in criminal investigations by converting hand-drawn sketches into realistic face images.",
+      "GAN pipeline for converting sketches into realistic face images to assist investigative workflows.",
+    image:
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80",
     url: "https://github.com/chenj926/Line2Live",
-  },
-  {
-    title: "Course Management System",
-    description:
-      "Designed and implemented a Java-based course management system using SQL, Hibernate, and Docker. Integrated complex SQL queries for data analysis and established seamless connectivity between the Java application and the database.",
-    url: "https://github.com/chenj926/Accounting_System", // Replace with the appropriate URL if different
-  },
-  {
-    title: "Traveling Salesman Optimization",
-    description:
-      "Implemented optimized greedy algorithms such as Nearest Neighbor and Node Insertion to solve the Traveling Salesman Problem efficiently. Achieved a 20% reduction in computation time for large datasets of over 1,000 nodes.",
-    url: "https://github.com/chenj926/Travelling_Salesman",
-  },
-];
-
-const hobbies = [
-  {
-    title: "Tenis",
-    description: "Play tennis since I was 12 years old. I love the sport.",
-    url: "https://example.com/tennis",
-  },
-  {
-    title: "Soccer",
-    description: "Huge soccer fan. I love watching and playing soccer.",
-    url: "https://example.com/soccer",
-  },
-  {
-    title: "Art",
-    description: "Art is a great way to express myself and relax.",
-    url: "https://example.com/art",
-  },
-  {
-    title: "Music",
-    description: "Guqin (chinese culture music instrument), Guitar",
-    url: "https://example.com/art",
-  },
-  {
-    title: "Work-out",
-    description: "Hit the gym.",
-    url: "https://example.com/art",
-  },
-  {
-    title: "Video Game",
-    description: "Mobile games.",
-    url: "https://example.com/art",
   },
 ];
 
 const ProjectsSection = () => {
-
   return (
     <FullScreenSection
       id="projects-section"
-      backgroundColor="#DBD8CF"
-      isDarkBackground
-      p={8}
-      // alignItems="flex-start"
-      alignItems="center" // Centers the entire section horizontally
-      justifyContent="center" // Centers the entire section vertically
+      backgroundColor="#f5f1e8"
+      px={{ base: 6, md: 12 }}
+      py={{ base: 10, md: 18 }}
+      alignItems="stretch"
       spacing={8}
     >
-      {/* --- Top Section: My Projects --- */}
-      <Box width="100%" textAlign="center" >
-        <Heading as="h1" mb={6} color="#303030">
-          My Projects
-        </Heading>
-        <Carousel items={projects}/>
-      </Box>
-
-      {/* --- Bottom Section: My Hobbies --- */}
-      <Box mb={16} width="100%" textAlign="center">
-        <Heading as="h1" mb={6} color="#303030">
-          My Hobbies
-        </Heading>
-        <Carousel items={hobbies} />
-      </Box>
-
-      
-      
+      <VStack align="flex-start" spacing={4}>
+        <Heading size="lg">Projects</Heading>
+        <Text maxW="640px" color="#5d564d">
+          Featured builds with visuals, context, and a quick link to dive deeper.
+        </Text>
+      </VStack>
+      <HStack spacing={6} flexWrap="wrap" align="stretch">
+        {projects.map((project) => (
+          <Box
+            key={project.title}
+            backgroundColor="#ffffff"
+            borderRadius="22px"
+            overflow="hidden"
+            boxShadow="0 18px 28px rgba(61, 59, 54, 0.08)"
+            flex="1"
+            minW={{ base: "100%", md: "280px" }}
+            maxW={{ base: "100%", md: "360px" }}
+          >
+            <Image src={project.image} alt={project.title} height="180px" width="100%" objectFit="cover" />
+            <Box p={6}>
+              <Heading size="sm" mb={2}>
+                {project.title}
+              </Heading>
+              <Text fontSize="sm" color="#5d564d" mb={4}>
+                {project.description}
+              </Text>
+              <Link href={project.url} isExternal color="#b25e4d" fontWeight="600">
+                View project →
+              </Link>
+            </Box>
+          </Box>
+        ))}
+      </HStack>
     </FullScreenSection>
   );
 };

@@ -1,114 +1,119 @@
 import React from "react";
-import { Box, Text, VStack, Flex, Divider } from "@chakra-ui/react";
-import FullScreenSection from "./FullScreenSection"; 
-import Card from "./Card"; 
+import {
+  Box,
+  Heading,
+  HStack,
+  Text,
+  VStack,
+  Badge,
+  Image,
+} from "@chakra-ui/react";
+import FullScreenSection from "./FullScreenSection";
+import branches from "../assets/decorations/branches.svg";
 
 const experiences = [
   {
-    year: "September, 2022",
+    year: "2022",
     title: "University of Toronto",
     description:
-      "Pursuing a Bachelor of Applied Science in Industrial Engineering with minors in Computer Science, Artificial Intelligence, and Engineering Business. Relevant courses include Data Structures, Database Systems, and Machine Learning.",
+      "B.A.Sc. Industrial Engineering with minors in CS, AI, and Engineering Business. Focus on data systems, ML, and product design.",
   },
   {
-    year: "May, 2023",
-    title: "Cellinemory Brand Management Co., LTD",
+    year: "2023",
+    title: "Cellinemory",
     description:
-      "Revamped the company's Shopify site with a custom domain and visual redesign, enhancing global e-commerce readiness. Optimized Stable Diffusion hyperparameters for product visualization, improving image quality by 8%.",
+      "Revamped Shopify storefront, implemented custom domain migration, and tuned diffusion workflows for visual merchandising.",
   },
   {
-    year: "May, 2024",
+    year: "2024",
     title: "Centivizer",
     description:
-      "Enhanced the usability of a research game by refining user login functionality, packaging data into JSON objects for backend storage, and improving interface navigation, increasing user ratings by 15%.",
+      "Improved research game onboarding, packaged data pipelines into JSON, and enhanced UI navigation for higher completion rates.",
   },
   {
-    year: "January, 2025",
+    year: "2025",
     title: "JB Research Group",
-    description: "44",
-  }
+    description:
+      "Exploring human-computer interaction research and ML-supported learning experiences for student creators.",
+  },
 ];
 
 const ExperienceSection = () => {
   return (
     <FullScreenSection
-      isDarkBackground
-      backgroundColor="#303030"
-      py={16}
-      px={8}
+      id="experience-section"
+      backgroundColor="#f5f1e8"
+      px={{ base: 6, md: 12 }}
+      py={{ base: 10, md: 18 }}
+      alignItems="stretch"
+      spacing={8}
+      position="relative"
     >
-      <Flex
-        direction="column"
-        justify="center"
-        align="center"
-        minHeight="100vh" // Ensures the content takes full screen height
-        width="100%"
-      >
-        <Text 
-          fontSize="4xl" 
-          fontWeight="bold" 
-          mb={12} 
-          color="#DBD8CF" 
-          textAlign="center"
-        >
-          Experiences
+      <Image
+        src={branches}
+        alt="Decorative branches"
+        position="absolute"
+        right={{ base: -6, md: 4 }}
+        bottom={{ base: -4, md: 0 }}
+        width={{ base: "200px", md: "320px" }}
+        opacity={0.55}
+        pointerEvents="none"
+      />
+      <VStack align="flex-start" spacing={4}>
+        <Heading size="lg">Experience Timeline</Heading>
+        <Text maxW="640px" color="#5d564d">
+          Scroll horizontally along the career tree to explore each role as a fruit on the
+          branch.
         </Text>
-        <VStack spacing={16} width="100%">
-          {experiences
-            .slice() // Creates a shallow copy of the array
-            .reverse() // Reverses the order from current to past
-            .map((experience, index) => (
-              <Flex
-                key={index}
-                direction="row"
-                align="relative"
-                width="100%"
+      </VStack>
+      <Box position="relative" width="100%" overflowX="auto" pb={4}>
+        <Box
+          position="absolute"
+          top="56px"
+          left={0}
+          right={0}
+          height="2px"
+          backgroundColor="#b7b0a6"
+        />
+        <HStack spacing={10} align="flex-start" position="relative" px={2}>
+          {experiences.map((experience) => (
+            <VStack key={experience.title} align="flex-start" spacing={3} minW="240px">
+              <Badge colorScheme="orange" variant="subtle" borderRadius="full" px={3} py={1}>
+                {experience.year}
+              </Badge>
+              <Box
+                width="16px"
+                height="16px"
+                borderRadius="full"
+                backgroundColor="#d47b6a"
+                position="relative"
+                _before={{
+                  content: '""',
+                  position: "absolute",
+                  top: "16px",
+                  left: "7px",
+                  width: "2px",
+                  height: "24px",
+                  backgroundColor: "#b7b0a6",
+                }}
+              />
+              <Box
+                backgroundColor="#ffffff"
+                borderRadius="18px"
+                padding={5}
+                boxShadow="0 16px 24px rgba(61, 59, 54, 0.08)"
               >
-                {/* Date Column */}
-                <Box width="120px" textAlign="right" pr={4}>
-                  <Text color="#DBD8CF">{experience.year}</Text>
-                </Box>
-
-                {/* Timeline Column */}
-                <Flex
-                  direction="column"
-                  align="center"
-                  justify="center"
-                  mx={4}
-                  position="relative"
-                >
-                  <Box
-                    width="12px"
-                    height="12px"
-                    borderRadius="full"
-                    backgroundColor="#4B6B8A"  
-                  />
-                  {index < experiences.length && ( // Fix timeline end
-                    <Divider
-                      orientation="vertical"
-                      borderColor="#4B6B8A"  
-                      borderWidth="2px"
-                      height="300px"  
-                      mt={4}
-                    />
-                  )}
-                </Flex>
-
-                {/* Card Column */}
-                <Box flex="1" display="flex" justifyContent="center">
-                  <Card
-                    title={experience.title}
-                    description={experience.description}
-                    url="https://www.linkedin.com/in/ericjialuochen/"
-                    target="_blank" // Opens in a new tab
-                    rel="noopener noreferrer" // Security best practice
-                    bgClr="#4B6B8A"
-                  />
-                </Box>
-              </Flex>
-            ))}
-        </VStack>
-      </Flex>
+                <Heading size="sm" mb={2}>
+                  {experience.title}
+                </Heading>
+                <Text fontSize="sm" color="#5d564d">
+                  {experience.description}
+                </Text>
+              </Box>
+            </VStack>
+          ))}
+        </HStack>
+      </Box>
     </FullScreenSection>
   );
 };

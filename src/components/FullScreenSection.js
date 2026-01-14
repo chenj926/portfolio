@@ -1,17 +1,15 @@
 import * as React from "react";
 import { VStack } from "@chakra-ui/react";
 
-/**
- * Illustrates the use of children prop and spread operator
- */
 const FullScreenSection = ({ children, isDarkBackground, ...boxProps }) => {
   return (
     <VStack
       backgroundColor={boxProps.backgroundColor}
       color={isDarkBackground ? "white" : "black"}
-      overflow="hidden" // Ensures proper clipping
+      overflow="hidden"
+      width="100%"
     >
-      <VStack maxWidth="1280px" minHeight="calc(100vh - 80px)" width="100%" {...boxProps}>
+      <VStack maxWidth="1280px" width="100%" {...boxProps}>
         {children}
       </VStack>
     </VStack>
