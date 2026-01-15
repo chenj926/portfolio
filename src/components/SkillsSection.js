@@ -1,12 +1,56 @@
 import React from "react";
-import { Box, Heading, HStack, Tag, Text, VStack, Wrap } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  HStack,
+  Text,
+  VStack,
+  Wrap,
+  WrapItem,
+} from "@chakra-ui/react";
 import FullScreenSection from "./FullScreenSection";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBrain,
+  faChartLine,
+  faCodeBranch,
+  faDatabase,
+  faDiagramProject,
+} from "@fortawesome/free-solid-svg-icons";
+import { faReact, faNodeJs, faPython } from "@fortawesome/free-brands-svg-icons";
 
-const skills = {
-  "Engineering": ["React", "TypeScript", "Spring Boot", "Node.js", "SQL"],
-  "Machine Learning": ["PyTorch", "Diffusion Models", "GANs", "ML Ops"],
-  "Product": ["Design Systems", "User Research", "A/B Testing", "Analytics"],
-};
+const skills = [
+  {
+    category: "Engineering",
+    description: "Production-grade apps, scalable services, and UI foundations.",
+    items: [
+      { label: "React", icon: faReact },
+      { label: "Node.js", icon: faNodeJs },
+      { label: "Data Systems", icon: faDatabase },
+      { label: "Version Control", icon: faCodeBranch },
+    ],
+  },
+  {
+    category: "Machine Learning",
+    description: "Model training, evaluation, and robust deployment workflows.",
+    items: [
+      { label: "Python", icon: faPython },
+      { label: "Applied ML", icon: faBrain },
+      { label: "Model Ops", icon: faDiagramProject },
+      { label: "Analytics", icon: faChartLine },
+    ],
+  },
+  {
+    category: "Product",
+    description: "User research, product strategy, and growth experimentation.",
+    items: [
+      { label: "Design Systems", icon: faDiagramProject },
+      { label: "Research", icon: faBrain },
+      { label: "Experiments", icon: faChartLine },
+      { label: "Stakeholder Comms", icon: faCodeBranch },
+    ],
+  },
+];
 
 const SkillsSection = () => {
   return (
@@ -26,24 +70,41 @@ const SkillsSection = () => {
         </Text>
       </VStack>
       <HStack spacing={6} align="stretch" flexWrap="wrap">
-        {Object.entries(skills).map(([category, items]) => (
+        {skills.map((skillGroup) => (
           <Box
-            key={category}
+            key={skillGroup.category}
             backgroundColor="#ffffff"
-            borderRadius="20px"
+            borderRadius="22px"
             padding={6}
             boxShadow="0 16px 24px rgba(61, 59, 54, 0.08)"
             flex="1"
-            minW={{ base: "100%", md: "240px" }}
+            minW={{ base: "100%", md: "260px" }}
+            display="flex"
+            flexDirection="column"
+            gap={4}
           >
-            <Heading size="sm" mb={3}>
-              {category}
-            </Heading>
-            <Wrap spacing={2}>
-              {items.map((skill) => (
-                <Tag key={skill} borderRadius="full" variant="subtle" colorScheme="orange">
-                  {skill}
-                </Tag>
+            <Box>
+              <Heading size="sm">{skillGroup.category}</Heading>
+              <Text fontSize="sm" color="#5d564d" mt={2}>
+                {skillGroup.description}
+              </Text>
+            </Box>
+            <Wrap spacing={3}>
+              {skillGroup.items.map((skill) => (
+                <WrapItem key={skill.label}>
+                  <HStack
+                    spacing={2}
+                    padding="6px 12px"
+                    borderRadius="full"
+                    backgroundColor="#f3ece2"
+                    fontSize="sm"
+                    fontWeight="600"
+                    color="#3d3b36"
+                  >
+                    <FontAwesomeIcon icon={skill.icon} />
+                    <Text>{skill.label}</Text>
+                  </HStack>
+                </WrapItem>
               ))}
             </Wrap>
           </Box>

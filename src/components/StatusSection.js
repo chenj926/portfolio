@@ -4,21 +4,62 @@ import {
   Box,
   Heading,
   HStack,
+  SimpleGrid,
   Text,
   VStack,
   Image,
 } from "@chakra-ui/react";
 import FullScreenSection from "./FullScreenSection";
 import wave from "../assets/decorations/wave.svg";
+import profilePic from "../assets/images/profile pic.jpg";
 
-const availability = [
-  "Full-time",
-  "Part-time",
-  "Contract",
-  "Volunteer",
-  "Research",
-  "Project",
+const statusCards = [
+  {
+    title: "Available for select projects",
+    description: "Currently open to focused collaborations with clear impact and timelines.",
+    tags: ["AI Engineering", "Applied Research", "Product"],
+  },
+  {
+    title: "Research partnerships",
+    description: "Welcoming co-authored work in trustworthy or efficient ML systems.",
+    tags: ["Trustworthy AI", "Transformers", "Bayesian Optimization"],
+  },
 ];
+
+const StatusCard = ({ title, description, tags }) => (
+  <Box
+    backgroundColor="#ffffff"
+    borderRadius="22px"
+    padding={{ base: 5, md: 6 }}
+    boxShadow="0 20px 30px rgba(61, 59, 54, 0.08)"
+    height="100%"
+  >
+    <Text fontSize="xs" textTransform="uppercase" color="#7b736a" mb={2}>
+      Status
+    </Text>
+    <Heading size="sm" mb={2}>
+      {title}
+    </Heading>
+    <Text fontSize="sm" color="#5d564d" mb={4}>
+      {description}
+    </Text>
+    <HStack spacing={2} flexWrap="wrap">
+      {tags.map((tag) => (
+        <Badge
+          key={tag}
+          colorScheme="orange"
+          variant="subtle"
+          px={3}
+          py={1}
+          borderRadius="full"
+          textTransform="none"
+        >
+          {tag}
+        </Badge>
+      ))}
+    </HStack>
+  </Box>
+);
 
 const StatusSection = () => {
   return (
@@ -41,38 +82,53 @@ const StatusSection = () => {
         opacity={0.5}
         pointerEvents="none"
       />
-      {/* status做的像2.那个一样 简约, 然后每一个status做一个组件*/}
-      <VStack align="flex-start" spacing={4} width="100%">
-        <Heading size="lg">Status</Heading>
-        <Text maxW="640px" color="#5d564d">
-          Here is a quick snapshot of how I can collaborate right now. If none are
-          highlighted, I&apos;m likely at full capacity.
-        </Text>
-        <Box
-          backgroundColor="#ffffff"
-          borderRadius="24px"
-          padding={{ base: 6, md: 8 }}
-          boxShadow="0 20px 30px rgba(61, 59, 54, 0.08)"
-        >
-          <HStack spacing={4} flexWrap="wrap">
-            {availability.map((item) => (
-              <Badge
-                key={item}
-                colorScheme="orange"
-                variant="subtle"
-                px={3}
-                py={1}
-                borderRadius="full"
-                textTransform="none"
-              >
-                {item}
-              </Badge>
+      <VStack align="flex-start" spacing={6} width="100%">
+        <Heading size="lg">About & Status</Heading>
+        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={8} width="100%">
+          <Box
+            backgroundColor="#ffffff"
+            borderRadius="26px"
+            padding={{ base: 6, md: 8 }}
+            boxShadow="0 20px 30px rgba(61, 59, 54, 0.08)"
+          >
+            <VStack align="center" spacing={4} textAlign="center">
+              <Image
+                src={profilePic}
+                alt="Portrait of Jialuo (Eric) Chen"
+                borderRadius="24px"
+                objectFit="cover"
+                width={{ base: "180px", md: "220px" }}
+                height={{ base: "180px", md: "220px" }}
+              />
+              <Heading size="md">About Me</Heading>
+              <Text color="#5d564d" fontSize="sm">
+                I blend machine learning research with production-ready software systems,
+                focusing on trustworthy AI, scalable data platforms, and human-centered
+                products.
+              </Text>
+              <HStack spacing={2} flexWrap="wrap" justify="center">
+                {["Toronto", "ML Systems", "Product Builder"].map((item) => (
+                  <Badge
+                    key={item}
+                    colorScheme="orange"
+                    variant="subtle"
+                    px={3}
+                    py={1}
+                    borderRadius="full"
+                    textTransform="none"
+                  >
+                    {item}
+                  </Badge>
+                ))}
+              </HStack>
+            </VStack>
+          </Box>
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+            {statusCards.map((status) => (
+              <StatusCard key={status.title} {...status} />
             ))}
-          </HStack>
-          <Text mt={4} fontWeight="600">
-            Currently: Open to select collaborations in software, ML, and applied research.
-          </Text>
-        </Box>
+          </SimpleGrid>
+        </SimpleGrid>
       </VStack>
     </FullScreenSection>
   );

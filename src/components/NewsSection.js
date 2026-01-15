@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import {
   Box,
+  Button,
   Heading,
   HStack,
   Link,
@@ -49,6 +50,12 @@ const news = [
 ];
 
 const NewsSection = () => {
+  const [showAll, setShowAll] = useState(false);
+  const visibleNews = useMemo(
+    () => (showAll ? news : news.slice(0, 5)),
+    [showAll]
+  );
+
   return (
     <FullScreenSection
       id="news-section"
@@ -58,36 +65,58 @@ const NewsSection = () => {
       alignItems="stretch"
       spacing={8}
     >
-      {/* lastest news 一条条的 */}
       <VStack align="flex-start" spacing={4}>
         <Heading size="lg">Latest News</Heading>
         <Text maxW="640px" color="#5d564d">
           Highlights from recent work, reviews, and social updates.
         </Text>
       </VStack>
-      <HStack spacing={6} flexWrap="wrap" align="stretch">
-        {news.map((item) => (
+      <VStack align="stretch" spacing={4}>
+        {visibleNews.map((item) => (
           <Box
             key={item.title}
             backgroundColor="#ffffff"
-            borderRadius="20px"
-            padding={6}
-            flex="1"
-            minW={{ base: "100%", md: "260px" }}
-            boxShadow="0 18px 26px rgba(61, 59, 54, 0.08)"
+            borderRadius="18px"
+            padding={{ base: 4, md: 5 }}
+            boxShadow="0 12px 18px rgba(61, 59, 54, 0.08)"
           >
-            <Text fontSize="xs" textTransform="uppercase" color="#7b736a">
-              {item.source} · {item.date}
-            </Text>
-            <Heading size="sm" mt={2} mb={3}>
-              {item.title}
-            </Heading>
-            <Link href={item.url} isExternal color="#b25e4d" fontWeight="600">
-              Read update →
-            </Link>
+            <HStack
+              spacing={{ base: 3, md: 6 }}
+              align={{ base: "flex-start", md: "center" }}
+              flexDirection={{ base: "column", md: "row" }}
+            >
+              <Text
+                fontSize="xs"
+                textTransform="uppercase"
+                color="#7b736a"
+                minW={{ md: "140px" }}
+              >
+                {item.date}
+              </Text>
+              <Box flex="1">
+                <Heading size="sm">{item.title}</Heading>
+                <Text fontSize="sm" color="#6f675d">
+                  {item.source}
+                </Text>
+              </Box>
+              <Link href={item.url} isExternal color="#b25e4d" fontWeight="600">
+                Read update →
+              </Link>
+            </HStack>
           </Box>
         ))}
-      </HStack>
+        {news.length > 5 && (
+          <Button
+            alignSelf="center"
+            variant="outline"
+            borderColor="#3d3b36"
+            size="sm"
+            onClick={() => setShowAll((prev) => !prev)}
+          >
+            {showAll ? "Show less" : "Show all"}
+          </Button>
+        )}
+      </VStack>
     </FullScreenSection>
   );
 };

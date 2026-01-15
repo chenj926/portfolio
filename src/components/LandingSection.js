@@ -136,28 +136,30 @@ const LandingSection = () => {
         <Box
           flex="0.8"
           display="flex"
-          justifyContent={{ base: "flex-start", md: "flex-end" }}
+          justifyContent={{ base: "center", md: "flex-end" }}
         >
-          <Box
+          <VStack
             backgroundColor="#ede6dc"
             borderRadius="32px"
             padding={{ base: 6, md: 10 }}
             boxShadow="0 24px 40px rgba(61, 59, 54, 0.1)"
+            align="center"
+            textAlign="center"
+            spacing={3}
           >
-            {/* put pic in middle make the avatar 点击可以有特效 */}
             <Avatar
               size="2xl"
               name="Jialuo (Eric) Chen"
               src={profilePic}
               boxSize={{ base: "180px", md: "240px" }}
             />
-            <Text mt={4} fontWeight="600">
+            <Text fontWeight="600">
               Software & AI/ML Engineer & Researcher
             </Text>
             <Text fontSize="sm" color="#6f675d">
               Industrial Engineering · University of Toronto
             </Text>
-          </Box>
+          </VStack>
         </Box>
       </HStack>
     </FullScreenSection>

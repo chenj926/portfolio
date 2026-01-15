@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import {
   Box,
@@ -16,6 +16,7 @@ import * as Yup from "yup";
 import FullScreenSection from "./FullScreenSection";
 
 const ContactMeSection = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -48,7 +49,6 @@ const ContactMeSection = () => {
       spacing={8}
       alignItems="stretch"
     >
-      {/* 像一个怎么做一个好看的 有特效的吧 做成国画卷轴展开 */}
       <VStack align="flex-start" spacing={4}>
         <Heading size="lg">Let&apos;s Connect</Heading>
         <Text maxW="640px" color="#5d564d">
@@ -56,49 +56,60 @@ const ContactMeSection = () => {
         </Text>
       </VStack>
       <Box
-        backgroundColor="#ffffff"
-        borderRadius="24px"
-        padding={{ base: 6, md: 8 }}
-        boxShadow="0 20px 30px rgba(61, 59, 54, 0.08)"
-        maxW={{ base: "100%", md: "600px" }}
+        className={`envelope ${isOpen ? "is-open" : ""}`}
+        maxW={{ base: "100%", md: "640px" }}
+        alignSelf="center"
       >
-        <form onSubmit={formik.handleSubmit}>
-          <VStack spacing={4}>
-            <FormControl
-              isInvalid={formik.touched.firstName && formik.errors.firstName}
-            >
-              <FormLabel htmlFor="firstName">Name</FormLabel>
-              <Input id="firstName" name="firstName" {...formik.getFieldProps("firstName")} />
-              <FormErrorMessage>{formik.errors.firstName}</FormErrorMessage>
-            </FormControl>
-            <FormControl isInvalid={formik.touched.email && formik.errors.email}>
-              <FormLabel htmlFor="email">Email</FormLabel>
-              <Input id="email" name="email" type="email" {...formik.getFieldProps("email")} />
-              <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
-            </FormControl>
-            <FormControl
-              isInvalid={formik.touched.comment && formik.errors.comment}
-            >
-              <FormLabel htmlFor="comment">Message</FormLabel>
-              <Textarea
-                id="comment"
-                name="comment"
-                height={{ base: 140, md: 180 }}
-                {...formik.getFieldProps("comment")}
-              />
-              <FormErrorMessage>{formik.errors.comment}</FormErrorMessage>
-            </FormControl>
-            <Button
-              type="submit"
-              backgroundColor="#3d3b36"
-              color="#f5f1e8"
-              width="full"
-              _hover={{ backgroundColor: "#2f2c28" }}
-            >
-              Send message
-            </Button>
-          </VStack>
-        </form>
+        <Box className="envelope-flap" />
+        <Box className="envelope-body">
+          <Button
+            className="envelope-seal"
+            onClick={() => setIsOpen((prev) => !prev)}
+            variant="unstyled"
+            aria-expanded={isOpen}
+          >
+            Connect
+          </Button>
+        </Box>
+        <Box className="envelope-letter">
+          <form onSubmit={formik.handleSubmit}>
+            <VStack spacing={4}>
+              <FormControl
+                isInvalid={formik.touched.firstName && formik.errors.firstName}
+              >
+                <FormLabel htmlFor="firstName">Name</FormLabel>
+                <Input id="firstName" name="firstName" {...formik.getFieldProps("firstName")} />
+                <FormErrorMessage>{formik.errors.firstName}</FormErrorMessage>
+              </FormControl>
+              <FormControl isInvalid={formik.touched.email && formik.errors.email}>
+                <FormLabel htmlFor="email">Email</FormLabel>
+                <Input id="email" name="email" type="email" {...formik.getFieldProps("email")} />
+                <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
+              </FormControl>
+              <FormControl
+                isInvalid={formik.touched.comment && formik.errors.comment}
+              >
+                <FormLabel htmlFor="comment">Message</FormLabel>
+                <Textarea
+                  id="comment"
+                  name="comment"
+                  height={{ base: 140, md: 180 }}
+                  {...formik.getFieldProps("comment")}
+                />
+                <FormErrorMessage>{formik.errors.comment}</FormErrorMessage>
+              </FormControl>
+              <Button
+                type="submit"
+                backgroundColor="#3d3b36"
+                color="#f5f1e8"
+                width="full"
+                _hover={{ backgroundColor: "#2f2c28" }}
+              >
+                Send message
+              </Button>
+            </VStack>
+          </form>
+        </Box>
       </Box>
     </FullScreenSection>
   );

@@ -21,7 +21,7 @@ function App() {
         <main>
           <Header />
           <LandingSection />
-          <StatusSection />
+          {/* <StatusSection /> */}
           <NewsSection />
           <ExperienceSection />
           <ProjectsSection />
