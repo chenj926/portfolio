@@ -1,17 +1,20 @@
 {
   "files": {
-    "main.css": "/portfolio/static/css/main.df6a7eab.css",
-    "main.js": "/portfolio/static/js/main.8707f35e.js",
+    "main.css": "/portfolio/static/css/main.99c73689.css",
+    "main.js": "/portfolio/static/js/main.fabf20eb.js",
     "static/js/488.9561f9b8.chunk.js": "/portfolio/static/js/488.9561f9b8.chunk.js",
     "static/media/profile pic.jpg": "/portfolio/static/media/profile pic.0ad34ef349b1816f49d8.jpg",
-    "static/media/Jialuo_Chen_Resume.pdf": "/portfolio/static/media/Jialuo_Chen_Resume.efa87c62d6da6c4d43d3.pdf",
+    "static/media/Jialuo_Chen_Resume.pdf": "/portfolio/static/media/Jialuo_Chen_Resume.40238f907f14f7bc5090.pdf",
     "index.html": "/portfolio/index.html",
-    "main.df6a7eab.css.map": "/portfolio/static/css/main.df6a7eab.css.map",
-    "main.8707f35e.js.map": "/portfolio/static/js/main.8707f35e.js.map",
+    "static/media/branches.svg": "/portfolio/static/media/branches.7ba72d867e3d9084900926c55fd27622.svg",
+    "static/media/wave.svg": "/portfolio/static/media/wave.30b0b5f27a37b943474c338f5f8c4d0e.svg",
+    "static/media/cloud-line.svg": "/portfolio/static/media/cloud-line.2f57f1f0606026c85e4c326bc1754aa8.svg",
+    "main.99c73689.css.map": "/portfolio/static/css/main.99c73689.css.map",
+    "main.fabf20eb.js.map": "/portfolio/static/js/main.fabf20eb.js.map",
     "488.9561f9b8.chunk.js.map": "/portfolio/static/js/488.9561f9b8.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.df6a7eab.css",
-    "static/js/main.8707f35e.js"
+    "static/css/main.99c73689.css",
+    "static/js/main.fabf20eb.js"
   ]
 }
