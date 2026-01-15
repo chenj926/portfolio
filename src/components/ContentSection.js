@@ -4,25 +4,25 @@ import FullScreenSection from "./FullScreenSection";
 
 const channels = [
   {
-    title: "小红书",
+    title: "小红书 (RedNote)",
     description: "Lifestyle notes, study routines, and visual storytelling.",
-    url: "https://www.xiaohongshu.com/",
+    url: "https://www.xiaohongshu.com/user/profile/60b414de0000000001007140",
   },
   {
     title: "Reddit",
-    description: "Sharing ML experiments and engaging in creator communities.",
-    url: "https://www.reddit.com/",
+    description: "Sharing study experiments and engaging in creator communities.",
+    url: "https://www.reddit.com/user/Every-Movie7060/",
   },
-  {
-    title: "YouTube / Bilibili",
-    description: "Future paid content on product strategy and applied ML.",
-    url: "https://www.youtube.com/",
-  },
-  {
-    title: "TikTok (future)",
-    description: "Short-form insights on research and career planning.",
-    url: "https://www.tiktok.com/",
-  },
+  // {
+  //   title: "YouTube / Bilibili",
+  //   description: "Future paid content on product strategy and applied ML.",
+  //   url: "https://www.youtube.com/",
+  // },
+  // {
+  //   title: "TikTok (Coming Soon)",
+  //   description: "Short-form insights on research and career planning.",
+  //   url: "https://www.tiktok.com/",
+  // },
 ];
 
 const ContentSection = () => {

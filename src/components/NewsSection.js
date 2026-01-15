@@ -11,22 +11,40 @@ import FullScreenSection from "./FullScreenSection";
 
 const news = [
   {
-    title: "Exploring humane AI products for student creators",
-    source: "LinkedIn",
-    date: "Feb 2025",
+    title: "Joined Efficient AI & Transformer Research Group",
+    source: "SJTU",
+    date: "Jan 2026",
     url: "https://www.linkedin.com/in/ericjialuochen/",
   },
   {
-    title: "OpenReview acceptance: Sketch-to-face diffusion study",
-    source: "OpenReview",
-    date: "Jan 2025",
-    url: "https://openreview.net/",
+    title: "Recieved 2nd place in Commerce Domain and 4th overall at AgentDs",
+    source: "AgentDs Hackathon",
+    date: "Dec 2025",
+    url: "https://agentds.org/",
   },
   {
-    title: "New ML workflow wins internal demo day",
-    source: "Instagram",
-    date: "Dec 2024",
-    url: "https://www.instagram.com/ericchen7161/",
+    title: "Participated in Claude AI Hackathon and Built ADHD Copliot App",
+    source: "UofT AI x Claude AI",
+    date: "Nov 2025",
+    url: "https://github.com/chenj926/adhd-scholarship-copilot",
+  },
+  {
+    title: "1st Place: P&G Engineering Business Case Competition",
+    source: "P&G",
+    date: "Oct 2025",
+    url: "https://www.linkedin.com/in/ericjialuochen/",
+  },
+  {
+    title: "Joined JANA Corp as Software Engineer Intern",
+    source: "JANA Corporation",
+    date: "May 2025",
+    url: "https://www.linkedin.com/in/ericjialuochen/",
+  },
+  {
+    title: "Joined JB Research Group for Trustworthy AI Research",
+    source: "UofT",
+    date: "Jan 2025",
+    url: "https://www.linkedin.com/in/ericjialuochen/",
   },
 ];
 

@@ -74,15 +74,15 @@ const LandingSection = () => {
       >
         <VStack align="flex-start" spacing={6} flex="1">
           <Text fontSize="sm" textTransform="uppercase" letterSpacing="0.2em">
-            Portfolio
+            My Home Page
           </Text>
           <Heading size={{ base: "xl", md: "2xl" }} lineHeight="1.1">
             Jialuo (Eric) Chen 陈佳洛
           </Heading>
           <Text fontSize={{ base: "md", md: "lg" }} maxW="520px">
-            Industrial Engineering student focused on software engineering and machine learning.
-            I love translating complex ideas into thoughtful products and elegant research
-            prototypes.
+            Industrial Engineering student with a dual focus on <b>Machine Learning</b> and <b>Software Architecture</b>. I thrive at the intersection of complex algorithms 
+            and intuitive product design, building systems that are both theoretically robust 
+            and practically scalable.
           </Text>
           <Box
             borderLeft="3px solid #a59a8b"
@@ -91,8 +91,16 @@ const LandingSection = () => {
             maxW="520px"
           >
             <Text fontSize={{ base: "sm", md: "md" }}>
-              Currently exploring applied ML, product engineering, and human-centered systems.
-              Based in Toronto, open to collaborative research and product building.
+              Currently engineering risk platforms at <b>JANA Corp</b>, researching{" "}
+              <b>Trustworthy AI</b> (Bayesian Optimization) at{" "}
+              <Link href="https://www.utoronto.ca/" isExternal textDecoration="underline">
+                UofT
+              </Link>{" "}
+              and <b>Efficient AI</b> (Transformer) at{" "}
+              <Link href="https://www.sjtu.edu.cn/" isExternal textDecoration="underline">
+                SJTU
+              </Link>.{" "} Open to challenging <b>AI Engineering</b> or <b>Applied Research</b>{" "}
+              roles where I can drive innovation from concept to deployment.
             </Text>
           </Box>
           <HStack spacing={4} flexWrap="wrap">

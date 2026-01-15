@@ -36,6 +36,18 @@ const experiences = [
     description:
       "Exploring human-computer interaction research and ML-supported learning experiences for student creators.",
   },
+  {
+    year: "2025",
+    title: "Jana Corporation",
+    description:
+      "Developing production-level probabilistic risk models (Python) and full-stack analysis tools (C#/React) for utility infrastructure.",
+  },
+  {
+    year: "2026",
+    title: "SJTU & UofT Research",
+    description:
+      "Researching linear attention mechanisms in Transformers (SJTU) and Bayesian Optimization under Uncertainty (UofT).",
+  },
 ];
 
 const ExperienceSection = () => {

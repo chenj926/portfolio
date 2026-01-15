@@ -4,16 +4,10 @@ import FullScreenSection from "./FullScreenSection";
 
 const publications = [
   {
-    title: "Sketch-to-Face Diffusion for Investigative Support",
-    venue: "OpenReview",
-    year: "2025",
-    url: "https://openreview.net/",
-  },
-  {
-    title: "Human-centered Systems for Student Creators",
-    venue: "Working paper",
-    year: "2024",
-    url: "https://www.linkedin.com/in/ericjialuochen/",
+    title: "(Coming Soon) Listwise Direct Preference Optimization with Multi-Dimensional Preference Mixing",
+    venue: "ACL 2026",
+    year: "2026",
+    // url: "https://www.linkedin.com/in/ericjialuochen/",
   },
 ];
 
@@ -29,7 +23,7 @@ const ResearchSection = () => {
     >
       {/* 同project */}
       <VStack align="flex-start" spacing={4}>
-        <Heading size="lg">Research & Publications</Heading>
+        <Heading size="lg">Publications</Heading>
         <Text maxW="640px" color="#5d564d">
           Selected papers, open review submissions, and research prototypes.
         </Text>
