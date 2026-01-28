@@ -6,10 +6,11 @@ import {
   Text,
   VStack,
   Badge,
-  Image,
 } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 import FullScreenSection from "./FullScreenSection";
-import branches from "../assets/decorations/branches.svg";
+
+const MotionBox = motion(Box);
 
 const experiences = [
   {
@@ -60,54 +61,54 @@ const ExperienceSection = () => {
   return (
     <FullScreenSection
       id="experience-section"
-      backgroundColor="#f5f1e8"
+      backgroundColor="#0a0a0f"
       px={{ base: 6, md: 12 }}
-      py={{ base: 10, md: 18 }}
+      py={{ base: 12, md: 20 }}
       alignItems="stretch"
       spacing={8}
       position="relative"
     >
-      <Image
-        src={branches}
-        alt="Decorative branches"
-        position="absolute"
-        right={{ base: -6, md: 4 }}
-        bottom={{ base: -4, md: 0 }}
-        width={{ base: "200px", md: "320px" }}
-        opacity={0.55}
-        pointerEvents="none"
-      />
-      {/* 要能动, 要加图片 */}
-      <VStack align="flex-start" spacing={4}>
-        <Heading size="lg">Experience Timeline</Heading>
-        <Text maxW="640px" color="#5d564d">
-          Scroll horizontally along the career tree to explore each role as a fruit on the
-          branch.
+      <VStack align="flex-start" spacing={3}>
+        <Text
+          fontSize="sm"
+          textTransform="uppercase"
+          letterSpacing="0.2em"
+          color="#6366f1"
+          fontWeight="600"
+        >
+          Journey
+        </Text>
+        <Heading size="lg" color="#f0f0f5">
+          Experience Timeline
+        </Heading>
+        <Text maxW="640px" color="#8b8b9a">
+          Scroll horizontally to explore each milestone in my career journey.
         </Text>
       </VStack>
+
       <Box position="relative" width="100%">
+        {/* Fade edges */}
         <Box
           position="absolute"
           left={0}
           top={0}
           bottom={0}
-          width="48px"
-          background="linear-gradient(90deg, rgba(245,241,232,1) 0%, rgba(245,241,232,0.7) 60%, rgba(245,241,232,0) 100%)"
-          backdropFilter="blur(6px)"
+          width="60px"
+          background="linear-gradient(90deg, rgba(10,10,15,1) 0%, rgba(10,10,15,0) 100%)"
           pointerEvents="none"
-          zIndex={1}
+          zIndex={2}
         />
         <Box
           position="absolute"
           right={0}
           top={0}
           bottom={0}
-          width="48px"
-          background="linear-gradient(270deg, rgba(245,241,232,1) 0%, rgba(245,241,232,0.7) 60%, rgba(245,241,232,0) 100%)"
-          backdropFilter="blur(6px)"
+          width="60px"
+          background="linear-gradient(270deg, rgba(10,10,15,1) 0%, rgba(10,10,15,0) 100%)"
           pointerEvents="none"
-          zIndex={1}
+          zIndex={2}
         />
+
         <Box
           position="relative"
           width="100%"
@@ -115,76 +116,100 @@ const ExperienceSection = () => {
           pb={4}
           className="timeline-scroll"
         >
-        <Box
-          position="absolute"
-          top="56px"
-          left={0}
-          right={0}
-          height="2px"
-          backgroundColor="#b7b0a6"
-        />
-        <HStack spacing={10} align="flex-start" position="relative" px={2}>
-          {experiences.map((experience) => (
-            <VStack
-              key={experience.title}
-              align="flex-start"
-              spacing={3}
-              minW="280px"
-              maxW="280px"
-            >
-              <Badge colorScheme="orange" variant="subtle" borderRadius="full" px={3} py={1}>
-                {experience.year}
-              </Badge>
-              <Box
-                width="16px"
-                height="16px"
-                borderRadius="full"
-                backgroundColor="#d47b6a"
-                position="relative"
-                _before={{
-                  content: '""',
-                  position: "absolute",
-                  top: "16px",
-                  left: "7px",
-                  width: "2px",
-                  height: "24px",
-                  backgroundColor: "#b7b0a6",
-                }}
-              />
-              <Box
-                backgroundColor="#ffffff"
-                borderRadius="18px"
-                padding={5}
-                boxShadow="0 16px 24px rgba(61, 59, 54, 0.08)"
-                minH="220px"
-                display="flex"
-                flexDirection="column"
-                gap={3}
+          {/* Timeline line */}
+          <Box
+            position="absolute"
+            top="48px"
+            left={0}
+            right={0}
+            height="2px"
+            background="linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3), transparent)"
+          />
+
+          <HStack spacing={8} align="flex-start" position="relative" px={4} py={2}>
+            {experiences.map((experience, index) => (
+              <MotionBox
+                key={experience.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
               >
-                <HStack spacing={3}>
-                  <Box
-                    width="40px"
-                    height="40px"
-                    borderRadius="12px"
-                    backgroundColor="#f3ece2"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
+                <VStack
+                  align="flex-start"
+                  spacing={3}
+                  minW="280px"
+                  maxW="280px"
+                >
+                  <Badge
+                    bg="rgba(99, 102, 241, 0.15)"
+                    color="#6366f1"
+                    borderRadius="full"
+                    px={3}
+                    py={1}
+                    fontSize="xs"
                     fontWeight="600"
-                    color="#3d3b36"
-                    fontSize="sm"
+                    border="1px solid rgba(99, 102, 241, 0.3)"
                   >
-                    {experience.logo}
+                    {experience.year}
+                  </Badge>
+
+                  {/* Timeline dot */}
+                  <Box
+                    width="12px"
+                    height="12px"
+                    borderRadius="full"
+                    bg="linear-gradient(135deg, #6366f1, #8b5cf6)"
+                    boxShadow="0 0 20px rgba(99, 102, 241, 0.5)"
+                    position="relative"
+                    _before={{
+                      content: '""',
+                      position: "absolute",
+                      top: "12px",
+                      left: "5px",
+                      width: "2px",
+                      height: "20px",
+                      background: "linear-gradient(180deg, rgba(99, 102, 241, 0.5), transparent)",
+                    }}
+                  />
+
+                  <Box
+                    className="glass-card card-shine"
+                    padding={5}
+                    minH="200px"
+                    display="flex"
+                    flexDirection="column"
+                    gap={3}
+                    cursor="default"
+                  >
+                    <HStack spacing={3}>
+                      <Box
+                        width="40px"
+                        height="40px"
+                        borderRadius="lg"
+                        bg="rgba(99, 102, 241, 0.15)"
+                        border="1px solid rgba(99, 102, 241, 0.3)"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        fontWeight="700"
+                        color="#6366f1"
+                        fontSize="sm"
+                      >
+                        {experience.logo}
+                      </Box>
+                      <Heading size="sm" color="#f0f0f5" fontWeight="600">
+                        {experience.title}
+                      </Heading>
+                    </HStack>
+                    <Text fontSize="sm" color="#8b8b9a" flex="1" lineHeight="1.7">
+                      {experience.description}
+                    </Text>
                   </Box>
-                  <Heading size="sm">{experience.title}</Heading>
-                </HStack>
-                <Text fontSize="sm" color="#5d564d" flex="1">
-                  {experience.description}
-                </Text>
-              </Box>
-            </VStack>
-          ))}
-        </HStack>
+                </VStack>
+              </MotionBox>
+            ))}
+          </HStack>
         </Box>
       </Box>
     </FullScreenSection>

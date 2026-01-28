@@ -8,7 +8,12 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { motion } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import FullScreenSection from "./FullScreenSection";
+
+const MotionBox = motion(Box);
 
 const news = [
   {
@@ -59,64 +64,105 @@ const NewsSection = () => {
   return (
     <FullScreenSection
       id="news-section"
-      backgroundColor="#f5f1e8"
+      backgroundColor="#0a0a0f"
       px={{ base: 6, md: 12 }}
-      py={{ base: 10, md: 16 }}
+      py={{ base: 12, md: 20 }}
       alignItems="stretch"
       spacing={8}
     >
-      <VStack align="flex-start" spacing={4}>
-        <Heading size="lg">Latest News</Heading>
-        <Text maxW="640px" color="#5d564d">
-          Highlights from recent work, reviews, and social updates.
+      <VStack align="flex-start" spacing={3}>
+        <Text
+          fontSize="sm"
+          textTransform="uppercase"
+          letterSpacing="0.2em"
+          color="#6366f1"
+          fontWeight="600"
+        >
+          Updates
+        </Text>
+        <Heading size="lg" color="#f0f0f5">
+          Latest News
+        </Heading>
+        <Text maxW="640px" color="#8b8b9a">
+          Highlights from recent work, reviews, and updates.
         </Text>
       </VStack>
-      <VStack align="stretch" spacing={4}>
-        {visibleNews.map((item) => (
-          <Box
+
+      <VStack align="stretch" spacing={3}>
+        {visibleNews.map((item, index) => (
+          <MotionBox
             key={item.title}
-            backgroundColor="#ffffff"
-            borderRadius="18px"
-            padding={{ base: 4, md: 5 }}
-            boxShadow="0 12px 18px rgba(61, 59, 54, 0.08)"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: index * 0.05 }}
           >
-            <HStack
-              spacing={{ base: 3, md: 6 }}
-              align={{ base: "flex-start", md: "center" }}
-              flexDirection={{ base: "column", md: "row" }}
+            <Box
+              className="glass-card"
+              padding={{ base: 4, md: 5 }}
+              _hover={{
+                borderColor: "rgba(99, 102, 241, 0.3)",
+              }}
             >
-              <Text
-                fontSize="xs"
-                textTransform="uppercase"
-                color="#7b736a"
-                minW={{ md: "140px" }}
+              <HStack
+                spacing={{ base: 3, md: 6 }}
+                align={{ base: "flex-start", md: "center" }}
+                flexDirection={{ base: "column", md: "row" }}
               >
-                {item.date}
-              </Text>
-              <Box flex="1">
-                <Heading size="sm">{item.title}</Heading>
-                <Text fontSize="sm" color="#6f675d">
-                  {item.source}
+                <Text
+                  fontSize="xs"
+                  textTransform="uppercase"
+                  letterSpacing="0.1em"
+                  color="#5a5a6e"
+                  minW={{ md: "100px" }}
+                  fontFamily="mono"
+                >
+                  {item.date}
                 </Text>
-              </Box>
-              <Link href={item.url} isExternal color="#b25e4d" fontWeight="600">
-                Read update →
-              </Link>
-            </HStack>
-          </Box>
+                <Box flex="1">
+                  <Heading size="sm" color="#f0f0f5" fontWeight="500">
+                    {item.title}
+                  </Heading>
+                  <Text fontSize="sm" color="#8b8b9a" mt={1}>
+                    {item.source}
+                  </Text>
+                </Box>
+                <Link
+                  href={item.url}
+                  isExternal
+                  color="#6366f1"
+                  fontWeight="500"
+                  fontSize="sm"
+                  display="inline-flex"
+                  alignItems="center"
+                  gap={2}
+                  _hover={{ color: "#8b5cf6", textDecoration: "none" }}
+                >
+                  View
+                  <FontAwesomeIcon icon={faArrowRight} size="sm" />
+                </Link>
+              </HStack>
+            </Box>
+          </MotionBox>
         ))}
-        {news.length > 5 && (
-          <Button
-            alignSelf="center"
-            variant="outline"
-            borderColor="#3d3b36"
-            size="sm"
-            onClick={() => setShowAll((prev) => !prev)}
-          >
-            {showAll ? "Show less" : "Show all"}
-          </Button>
-        )}
       </VStack>
+
+      {news.length > 5 && (
+        <Button
+          alignSelf="center"
+          variant="ghost"
+          size="sm"
+          color="#8b8b9a"
+          rightIcon={<FontAwesomeIcon icon={showAll ? faChevronUp : faChevronDown} />}
+          onClick={() => setShowAll((prev) => !prev)}
+          _hover={{
+            color: "#f0f0f5",
+            bg: "rgba(255, 255, 255, 0.05)",
+          }}
+        >
+          {showAll ? "Show less" : "Show all"}
+        </Button>
+      )}
     </FullScreenSection>
   );
 };

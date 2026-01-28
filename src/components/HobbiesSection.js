@@ -1,6 +1,9 @@
 import React from "react";
 import { Box, Heading, Image, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 import FullScreenSection from "./FullScreenSection";
+
+const MotionBox = motion(Box);
 
 const hobbies = [
   {
@@ -45,49 +48,74 @@ const HobbiesSection = () => {
   return (
     <FullScreenSection
       id="hobbies-section"
-      backgroundColor="#f5f1e8"
+      backgroundColor="#0a0a0f"
       px={{ base: 6, md: 12 }}
-      py={{ base: 10, md: 18 }}
+      py={{ base: 12, md: 20 }}
       alignItems="stretch"
       spacing={8}
     >
-      {/* 同project */}
-      <VStack align="flex-start" spacing={4}>
-        <Heading size="lg">Hobbies</Heading>
-        <Text maxW="640px" color="#5d564d">
+      <VStack align="flex-start" spacing={3}>
+        <Text
+          fontSize="sm"
+          textTransform="uppercase"
+          letterSpacing="0.2em"
+          color="#6366f1"
+          fontWeight="600"
+        >
+          Beyond Code
+        </Text>
+        <Heading size="lg" color="#f0f0f5">
+          Hobbies
+        </Heading>
+        <Text maxW="640px" color="#8b8b9a">
           Interests that keep me curious, balanced, and creative.
         </Text>
       </VStack>
+
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-        {hobbies.map((hobby) => (
-          <Box
+        {hobbies.map((hobby, index) => (
+          <MotionBox
             key={hobby.title}
-            backgroundColor="#ffffff"
-            borderRadius="20px"
-            padding={6}
-            boxShadow="0 16px 24px rgba(61, 59, 54, 0.08)"
-            minH="280px"
-            display="flex"
-            flexDirection="column"
-            gap={4}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: index * 0.08 }}
           >
-            <Image
-              src={hobby.media}
-              alt={hobby.title}
-              borderRadius="16px"
-              height="140px"
-              objectFit="cover"
-              width="100%"
-            />
-            <Box>
-              <Heading size="sm" mb={2}>
-                {hobby.title}
-              </Heading>
-              <Text fontSize="sm" color="#5d564d">
-                {hobby.description}
-              </Text>
+            <Box
+              className="glass-card card-shine"
+              padding={5}
+              display="flex"
+              flexDirection="column"
+              gap={4}
+              height="100%"
+              role="group"
+            >
+              <Box position="relative" overflow="hidden" borderRadius="lg">
+                <Image
+                  src={hobby.media}
+                  alt={hobby.title}
+                  height="140px"
+                  objectFit="cover"
+                  width="100%"
+                  transition="transform 0.5s ease"
+                  _groupHover={{ transform: "scale(1.05)" }}
+                />
+                <Box
+                  position="absolute"
+                  inset={0}
+                  bg="linear-gradient(180deg, transparent 60%, rgba(10, 10, 15, 0.8) 100%)"
+                />
+              </Box>
+              <Box>
+                <Heading size="sm" mb={2} color="#f0f0f5" fontWeight="600">
+                  {hobby.title}
+                </Heading>
+                <Text fontSize="sm" color="#8b8b9a" lineHeight="1.7">
+                  {hobby.description}
+                </Text>
+              </Box>
             </Box>
-          </Box>
+          </MotionBox>
         ))}
       </SimpleGrid>
     </FullScreenSection>

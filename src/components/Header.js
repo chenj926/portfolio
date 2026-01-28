@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -7,7 +7,11 @@ import {
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
 import { Box, HStack, Link } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 import Resume from "../assets/resume/Jialuo_Chen_Resume.pdf";
+
+const MotionBox = motion(Box);
+const MotionLink = motion(Link);
 
 const socials = [
   {
@@ -34,7 +38,6 @@ const socials = [
 
 const navLinks = [
   { label: "About", anchor: "home" },
-  { label: "Status", anchor: "status" },
   { label: "News", anchor: "news" },
   { label: "Experience", anchor: "experience" },
   { label: "Projects", anchor: "projects" },
@@ -44,6 +47,16 @@ const navLinks = [
 ];
 
 const Header = () => {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleClick = (anchor) => () => {
     const id = `${anchor}-section`;
     const element = document.getElementById(id);
@@ -56,51 +69,106 @@ const Header = () => {
   };
 
   return (
-    <Box
+    <MotionBox
+      as="header"
       position="fixed"
       top={0}
       left={0}
       right={0}
-      translateY={0}
-      transitionProperty="transform"
-      transitionDuration=".3s"
-      transitionTimingFunction="ease-in-out"
-      backgroundColor="#f5f1e8"
-      borderBottom="1px solid #e2ddd2"
       zIndex="9999"
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <Box color="#3d3b36" maxWidth="1280px" margin="0 auto">
-        <HStack px={{ base: 6, md: 16 }} py={4} justifyContent="space-between">
-          <nav>
-            <HStack spacing={4}>
-              {socials.map((social) => (
-                <Link
-                  key={social.label}
-                  href={social.url}
+      <Box
+        backgroundColor={scrolled ? "rgba(10, 10, 15, 0.8)" : "transparent"}
+        backdropFilter={scrolled ? "blur(20px)" : "none"}
+        borderBottom={scrolled ? "1px solid rgba(255, 255, 255, 0.06)" : "none"}
+        transition="all 0.3s ease"
+      >
+        <Box maxWidth="1280px" margin="0 auto">
+          <HStack px={{ base: 6, md: 16 }} py={4} justifyContent="space-between">
+            <nav>
+              <HStack spacing={4}>
+                {socials.map((social, index) => (
+                  <MotionLink
+                    key={social.label}
+                    href={social.url}
+                    isExternal
+                    aria-label={social.label}
+                    color="#8b8b9a"
+                    _hover={{ color: "#f0f0f5" }}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1, duration: 0.3 }}
+                  >
+                    <FontAwesomeIcon icon={social.icon} size="lg" />
+                  </MotionLink>
+                ))}
+              </HStack>
+            </nav>
+            <nav>
+              <HStack spacing={{ base: 3, md: 6 }} fontSize="sm">
+                {navLinks.map((link, index) => (
+                  <MotionLink
+                    key={link.label}
+                    onClick={handleClick(link.anchor)}
+                    cursor="pointer"
+                    color="#8b8b9a"
+                    fontWeight="500"
+                    position="relative"
+                    _hover={{ color: "#f0f0f5", textDecoration: "none" }}
+                    display={{ base: index > 3 ? "none" : "block", md: "block" }}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 + index * 0.05, duration: 0.3 }}
+                    sx={{
+                      "&::after": {
+                        content: '""',
+                        position: "absolute",
+                        left: 0,
+                        bottom: "-4px",
+                        width: "0%",
+                        height: "2px",
+                        background: "linear-gradient(90deg, #6366f1, #8b5cf6)",
+                        transition: "width 0.3s ease",
+                      },
+                      "&:hover::after": {
+                        width: "100%",
+                      },
+                    }}
+                  >
+                    {link.label}
+                  </MotionLink>
+                ))}
+                <MotionLink
+                  href={Resume}
                   isExternal
-                  aria-label={social.label}
-                  color="#3d3b36"
+                  fontWeight="600"
+                  color="#f0f0f5"
+                  px={4}
+                  py={2}
+                  borderRadius="full"
+                  background="linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2))"
+                  border="1px solid rgba(99, 102, 241, 0.3)"
+                  _hover={{
+                    background: "linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3))",
+                    textDecoration: "none",
+                    transform: "translateY(-1px)",
+                  }}
+                  transition="all 0.3s ease"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  whileHover={{ scale: 1.02 }}
                 >
-                  <FontAwesomeIcon icon={social.icon} size="lg" />
-                </Link>
-              ))}
-            </HStack>
-          </nav>
-          <nav>
-            <HStack spacing={4} fontSize="sm">
-              {navLinks.map((link) => (
-                <Link key={link.label} onClick={handleClick(link.anchor)}>
-                  {link.label}
-                </Link>
-              ))}
-              <Link href={Resume} isExternal fontWeight="600">
-                Resume
-              </Link>
-            </HStack>
-          </nav>
-        </HStack>
+                  Resume
+                </MotionLink>
+              </HStack>
+            </nav>
+          </HStack>
+        </Box>
       </Box>
-    </Box>
+    </MotionBox>
   );
 };
 export default Header;
