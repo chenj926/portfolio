@@ -11,14 +11,20 @@ import {
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 import FullScreenSection from "./FullScreenSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFileLines,
   faGlobe,
   faLink,
+  faChevronDown,
+  faChevronUp,
+  faArrowUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+
+const MotionBox = motion(Box);
 
 const linkIcons = {
   github: faGithub,
@@ -40,18 +46,6 @@ const publications = [
       { label: "Github", url: "https://arxiv.org/", type: "github" },
     ],
   },
-  // {
-  //   title: "Uncertainty-Aware Bayesian Optimization for Trustworthy AI Systems",
-  //   venue: "Under Review",
-  //   year: "2025",
-  //   description:
-  //     "Explores calibrated Bayesian optimization loops for risk-sensitive decision making.",
-  //   tags: ["Bayesian Opt", "Trustworthy AI"],
-  //   links: [
-  //     { label: "Paper", url: "https://arxiv.org/", type: "paper" },
-  //     { label: "GitHub", url: "https://github.com/chenj926", type: "github" },
-  //   ],
-  // },
 ];
 
 const ResearchSection = () => {
@@ -64,81 +58,125 @@ const ResearchSection = () => {
   return (
     <FullScreenSection
       id="research-section"
-      backgroundColor="#f5f1e8"
+      backgroundColor="#0a0a0f"
       px={{ base: 6, md: 12 }}
-      py={{ base: 10, md: 18 }}
+      py={{ base: 12, md: 20 }}
       alignItems="stretch"
       spacing={8}
     >
-      {/* 同project */}
-      <VStack align="flex-start" spacing={4}>
-        <Heading size="lg">Publications</Heading>
-        <Text maxW="640px" color="#5d564d">
+      <VStack align="flex-start" spacing={3}>
+        <Text
+          fontSize="sm"
+          textTransform="uppercase"
+          letterSpacing="0.2em"
+          color="#6366f1"
+          fontWeight="600"
+        >
+          Research
+        </Text>
+        <Heading size="lg" color="#f0f0f5">
+          Publications
+        </Heading>
+        <Text maxW="640px" color="#8b8b9a">
           Selected papers, open review submissions, and research prototypes.
         </Text>
       </VStack>
+
       <VStack spacing={6} align="stretch">
-        {visiblePublications.map((pub) => (
-          <Box
+        {visiblePublications.map((pub, index) => (
+          <MotionBox
             key={pub.title}
-            backgroundColor="#ffffff"
-            borderRadius="22px"
-            padding={{ base: 6, md: 7 }}
-            boxShadow="0 18px 28px rgba(61, 59, 54, 0.08)"
-            display="flex"
-            flexDirection="column"
-            minH="240px"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: index * 0.1 }}
           >
-            <Text fontSize="xs" textTransform="uppercase" color="#7b736a">
-              {pub.venue} · {pub.year}
-            </Text>
-            <Heading size="sm" mt={2} mb={3}>
-              {pub.title}
-            </Heading>
-            <Text fontSize="sm" color="#5d564d" mb={4} flex="1">
-              {pub.description}
-            </Text>
-            <Wrap spacing={2} mb={4}>
-              {pub.tags.map((tag) => (
-                <WrapItem key={tag}>
-                  <Tag size="sm" variant="subtle" colorScheme="orange">
-                    {tag}
-                  </Tag>
-                </WrapItem>
-              ))}
-            </Wrap>
-            <HStack spacing={3} flexWrap="wrap">
-              {pub.links.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.url}
-                  isExternal
-                  color="#3d3b36"
-                  fontWeight="600"
-                  display="inline-flex"
-                  alignItems="center"
-                  gap={2}
-                  fontSize="sm"
-                  padding="6px 12px"
-                  borderRadius="full"
-                  border="1px solid #d7cdbf"
-                  _hover={{ textDecoration: "none", backgroundColor: "#f3ece2" }}
-                >
-                  <FontAwesomeIcon icon={linkIcons[link.type] || linkIcons.default} />
-                  {link.label}
-                </Link>
-              ))}
-            </HStack>
-          </Box>
+            <Box
+              className="glass-card"
+              padding={{ base: 6, md: 7 }}
+              display="flex"
+              flexDirection="column"
+            >
+              <Text
+                fontSize="xs"
+                textTransform="uppercase"
+                letterSpacing="0.1em"
+                color="#6366f1"
+                fontFamily="mono"
+              >
+                {pub.venue} · {pub.year}
+              </Text>
+              <Heading size="sm" mt={3} mb={3} color="#f0f0f5" fontWeight="600">
+                {pub.title}
+              </Heading>
+              <Text fontSize="sm" color="#8b8b9a" mb={4} lineHeight="1.7">
+                {pub.description}
+              </Text>
+
+              <Wrap spacing={2} mb={4}>
+                {pub.tags.map((tag) => (
+                  <WrapItem key={tag}>
+                    <Tag
+                      size="sm"
+                      bg="rgba(99, 102, 241, 0.15)"
+                      color="#6366f1"
+                      border="1px solid rgba(99, 102, 241, 0.3)"
+                      borderRadius="full"
+                      fontWeight="500"
+                    >
+                      {tag}
+                    </Tag>
+                  </WrapItem>
+                ))}
+              </Wrap>
+
+              <HStack spacing={3} flexWrap="wrap">
+                {pub.links.map((link) => (
+                  <Link
+                    key={link.label}
+                    href={link.url}
+                    isExternal
+                    color="#8b8b9a"
+                    fontWeight="500"
+                    display="inline-flex"
+                    alignItems="center"
+                    gap={2}
+                    fontSize="sm"
+                    padding="8px 14px"
+                    borderRadius="lg"
+                    border="1px solid rgba(255, 255, 255, 0.08)"
+                    bg="rgba(255, 255, 255, 0.02)"
+                    _hover={{
+                      textDecoration: "none",
+                      color: "#f0f0f5",
+                      borderColor: "rgba(99, 102, 241, 0.4)",
+                      bg: "rgba(99, 102, 241, 0.1)",
+                    }}
+                    transition="all 0.3s ease"
+                  >
+                    <FontAwesomeIcon icon={linkIcons[link.type] || linkIcons.default} />
+                    {link.label}
+                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="xs" />
+                  </Link>
+                ))}
+              </HStack>
+            </Box>
+          </MotionBox>
         ))}
       </VStack>
+
       {publications.length > 6 && (
         <Button
           alignSelf="center"
-          variant="outline"
-          borderColor="#3d3b36"
+          variant="ghost"
           size="sm"
+          color="#8b8b9a"
+          rightIcon={<FontAwesomeIcon icon={showAll ? faChevronUp : faChevronDown} />}
           onClick={() => setShowAll((prev) => !prev)}
+          _hover={{
+            color: "#f0f0f5",
+            bg: "rgba(255, 255, 255, 0.05)",
+          }}
         >
           {showAll ? "Show less" : "Show more"}
         </Button>

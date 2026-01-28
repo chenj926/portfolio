@@ -1,6 +1,11 @@
 import React from "react";
-import { Box, Heading, Link, Text, VStack, Wrap, WrapItem } from "@chakra-ui/react";
+import { Box, Heading, Link, Text, VStack, SimpleGrid } from "@chakra-ui/react";
+import { motion } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import FullScreenSection from "./FullScreenSection";
+
+const MotionBox = motion(Box);
 
 const channels = [
   {
@@ -13,58 +18,75 @@ const channels = [
     description: "Sharing study experiments and engaging in creator communities.",
     url: "https://www.reddit.com/user/Every-Movie7060/",
   },
-  // {
-  //   title: "YouTube / Bilibili",
-  //   description: "Future paid content on product strategy and applied ML.",
-  //   url: "https://www.youtube.com/",
-  // },
-  // {
-  //   title: "TikTok (Coming Soon)",
-  //   description: "Short-form insights on research and career planning.",
-  //   url: "https://www.tiktok.com/",
-  // },
 ];
 
 const ContentSection = () => {
   return (
     <FullScreenSection
       id="content-section"
-      backgroundColor="#f5f1e8"
+      backgroundColor="#0a0a0f"
       px={{ base: 6, md: 12 }}
-      py={{ base: 10, md: 18 }}
+      py={{ base: 12, md: 20 }}
       alignItems="stretch"
       spacing={8}
     >
-      {/* 同project,  */}
-      <VStack align="flex-start" spacing={4}>
-        <Heading size="lg">Content & Community</Heading>
-        <Text maxW="640px" color="#5d564d">
-          Places where I share ideas, experiments, and future paid knowledge content.
+      <VStack align="flex-start" spacing={3}>
+        <Text
+          fontSize="sm"
+          textTransform="uppercase"
+          letterSpacing="0.2em"
+          color="#6366f1"
+          fontWeight="600"
+        >
+          Social
+        </Text>
+        <Heading size="lg" color="#f0f0f5">
+          Content & Community
+        </Heading>
+        <Text maxW="640px" color="#8b8b9a">
+          Places where I share ideas, experiments, and knowledge content.
         </Text>
       </VStack>
-      <Wrap spacing={6} align="stretch">
-        {channels.map((channel) => (
-          <WrapItem key={channel.title} flex="1" minW={{ base: "100%", md: "240px" }}>
+
+      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+        {channels.map((channel, index) => (
+          <MotionBox
+            key={channel.title}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: index * 0.1 }}
+          >
             <Box
-              backgroundColor="#ffffff"
-              borderRadius="20px"
+              className="glass-card"
               padding={6}
-              boxShadow="0 16px 24px rgba(61, 59, 54, 0.08)"
               width="100%"
+              height="100%"
             >
-              <Heading size="sm" mb={2}>
+              <Heading size="sm" mb={2} color="#f0f0f5" fontWeight="600">
                 {channel.title}
               </Heading>
-              <Text fontSize="sm" color="#5d564d" mb={3}>
+              <Text fontSize="sm" color="#8b8b9a" mb={4} lineHeight="1.7">
                 {channel.description}
               </Text>
-              <Link href={channel.url} isExternal color="#b25e4d" fontWeight="600">
-                Visit channel →
+              <Link
+                href={channel.url}
+                isExternal
+                color="#6366f1"
+                fontWeight="500"
+                fontSize="sm"
+                display="inline-flex"
+                alignItems="center"
+                gap={2}
+                _hover={{ color: "#8b5cf6", textDecoration: "none" }}
+              >
+                Visit channel
+                <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="xs" />
               </Link>
             </Box>
-          </WrapItem>
+          </MotionBox>
         ))}
-      </Wrap>
+      </SimpleGrid>
     </FullScreenSection>
   );
 };
