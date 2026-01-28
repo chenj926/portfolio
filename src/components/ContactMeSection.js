@@ -15,11 +15,14 @@ import {
 import { motion } from "framer-motion";
 import * as Yup from "yup";
 import FullScreenSection from "./FullScreenSection";
+import { useTheme } from "../context/themeContext";
 
 const MotionBox = motion(Box);
 
 const ContactMeSection = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { isDarkMode } = useTheme();
+
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -46,7 +49,7 @@ const ContactMeSection = () => {
   return (
     <FullScreenSection
       id="connect-section"
-      backgroundColor="#0a0a0f"
+      backgroundColor={isDarkMode ? "#0a0a0f" : "#faf8f5"}
       py={{ base: 12, md: 20 }}
       px={{ base: 6, md: 12 }}
       spacing={8}
@@ -57,24 +60,24 @@ const ContactMeSection = () => {
           fontSize="sm"
           textTransform="uppercase"
           letterSpacing="0.2em"
-          color="#6366f1"
+          color={isDarkMode ? "#6366f1" : "#8b6914"}
           fontWeight="600"
         >
           Contact
         </Text>
-        <Heading size="lg" color="#f0f0f5">
+        <Heading size="lg" color={isDarkMode ? "#f0f0f5" : "#2d2a26"}>
           Let&apos;s Connect
         </Heading>
-        <Text maxW="640px" color="#8b8b9a">
+        <Text maxW="640px" color={isDarkMode ? "#8b8b9a" : "#5c574e"}>
           Want to collaborate or chat? Send a note and I&apos;ll get back to you soon.
         </Text>
       </VStack>
 
       <MotionBox
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
       >
         <Box
           className={`envelope ${isOpen ? "is-open" : ""}`}
@@ -98,43 +101,43 @@ const ContactMeSection = () => {
                 <FormControl
                   isInvalid={formik.touched.firstName && formik.errors.firstName}
                 >
-                  <FormLabel htmlFor="firstName" color="#f0f0f5" fontSize="sm">
+                  <FormLabel htmlFor="firstName" color={isDarkMode ? "#f0f0f5" : "#2d2a26"} fontSize="sm">
                     Name
                   </FormLabel>
                   <Input
                     id="firstName"
                     name="firstName"
-                    bg="rgba(255, 255, 255, 0.05)"
-                    border="1px solid rgba(255, 255, 255, 0.1)"
-                    color="#f0f0f5"
-                    _hover={{ borderColor: "rgba(99, 102, 241, 0.4)" }}
+                    bg={isDarkMode ? "rgba(255, 255, 255, 0.05)" : "rgba(255, 255, 255, 0.7)"}
+                    border={`1px solid ${isDarkMode ? "rgba(255, 255, 255, 0.1)" : "rgba(139, 90, 43, 0.15)"}`}
+                    color={isDarkMode ? "#f0f0f5" : "#2d2a26"}
+                    _hover={{ borderColor: isDarkMode ? "rgba(99, 102, 241, 0.4)" : "rgba(139, 105, 20, 0.4)" }}
                     _focus={{
-                      borderColor: "#6366f1",
-                      boxShadow: "0 0 0 1px #6366f1",
+                      borderColor: isDarkMode ? "#6366f1" : "#8b6914",
+                      boxShadow: isDarkMode ? "0 0 0 1px #6366f1" : "0 0 0 1px #8b6914",
                     }}
-                    _placeholder={{ color: "#5a5a6e" }}
+                    _placeholder={{ color: isDarkMode ? "#5a5a6e" : "#8a847a" }}
                     {...formik.getFieldProps("firstName")}
                   />
                   <FormErrorMessage color="#ef4444">{formik.errors.firstName}</FormErrorMessage>
                 </FormControl>
 
                 <FormControl isInvalid={formik.touched.email && formik.errors.email}>
-                  <FormLabel htmlFor="email" color="#f0f0f5" fontSize="sm">
+                  <FormLabel htmlFor="email" color={isDarkMode ? "#f0f0f5" : "#2d2a26"} fontSize="sm">
                     Email
                   </FormLabel>
                   <Input
                     id="email"
                     name="email"
                     type="email"
-                    bg="rgba(255, 255, 255, 0.05)"
-                    border="1px solid rgba(255, 255, 255, 0.1)"
-                    color="#f0f0f5"
-                    _hover={{ borderColor: "rgba(99, 102, 241, 0.4)" }}
+                    bg={isDarkMode ? "rgba(255, 255, 255, 0.05)" : "rgba(255, 255, 255, 0.7)"}
+                    border={`1px solid ${isDarkMode ? "rgba(255, 255, 255, 0.1)" : "rgba(139, 90, 43, 0.15)"}`}
+                    color={isDarkMode ? "#f0f0f5" : "#2d2a26"}
+                    _hover={{ borderColor: isDarkMode ? "rgba(99, 102, 241, 0.4)" : "rgba(139, 105, 20, 0.4)" }}
                     _focus={{
-                      borderColor: "#6366f1",
-                      boxShadow: "0 0 0 1px #6366f1",
+                      borderColor: isDarkMode ? "#6366f1" : "#8b6914",
+                      boxShadow: isDarkMode ? "0 0 0 1px #6366f1" : "0 0 0 1px #8b6914",
                     }}
-                    _placeholder={{ color: "#5a5a6e" }}
+                    _placeholder={{ color: isDarkMode ? "#5a5a6e" : "#8a847a" }}
                     {...formik.getFieldProps("email")}
                   />
                   <FormErrorMessage color="#ef4444">{formik.errors.email}</FormErrorMessage>
@@ -143,22 +146,22 @@ const ContactMeSection = () => {
                 <FormControl
                   isInvalid={formik.touched.comment && formik.errors.comment}
                 >
-                  <FormLabel htmlFor="comment" color="#f0f0f5" fontSize="sm">
+                  <FormLabel htmlFor="comment" color={isDarkMode ? "#f0f0f5" : "#2d2a26"} fontSize="sm">
                     Message
                   </FormLabel>
                   <Textarea
                     id="comment"
                     name="comment"
                     height={{ base: 140, md: 160 }}
-                    bg="rgba(255, 255, 255, 0.05)"
-                    border="1px solid rgba(255, 255, 255, 0.1)"
-                    color="#f0f0f5"
-                    _hover={{ borderColor: "rgba(99, 102, 241, 0.4)" }}
+                    bg={isDarkMode ? "rgba(255, 255, 255, 0.05)" : "rgba(255, 255, 255, 0.7)"}
+                    border={`1px solid ${isDarkMode ? "rgba(255, 255, 255, 0.1)" : "rgba(139, 90, 43, 0.15)"}`}
+                    color={isDarkMode ? "#f0f0f5" : "#2d2a26"}
+                    _hover={{ borderColor: isDarkMode ? "rgba(99, 102, 241, 0.4)" : "rgba(139, 105, 20, 0.4)" }}
                     _focus={{
-                      borderColor: "#6366f1",
-                      boxShadow: "0 0 0 1px #6366f1",
+                      borderColor: isDarkMode ? "#6366f1" : "#8b6914",
+                      boxShadow: isDarkMode ? "0 0 0 1px #6366f1" : "0 0 0 1px #8b6914",
                     }}
-                    _placeholder={{ color: "#5a5a6e" }}
+                    _placeholder={{ color: isDarkMode ? "#5a5a6e" : "#8a847a" }}
                     {...formik.getFieldProps("comment")}
                   />
                   <FormErrorMessage color="#ef4444">{formik.errors.comment}</FormErrorMessage>
@@ -167,14 +170,19 @@ const ContactMeSection = () => {
                 <Button
                   type="submit"
                   width="full"
-                  bg="linear-gradient(135deg, #6366f1, #8b5cf6)"
+                  bg={isDarkMode
+                    ? "linear-gradient(135deg, #6366f1, #8b5cf6)"
+                    : "linear-gradient(135deg, #8b6914, #a67c00)"
+                  }
                   color="white"
                   fontWeight="600"
                   _hover={{
                     transform: "translateY(-2px)",
-                    boxShadow: "0 10px 30px rgba(99, 102, 241, 0.4)",
+                    boxShadow: isDarkMode
+                      ? "0 10px 30px rgba(99, 102, 241, 0.4)"
+                      : "0 10px 30px rgba(139, 105, 20, 0.3)",
                   }}
-                  transition="all 0.3s ease"
+                  transition="all 0.4s ease"
                 >
                   Send message
                 </Button>

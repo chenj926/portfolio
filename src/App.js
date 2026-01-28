@@ -11,28 +11,31 @@ import SkillsSection from "./components/SkillsSection";
 import ContactMeSection from "./components/ContactMeSection";
 import Footer from "./components/Footer";
 import { AlertProvider } from "./context/alertContext";
+import { ThemeProvider } from "./context/themeContext";
 import Alert from "./components/Alert";
 
 function App() {
   return (
     <ChakraProvider>
-      <AlertProvider>
-        <main>
-          <Header />
-          <LandingSection />
-          {/* <StatusSection /> */}
-          <NewsSection />
-          <ExperienceSection />
-          <ProjectsSection />
-          <ResearchSection />
-          <HobbiesSection />
-          <ContentSection />
-          <SkillsSection />
-          <ContactMeSection />
-          <Footer />
-          <Alert />
-        </main>
-      </AlertProvider>
+      <ThemeProvider>
+        <AlertProvider>
+          <main>
+            <Header />
+            <LandingSection />
+            {/* <StatusSection /> */}
+            <NewsSection />
+            <ExperienceSection />
+            <ProjectsSection />
+            <ResearchSection />
+            <HobbiesSection />
+            <ContentSection />
+            <SkillsSection />
+            <ContactMeSection />
+            <Footer />
+            <Alert />
+          </main>
+        </AlertProvider>
+      </ThemeProvider>
     </ChakraProvider>
   );
 }

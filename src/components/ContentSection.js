@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import FullScreenSection from "./FullScreenSection";
+import { useTheme } from "../context/themeContext";
 
 const MotionBox = motion(Box);
 
@@ -21,10 +22,12 @@ const channels = [
 ];
 
 const ContentSection = () => {
+  const { isDarkMode } = useTheme();
+
   return (
     <FullScreenSection
       id="content-section"
-      backgroundColor="#0a0a0f"
+      backgroundColor={isDarkMode ? "#0a0a0f" : "#faf8f5"}
       px={{ base: 6, md: 12 }}
       py={{ base: 12, md: 20 }}
       alignItems="stretch"
@@ -35,15 +38,15 @@ const ContentSection = () => {
           fontSize="sm"
           textTransform="uppercase"
           letterSpacing="0.2em"
-          color="#6366f1"
+          color={isDarkMode ? "#6366f1" : "#8b6914"}
           fontWeight="600"
         >
           Social
         </Text>
-        <Heading size="lg" color="#f0f0f5">
+        <Heading size="lg" color={isDarkMode ? "#f0f0f5" : "#2d2a26"}>
           Content & Community
         </Heading>
-        <Text maxW="640px" color="#8b8b9a">
+        <Text maxW="640px" color={isDarkMode ? "#8b8b9a" : "#5c574e"}>
           Places where I share ideas, experiments, and knowledge content.
         </Text>
       </VStack>
@@ -52,10 +55,10 @@ const ContentSection = () => {
         {channels.map((channel, index) => (
           <MotionBox
             key={channel.title}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
+            transition={{ duration: 0.5, delay: index * 0.1, ease: [0.4, 0, 0.2, 1] }}
           >
             <Box
               className="glass-card"
@@ -63,22 +66,22 @@ const ContentSection = () => {
               width="100%"
               height="100%"
             >
-              <Heading size="sm" mb={2} color="#f0f0f5" fontWeight="600">
+              <Heading size="sm" mb={2} color={isDarkMode ? "#f0f0f5" : "#2d2a26"} fontWeight="600">
                 {channel.title}
               </Heading>
-              <Text fontSize="sm" color="#8b8b9a" mb={4} lineHeight="1.7">
+              <Text fontSize="sm" color={isDarkMode ? "#8b8b9a" : "#5c574e"} mb={4} lineHeight="1.7">
                 {channel.description}
               </Text>
               <Link
                 href={channel.url}
                 isExternal
-                color="#6366f1"
+                color={isDarkMode ? "#6366f1" : "#8b6914"}
                 fontWeight="500"
                 fontSize="sm"
                 display="inline-flex"
                 alignItems="center"
                 gap={2}
-                _hover={{ color: "#8b5cf6", textDecoration: "none" }}
+                _hover={{ color: isDarkMode ? "#8b5cf6" : "#a67c00", textDecoration: "none" }}
               >
                 Visit channel
                 <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="xs" />

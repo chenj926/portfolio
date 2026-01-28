@@ -1,5 +1,5 @@
 :root {
-  /* Primary colors */
+  /* Dark theme (default) */
   --bg-primary: #0a0a0f;
   --bg-secondary: #12121a;
   --bg-tertiary: #1a1a24;
@@ -36,6 +36,48 @@
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 20px;
+
+  /* Hover glow */
+  --hover-glow: 0 0 20px rgba(99, 102, 241, 0.3), 0 0 40px rgba(99, 102, 241, 0.1);
+  --hover-glow-strong: 0 0 30px rgba(99, 102, 241, 0.4), 0 0 60px rgba(139, 92, 246, 0.2);
+}
+
+/* Light theme (warm beige) */
+[data-theme="light"] {
+  --bg-primary: #faf8f5;
+  --bg-secondary: #f5f0e8;
+  --bg-tertiary: #ebe5d9;
+
+  /* Glass effect backgrounds for light mode */
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(139, 90, 43, 0.12);
+  --glass-hover: rgba(255, 255, 255, 0.8);
+
+  /* Text colors */
+  --text-primary: #2d2a26;
+  --text-secondary: #5c574e;
+  --text-muted: #8a847a;
+
+  /* Accent colors - warmer tones */
+  --accent-primary: #8b6914;
+  --accent-secondary: #a67c00;
+  --accent-gradient: linear-gradient(135deg, #8b6914 0%, #a67c00 50%, #c49102 100%);
+  --accent-glow: rgba(139, 105, 20, 0.3);
+
+  /* Semantic colors */
+  --success: #059669;
+  --warning: #d97706;
+
+  /* Borders & shadows */
+  --border-subtle: rgba(139, 90, 43, 0.1);
+  --shadow-sm: 0 2px 8px rgba(139, 90, 43, 0.08);
+  --shadow-md: 0 8px 24px rgba(139, 90, 43, 0.12);
+  --shadow-lg: 0 16px 48px rgba(139, 90, 43, 0.15);
+  --shadow-glow: 0 0 40px rgba(139, 105, 20, 0.1);
+
+  /* Hover glow */
+  --hover-glow: 0 0 20px rgba(139, 105, 20, 0.2), 0 0 40px rgba(166, 124, 0, 0.1);
+  --hover-glow-strong: 0 0 30px rgba(139, 105, 20, 0.3), 0 0 60px rgba(166, 124, 0, 0.15);
 }
 
 * {
@@ -45,6 +87,7 @@
 html {
   background-color: var(--bg-primary);
   scroll-behavior: smooth;
+  transition: background-color 0.4s ease;
 }
 
 body {
@@ -56,6 +99,7 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 code {
@@ -85,4 +129,12 @@ code {
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="light"]::-webkit-scrollbar-thumb {
+  background: rgba(139, 90, 43, 0.2);
+}
+
+[data-theme="light"]::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 90, 43, 0.3);
 }

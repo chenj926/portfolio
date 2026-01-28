@@ -12,6 +12,7 @@ import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import FullScreenSection from "./FullScreenSection";
+import { useTheme } from "../context/themeContext";
 
 const MotionBox = motion(Box);
 
@@ -56,6 +57,7 @@ const news = [
 
 const NewsSection = () => {
   const [showAll, setShowAll] = useState(false);
+  const { isDarkMode } = useTheme();
   const visibleNews = useMemo(
     () => (showAll ? news : news.slice(0, 5)),
     [showAll]
@@ -64,7 +66,7 @@ const NewsSection = () => {
   return (
     <FullScreenSection
       id="news-section"
-      backgroundColor="#0a0a0f"
+      backgroundColor={isDarkMode ? "#0a0a0f" : "#faf8f5"}
       px={{ base: 6, md: 12 }}
       py={{ base: 12, md: 20 }}
       alignItems="stretch"
@@ -75,15 +77,15 @@ const NewsSection = () => {
           fontSize="sm"
           textTransform="uppercase"
           letterSpacing="0.2em"
-          color="#6366f1"
+          color={isDarkMode ? "#6366f1" : "#8b6914"}
           fontWeight="600"
         >
           Updates
         </Text>
-        <Heading size="lg" color="#f0f0f5">
+        <Heading size="lg" color={isDarkMode ? "#f0f0f5" : "#2d2a26"}>
           Latest News
         </Heading>
-        <Text maxW="640px" color="#8b8b9a">
+        <Text maxW="640px" color={isDarkMode ? "#8b8b9a" : "#5c574e"}>
           Highlights from recent work, reviews, and updates.
         </Text>
       </VStack>
@@ -95,14 +97,11 @@ const NewsSection = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: index * 0.05 }}
+            transition={{ duration: 0.5, delay: index * 0.05, ease: [0.4, 0, 0.2, 1] }}
           >
             <Box
               className="glass-card"
               padding={{ base: 4, md: 5 }}
-              _hover={{
-                borderColor: "rgba(99, 102, 241, 0.3)",
-              }}
             >
               <HStack
                 spacing={{ base: 3, md: 6 }}
@@ -113,30 +112,30 @@ const NewsSection = () => {
                   fontSize="xs"
                   textTransform="uppercase"
                   letterSpacing="0.1em"
-                  color="#5a5a6e"
+                  color={isDarkMode ? "#5a5a6e" : "#8a847a"}
                   minW={{ md: "100px" }}
                   fontFamily="mono"
                 >
                   {item.date}
                 </Text>
                 <Box flex="1">
-                  <Heading size="sm" color="#f0f0f5" fontWeight="500">
+                  <Heading size="sm" color={isDarkMode ? "#f0f0f5" : "#2d2a26"} fontWeight="500">
                     {item.title}
                   </Heading>
-                  <Text fontSize="sm" color="#8b8b9a" mt={1}>
+                  <Text fontSize="sm" color={isDarkMode ? "#8b8b9a" : "#5c574e"} mt={1}>
                     {item.source}
                   </Text>
                 </Box>
                 <Link
                   href={item.url}
                   isExternal
-                  color="#6366f1"
+                  color={isDarkMode ? "#6366f1" : "#8b6914"}
                   fontWeight="500"
                   fontSize="sm"
                   display="inline-flex"
                   alignItems="center"
                   gap={2}
-                  _hover={{ color: "#8b5cf6", textDecoration: "none" }}
+                  _hover={{ color: isDarkMode ? "#8b5cf6" : "#a67c00", textDecoration: "none" }}
                 >
                   View
                   <FontAwesomeIcon icon={faArrowRight} size="sm" />
@@ -152,12 +151,12 @@ const NewsSection = () => {
           alignSelf="center"
           variant="ghost"
           size="sm"
-          color="#8b8b9a"
+          color={isDarkMode ? "#8b8b9a" : "#5c574e"}
           rightIcon={<FontAwesomeIcon icon={showAll ? faChevronUp : faChevronDown} />}
           onClick={() => setShowAll((prev) => !prev)}
           _hover={{
-            color: "#f0f0f5",
-            bg: "rgba(255, 255, 255, 0.05)",
+            color: isDarkMode ? "#f0f0f5" : "#2d2a26",
+            bg: isDarkMode ? "rgba(255, 255, 255, 0.05)" : "rgba(139, 90, 43, 0.08)",
           }}
         >
           {showAll ? "Show less" : "Show all"}

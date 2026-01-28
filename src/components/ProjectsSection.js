@@ -25,6 +25,7 @@ import {
   faArrowUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import { useTheme } from "../context/themeContext";
 
 const MotionBox = motion(Box);
 
@@ -105,6 +106,7 @@ const projects = [
 
 const ProjectsSection = () => {
   const [showAll, setShowAll] = useState(false);
+  const { isDarkMode } = useTheme();
   const visibleProjects = useMemo(
     () => (showAll ? projects : projects.slice(0, 6)),
     [showAll]
@@ -113,7 +115,7 @@ const ProjectsSection = () => {
   return (
     <FullScreenSection
       id="projects-section"
-      backgroundColor="#0a0a0f"
+      backgroundColor={isDarkMode ? "#0a0a0f" : "#faf8f5"}
       px={{ base: 6, md: 12 }}
       py={{ base: 12, md: 20 }}
       alignItems="stretch"
@@ -124,15 +126,15 @@ const ProjectsSection = () => {
           fontSize="sm"
           textTransform="uppercase"
           letterSpacing="0.2em"
-          color="#6366f1"
+          color={isDarkMode ? "#6366f1" : "#8b6914"}
           fontWeight="600"
         >
           Portfolio
         </Text>
-        <Heading size="lg" color="#f0f0f5">
+        <Heading size="lg" color={isDarkMode ? "#f0f0f5" : "#2d2a26"}>
           Projects & Research
         </Heading>
-        <Text maxW="640px" color="#8b8b9a">
+        <Text maxW="640px" color={isDarkMode ? "#8b8b9a" : "#5c574e"}>
           Featured builds with visuals, context, and quick links to dive deeper.
         </Text>
       </VStack>
@@ -141,10 +143,10 @@ const ProjectsSection = () => {
         {visibleProjects.map((project, index) => (
           <MotionBox
             key={project.title}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: index * 0.08 }}
+            transition={{ duration: 0.5, delay: index * 0.08, ease: [0.4, 0, 0.2, 1] }}
           >
             <Box
               className="glass-card card-shine"
@@ -154,6 +156,7 @@ const ProjectsSection = () => {
               height="100%"
               role="group"
             >
+              {/* Image area */}
               <Box position="relative" overflow="hidden">
                 <Image
                   src={project.image}
@@ -161,21 +164,43 @@ const ProjectsSection = () => {
                   height="180px"
                   width="100%"
                   objectFit="cover"
-                  transition="transform 0.5s ease"
-                  _groupHover={{ transform: "scale(1.05)" }}
+                  transition="transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)"
+                  _groupHover={{ transform: "scale(1.08)" }}
                 />
                 <Box
                   position="absolute"
                   inset={0}
-                  bg="linear-gradient(180deg, transparent 50%, rgba(10, 10, 15, 0.9) 100%)"
+                  bg={isDarkMode
+                    ? "linear-gradient(180deg, transparent 40%, rgba(10, 10, 15, 0.95) 100%)"
+                    : "linear-gradient(180deg, transparent 40%, rgba(250, 248, 245, 0.95) 100%)"
+                  }
                 />
               </Box>
 
-              <Box p={5} display="flex" flexDirection="column" flex="1">
-                <Heading size="sm" mb={2} color="#f0f0f5" fontWeight="600">
+              {/* Content area with frosted glass effect */}
+              <Box
+                className="project-content-frosted"
+                p={5}
+                display="flex"
+                flexDirection="column"
+                flex="1"
+                position="relative"
+                _before={{
+                  content: '""',
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: "1px",
+                  background: isDarkMode
+                    ? "linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent)"
+                    : "linear-gradient(90deg, transparent, rgba(139, 105, 20, 0.2), transparent)",
+                }}
+              >
+                <Heading size="sm" mb={2} color={isDarkMode ? "#f0f0f5" : "#2d2a26"} fontWeight="600">
                   {project.title}
                 </Heading>
-                <Text fontSize="sm" color="#8b8b9a" mb={4} flex="1" lineHeight="1.7">
+                <Text fontSize="sm" color={isDarkMode ? "#8b8b9a" : "#5c574e"} mb={4} flex="1" lineHeight="1.7">
                   {project.description}
                 </Text>
 
@@ -184,11 +209,19 @@ const ProjectsSection = () => {
                     <WrapItem key={tag}>
                       <Tag
                         size="sm"
-                        bg="rgba(99, 102, 241, 0.15)"
-                        color="#6366f1"
-                        border="1px solid rgba(99, 102, 241, 0.3)"
+                        bg={isDarkMode ? "rgba(99, 102, 241, 0.15)" : "rgba(139, 105, 20, 0.1)"}
+                        color={isDarkMode ? "#6366f1" : "#8b6914"}
+                        border={`1px solid ${isDarkMode ? "rgba(99, 102, 241, 0.3)" : "rgba(139, 105, 20, 0.2)"}`}
                         borderRadius="full"
                         fontWeight="500"
+                        transition="all 0.4s ease"
+                        _hover={{
+                          bg: isDarkMode ? "rgba(99, 102, 241, 0.25)" : "rgba(139, 105, 20, 0.2)",
+                          borderColor: isDarkMode ? "#6366f1" : "#8b6914",
+                          boxShadow: isDarkMode
+                            ? "0 0 15px rgba(99, 102, 241, 0.3)"
+                            : "0 0 15px rgba(139, 105, 20, 0.2)",
+                        }}
                       >
                         {tag}
                       </Tag>
@@ -202,7 +235,7 @@ const ProjectsSection = () => {
                       key={link.label}
                       href={link.url}
                       isExternal
-                      color="#8b8b9a"
+                      color={isDarkMode ? "#8b8b9a" : "#5c574e"}
                       fontWeight="500"
                       display="inline-flex"
                       alignItems="center"
@@ -210,15 +243,18 @@ const ProjectsSection = () => {
                       fontSize="sm"
                       padding="8px 14px"
                       borderRadius="lg"
-                      border="1px solid rgba(255, 255, 255, 0.08)"
-                      bg="rgba(255, 255, 255, 0.02)"
+                      border={`1px solid ${isDarkMode ? "rgba(255, 255, 255, 0.08)" : "rgba(139, 90, 43, 0.12)"}`}
+                      bg={isDarkMode ? "rgba(255, 255, 255, 0.02)" : "rgba(255, 255, 255, 0.5)"}
                       _hover={{
                         textDecoration: "none",
-                        color: "#f0f0f5",
-                        borderColor: "rgba(99, 102, 241, 0.4)",
-                        bg: "rgba(99, 102, 241, 0.1)",
+                        color: isDarkMode ? "#f0f0f5" : "#2d2a26",
+                        borderColor: isDarkMode ? "rgba(99, 102, 241, 0.4)" : "rgba(139, 105, 20, 0.4)",
+                        bg: isDarkMode ? "rgba(99, 102, 241, 0.1)" : "rgba(139, 105, 20, 0.1)",
+                        boxShadow: isDarkMode
+                          ? "0 0 15px rgba(99, 102, 241, 0.2)"
+                          : "0 0 15px rgba(139, 105, 20, 0.15)",
                       }}
-                      transition="all 0.3s ease"
+                      transition="all 0.4s ease"
                     >
                       <FontAwesomeIcon icon={linkIcons[link.type] || linkIcons.default} />
                       {link.label}
@@ -237,12 +273,12 @@ const ProjectsSection = () => {
           alignSelf="center"
           variant="ghost"
           size="sm"
-          color="#8b8b9a"
+          color={isDarkMode ? "#8b8b9a" : "#5c574e"}
           rightIcon={<FontAwesomeIcon icon={showAll ? faChevronUp : faChevronDown} />}
           onClick={() => setShowAll((prev) => !prev)}
           _hover={{
-            color: "#f0f0f5",
-            bg: "rgba(255, 255, 255, 0.05)",
+            color: isDarkMode ? "#f0f0f5" : "#2d2a26",
+            bg: isDarkMode ? "rgba(255, 255, 255, 0.05)" : "rgba(139, 90, 43, 0.08)",
           }}
         >
           {showAll ? "Show less" : "Show more"}

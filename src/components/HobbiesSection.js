@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Heading, Image, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import FullScreenSection from "./FullScreenSection";
+import { useTheme } from "../context/themeContext";
 
 const MotionBox = motion(Box);
 
@@ -45,10 +46,12 @@ const hobbies = [
 ];
 
 const HobbiesSection = () => {
+  const { isDarkMode } = useTheme();
+
   return (
     <FullScreenSection
       id="hobbies-section"
-      backgroundColor="#0a0a0f"
+      backgroundColor={isDarkMode ? "#0a0a0f" : "#faf8f5"}
       px={{ base: 6, md: 12 }}
       py={{ base: 12, md: 20 }}
       alignItems="stretch"
@@ -59,15 +62,15 @@ const HobbiesSection = () => {
           fontSize="sm"
           textTransform="uppercase"
           letterSpacing="0.2em"
-          color="#6366f1"
+          color={isDarkMode ? "#6366f1" : "#8b6914"}
           fontWeight="600"
         >
           Beyond Code
         </Text>
-        <Heading size="lg" color="#f0f0f5">
+        <Heading size="lg" color={isDarkMode ? "#f0f0f5" : "#2d2a26"}>
           Hobbies
         </Heading>
-        <Text maxW="640px" color="#8b8b9a">
+        <Text maxW="640px" color={isDarkMode ? "#8b8b9a" : "#5c574e"}>
           Interests that keep me curious, balanced, and creative.
         </Text>
       </VStack>
@@ -76,10 +79,10 @@ const HobbiesSection = () => {
         {hobbies.map((hobby, index) => (
           <MotionBox
             key={hobby.title}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: index * 0.08 }}
+            transition={{ duration: 0.5, delay: index * 0.08, ease: [0.4, 0, 0.2, 1] }}
           >
             <Box
               className="glass-card card-shine"
@@ -97,20 +100,23 @@ const HobbiesSection = () => {
                   height="140px"
                   objectFit="cover"
                   width="100%"
-                  transition="transform 0.5s ease"
-                  _groupHover={{ transform: "scale(1.05)" }}
+                  transition="transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)"
+                  _groupHover={{ transform: "scale(1.08)" }}
                 />
                 <Box
                   position="absolute"
                   inset={0}
-                  bg="linear-gradient(180deg, transparent 60%, rgba(10, 10, 15, 0.8) 100%)"
+                  bg={isDarkMode
+                    ? "linear-gradient(180deg, transparent 60%, rgba(10, 10, 15, 0.8) 100%)"
+                    : "linear-gradient(180deg, transparent 60%, rgba(250, 248, 245, 0.8) 100%)"
+                  }
                 />
               </Box>
               <Box>
-                <Heading size="sm" mb={2} color="#f0f0f5" fontWeight="600">
+                <Heading size="sm" mb={2} color={isDarkMode ? "#f0f0f5" : "#2d2a26"} fontWeight="600">
                   {hobby.title}
                 </Heading>
-                <Text fontSize="sm" color="#8b8b9a" lineHeight="1.7">
+                <Text fontSize="sm" color={isDarkMode ? "#8b8b9a" : "#5c574e"} lineHeight="1.7">
                   {hobby.description}
                 </Text>
               </Box>
