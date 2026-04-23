@@ -46,7 +46,7 @@ const ContactMeSection = () => {
   return (
     <FullScreenSection
       id="connect-section"
-      backgroundColor="#0a0a0f"
+      backgroundColor="var(--bg-primary)"
       py={{ base: 12, md: 20 }}
       px={{ base: 6, md: 12 }}
       spacing={8}
@@ -57,15 +57,15 @@ const ContactMeSection = () => {
           fontSize="sm"
           textTransform="uppercase"
           letterSpacing="0.2em"
-          color="#6366f1"
+          color="var(--accent-primary)"
           fontWeight="600"
         >
           Contact
         </Text>
-        <Heading size="lg" color="#f0f0f5">
+        <Heading size="lg" color="var(--text-primary)">
           Let&apos;s Connect
         </Heading>
-        <Text maxW="640px" color="#8b8b9a">
+        <Text maxW="640px" color="var(--text-secondary)">
           Want to collaborate or chat? Send a note and I&apos;ll get back to you soon.
         </Text>
       </VStack>
@@ -98,43 +98,43 @@ const ContactMeSection = () => {
                 <FormControl
                   isInvalid={formik.touched.firstName && formik.errors.firstName}
                 >
-                  <FormLabel htmlFor="firstName" color="#f0f0f5" fontSize="sm">
+                  <FormLabel htmlFor="firstName" color="var(--text-primary)" fontSize="sm">
                     Name
                   </FormLabel>
                   <Input
                     id="firstName"
                     name="firstName"
-                    bg="rgba(255, 255, 255, 0.05)"
-                    border="1px solid rgba(255, 255, 255, 0.1)"
-                    color="#f0f0f5"
-                    _hover={{ borderColor: "rgba(99, 102, 241, 0.4)" }}
+                    bg="var(--glass-hover)"
+                    border="1px solid var(--glass-border)"
+                    color="var(--text-primary)"
+                    _hover={{ borderColor: "var(--accent-border-strong)" }}
                     _focus={{
-                      borderColor: "#6366f1",
-                      boxShadow: "0 0 0 1px #6366f1",
+                      borderColor: "var(--accent-primary)",
+                      boxShadow: "0 0 0 1px var(--accent-primary)",
                     }}
-                    _placeholder={{ color: "#5a5a6e" }}
+                    _placeholder={{ color: "var(--text-muted)" }}
                     {...formik.getFieldProps("firstName")}
                   />
                   <FormErrorMessage color="#ef4444">{formik.errors.firstName}</FormErrorMessage>
                 </FormControl>
 
                 <FormControl isInvalid={formik.touched.email && formik.errors.email}>
-                  <FormLabel htmlFor="email" color="#f0f0f5" fontSize="sm">
+                  <FormLabel htmlFor="email" color="var(--text-primary)" fontSize="sm">
                     Email
                   </FormLabel>
                   <Input
                     id="email"
                     name="email"
                     type="email"
-                    bg="rgba(255, 255, 255, 0.05)"
-                    border="1px solid rgba(255, 255, 255, 0.1)"
-                    color="#f0f0f5"
-                    _hover={{ borderColor: "rgba(99, 102, 241, 0.4)" }}
+                    bg="var(--glass-hover)"
+                    border="1px solid var(--glass-border)"
+                    color="var(--text-primary)"
+                    _hover={{ borderColor: "var(--accent-border-strong)" }}
                     _focus={{
-                      borderColor: "#6366f1",
-                      boxShadow: "0 0 0 1px #6366f1",
+                      borderColor: "var(--accent-primary)",
+                      boxShadow: "0 0 0 1px var(--accent-primary)",
                     }}
-                    _placeholder={{ color: "#5a5a6e" }}
+                    _placeholder={{ color: "var(--text-muted)" }}
                     {...formik.getFieldProps("email")}
                   />
                   <FormErrorMessage color="#ef4444">{formik.errors.email}</FormErrorMessage>
@@ -143,22 +143,22 @@ const ContactMeSection = () => {
                 <FormControl
                   isInvalid={formik.touched.comment && formik.errors.comment}
                 >
-                  <FormLabel htmlFor="comment" color="#f0f0f5" fontSize="sm">
+                  <FormLabel htmlFor="comment" color="var(--text-primary)" fontSize="sm">
                     Message
                   </FormLabel>
                   <Textarea
                     id="comment"
                     name="comment"
                     height={{ base: 140, md: 160 }}
-                    bg="rgba(255, 255, 255, 0.05)"
-                    border="1px solid rgba(255, 255, 255, 0.1)"
-                    color="#f0f0f5"
-                    _hover={{ borderColor: "rgba(99, 102, 241, 0.4)" }}
+                    bg="var(--glass-hover)"
+                    border="1px solid var(--glass-border)"
+                    color="var(--text-primary)"
+                    _hover={{ borderColor: "var(--accent-border-strong)" }}
                     _focus={{
-                      borderColor: "#6366f1",
-                      boxShadow: "0 0 0 1px #6366f1",
+                      borderColor: "var(--accent-primary)",
+                      boxShadow: "0 0 0 1px var(--accent-primary)",
                     }}
-                    _placeholder={{ color: "#5a5a6e" }}
+                    _placeholder={{ color: "var(--text-muted)" }}
                     {...formik.getFieldProps("comment")}
                   />
                   <FormErrorMessage color="#ef4444">{formik.errors.comment}</FormErrorMessage>
@@ -167,12 +167,12 @@ const ContactMeSection = () => {
                 <Button
                   type="submit"
                   width="full"
-                  bg="linear-gradient(135deg, #6366f1, #8b5cf6)"
+                  bg="var(--accent-gradient)"
                   color="white"
                   fontWeight="600"
                   _hover={{
                     transform: "translateY(-2px)",
-                    boxShadow: "0 10px 30px rgba(99, 102, 241, 0.4)",
+                    boxShadow: "0 10px 30px var(--accent-border-strong)",
                   }}
                   transition="all 0.3s ease"
                 >

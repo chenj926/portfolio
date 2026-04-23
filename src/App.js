@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 import Header from "./components/Header";
 import LandingSection from "./components/LandingSection";
@@ -12,13 +13,27 @@ import ContactMeSection from "./components/ContactMeSection";
 import Footer from "./components/Footer";
 import { AlertProvider } from "./context/alertContext";
 import Alert from "./components/Alert";
+import "./App.css";
 
 function App() {
+  const [theme, setTheme] = useState(() => {
+    return window.localStorage.getItem("portfolio-theme") || "dark";
+  });
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    window.localStorage.setItem("portfolio-theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"));
+  };
+
   return (
     <ChakraProvider>
       <AlertProvider>
-        <main>
-          <Header />
+        <main className="app-shell" data-theme={theme}>
+          <Header theme={theme} onThemeToggle={toggleTheme} />
           <LandingSection />
           {/* <StatusSection /> */}
           <NewsSection />

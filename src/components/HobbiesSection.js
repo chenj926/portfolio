@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Heading, Image, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import FullScreenSection from "./FullScreenSection";
+import GuqinImage from "../assets/images/Guqin.jpg";
 
 const MotionBox = motion(Box);
 
@@ -28,7 +29,7 @@ const hobbies = [
     title: "Music",
     description: "Guqin, guitar, and curated focus playlists.",
     media:
-      "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80",
+      GuqinImage,
   },
   {
     title: "Workouts",
@@ -48,7 +49,7 @@ const HobbiesSection = () => {
   return (
     <FullScreenSection
       id="hobbies-section"
-      backgroundColor="#0a0a0f"
+      backgroundColor="var(--bg-primary)"
       px={{ base: 6, md: 12 }}
       py={{ base: 12, md: 20 }}
       alignItems="stretch"
@@ -59,15 +60,15 @@ const HobbiesSection = () => {
           fontSize="sm"
           textTransform="uppercase"
           letterSpacing="0.2em"
-          color="#6366f1"
+          color="var(--accent-primary)"
           fontWeight="600"
         >
           Beyond Code
         </Text>
-        <Heading size="lg" color="#f0f0f5">
+        <Heading size="lg" color="var(--text-primary)">
           Hobbies
         </Heading>
-        <Text maxW="640px" color="#8b8b9a">
+        <Text maxW="640px" color="var(--text-secondary)">
           Interests that keep me curious, balanced, and creative.
         </Text>
       </VStack>
@@ -94,7 +95,7 @@ const HobbiesSection = () => {
                 <Image
                   src={hobby.media}
                   alt={hobby.title}
-                  height="140px"
+                  height="280px"
                   objectFit="cover"
                   width="100%"
                   transition="transform 0.5s ease"
@@ -107,10 +108,10 @@ const HobbiesSection = () => {
                 />
               </Box>
               <Box>
-                <Heading size="sm" mb={2} color="#f0f0f5" fontWeight="600">
+                <Heading size="sm" mb={2} color="var(--text-primary)" fontWeight="600">
                   {hobby.title}
                 </Heading>
-                <Text fontSize="sm" color="#8b8b9a" lineHeight="1.7">
+                <Text fontSize="sm" color="var(--text-secondary)" lineHeight="1.7">
                   {hobby.description}
                 </Text>
               </Box>

@@ -60,7 +60,7 @@ const SkillsSection = () => {
   return (
     <FullScreenSection
       id="skills-section"
-      backgroundColor="#0a0a0f"
+      backgroundColor="var(--bg-primary)"
       px={{ base: 6, md: 12 }}
       py={{ base: 12, md: 20 }}
       alignItems="stretch"
@@ -71,15 +71,15 @@ const SkillsSection = () => {
           fontSize="sm"
           textTransform="uppercase"
           letterSpacing="0.2em"
-          color="#6366f1"
+          color="var(--accent-primary)"
           fontWeight="600"
         >
           Expertise
         </Text>
-        <Heading size="lg" color="#f0f0f5">
+        <Heading size="lg" color="var(--text-primary)">
           Skills
         </Heading>
-        <Text maxW="640px" color="#8b8b9a">
+        <Text maxW="640px" color="var(--text-secondary)">
           A snapshot of the tools and focus areas I enjoy using most.
         </Text>
       </VStack>
@@ -102,10 +102,10 @@ const SkillsSection = () => {
               gap={4}
             >
               <Box>
-                <Heading size="sm" color="#f0f0f5" fontWeight="600">
+                <Heading size="sm" color="var(--text-primary)" fontWeight="600">
                   {skillGroup.category}
                 </Heading>
-                <Text fontSize="sm" color="#8b8b9a" mt={2} lineHeight="1.7">
+                <Text fontSize="sm" color="var(--text-secondary)" mt={2} lineHeight="1.7">
                   {skillGroup.description}
                 </Text>
               </Box>
@@ -118,14 +118,14 @@ const SkillsSection = () => {
                       spacing={2}
                       padding="8px 14px"
                       borderRadius="lg"
-                      bg="rgba(99, 102, 241, 0.1)"
-                      border="1px solid rgba(99, 102, 241, 0.2)"
+                      bg="var(--accent-wash)"
+                      border="1px solid var(--accent-wash)"
                       fontSize="sm"
                       fontWeight="500"
-                      color="#f0f0f5"
+                      color="var(--text-primary)"
                       cursor="default"
                     >
-                      <FontAwesomeIcon icon={skill.icon} style={{ color: "#6366f1" }} />
+                      <FontAwesomeIcon icon={skill.icon} style={{ color: "var(--accent-primary)" }} />
                       <Text>{skill.label}</Text>
                     </HStack>
                   </WrapItem>

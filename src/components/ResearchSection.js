@@ -35,15 +35,17 @@ const linkIcons = {
 
 const publications = [
   {
-    title: "(Coming Soon) Listwise Direct Preference Optimization with Multi-Dimensional Preference Mixing",
-    venue: "ACL 2026",
-    year: "Jan 2026",
+    title: "(Accepted) HMITL Manager-Governed LLM Iteration with Guardrails and Rollback for Reproducible Healthcare Machine Learning Pipelines",
+    venue: "IEEE ICHI 2026",
+    year: "June 2026",
     description:
-      "A framework for blending preference signals to improve ranking quality across multiple alignment objectives.",
-    tags: ["LLM Alignment", "Preference Learning"],
+      "We introduce Human-Manager-in-the-Loop (HMITL), a collaboration protocol that assigns the human the role of " +
+      "workflow manager. The manager maintains a task brief, enforces data-integrity guardrails, runs deterministic " +
+      "evaluation, and rolls back regressions.",
+    tags: ["Agent Harness", "Human-AI Collaboration"],
     links: [
       { label: "Paper", url: "https://arxiv.org/", type: "paper" },
-      { label: "Github", url: "https://arxiv.org/", type: "github" },
+      { label: "Github", url: "https://github.com/chenj926/ICHI_AgentDS_clai", type: "github" },
     ],
   },
 ];
@@ -58,7 +60,7 @@ const ResearchSection = () => {
   return (
     <FullScreenSection
       id="research-section"
-      backgroundColor="#0a0a0f"
+      backgroundColor="var(--bg-primary)"
       px={{ base: 6, md: 12 }}
       py={{ base: 12, md: 20 }}
       alignItems="stretch"
@@ -69,15 +71,15 @@ const ResearchSection = () => {
           fontSize="sm"
           textTransform="uppercase"
           letterSpacing="0.2em"
-          color="#6366f1"
+          color="var(--accent-primary)"
           fontWeight="600"
         >
           Research
         </Text>
-        <Heading size="lg" color="#f0f0f5">
+        <Heading size="lg" color="var(--text-primary)">
           Publications
         </Heading>
-        <Text maxW="640px" color="#8b8b9a">
+        <Text maxW="640px" color="var(--text-secondary)">
           Selected papers, open review submissions, and research prototypes.
         </Text>
       </VStack>
@@ -101,15 +103,15 @@ const ResearchSection = () => {
                 fontSize="xs"
                 textTransform="uppercase"
                 letterSpacing="0.1em"
-                color="#6366f1"
+                color="var(--accent-primary)"
                 fontFamily="mono"
               >
                 {pub.venue} · {pub.year}
               </Text>
-              <Heading size="sm" mt={3} mb={3} color="#f0f0f5" fontWeight="600">
+              <Heading size="sm" mt={3} mb={3} color="var(--text-primary)" fontWeight="600">
                 {pub.title}
               </Heading>
-              <Text fontSize="sm" color="#8b8b9a" mb={4} lineHeight="1.7">
+              <Text fontSize="sm" color="var(--text-secondary)" mb={4} lineHeight="1.7">
                 {pub.description}
               </Text>
 
@@ -118,9 +120,9 @@ const ResearchSection = () => {
                   <WrapItem key={tag}>
                     <Tag
                       size="sm"
-                      bg="rgba(99, 102, 241, 0.15)"
-                      color="#6366f1"
-                      border="1px solid rgba(99, 102, 241, 0.3)"
+                      bg="var(--accent-wash)"
+                      color="var(--accent-primary)"
+                      border="1px solid var(--accent-border)"
                       borderRadius="full"
                       fontWeight="500"
                     >
@@ -136,7 +138,7 @@ const ResearchSection = () => {
                     key={link.label}
                     href={link.url}
                     isExternal
-                    color="#8b8b9a"
+                    color="var(--text-secondary)"
                     fontWeight="500"
                     display="inline-flex"
                     alignItems="center"
@@ -144,13 +146,13 @@ const ResearchSection = () => {
                     fontSize="sm"
                     padding="8px 14px"
                     borderRadius="lg"
-                    border="1px solid rgba(255, 255, 255, 0.08)"
-                    bg="rgba(255, 255, 255, 0.02)"
+                    border="1px solid var(--glass-border)"
+                    bg="var(--glass-bg)"
                     _hover={{
                       textDecoration: "none",
-                      color: "#f0f0f5",
-                      borderColor: "rgba(99, 102, 241, 0.4)",
-                      bg: "rgba(99, 102, 241, 0.1)",
+                      color: "var(--text-primary)",
+                      borderColor: "var(--accent-border-strong)",
+                      bg: "var(--accent-wash)",
                     }}
                     transition="all 0.3s ease"
                   >
@@ -170,12 +172,12 @@ const ResearchSection = () => {
           alignSelf="center"
           variant="ghost"
           size="sm"
-          color="#8b8b9a"
+          color="var(--text-secondary)"
           rightIcon={<FontAwesomeIcon icon={showAll ? faChevronUp : faChevronDown} />}
           onClick={() => setShowAll((prev) => !prev)}
           _hover={{
-            color: "#f0f0f5",
-            bg: "rgba(255, 255, 255, 0.05)",
+            color: "var(--text-primary)",
+            bg: "var(--glass-hover)",
           }}
         >
           {showAll ? "Show less" : "Show more"}

@@ -1,6 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronDown,
+  faEnvelope,
+  faMoon,
+  faSun,
+} from "@fortawesome/free-solid-svg-icons";
+import { faFileLines } from "@fortawesome/free-regular-svg-icons";
 import {
   faGithub,
   faLinkedin,
@@ -9,14 +15,20 @@ import {
 import { Box, HStack, Link } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import Resume from "../assets/resume/Jialuo_Chen_Resume.pdf";
+import "./HomeGlass.css";
 
 const MotionBox = motion(Box);
 const MotionLink = motion(Link);
 
+const documents = [
+  { label: "Resume", url: Resume },
+  { label: "CV", url: Resume },
+];
+
 const socials = [
   {
     icon: faEnvelope,
-    url: "mailto: jialuo.chen@utoronto.ca",
+    url: "mailto:jialuo.chen@utoronto.ca",
     label: "Email",
   },
   {
@@ -46,15 +58,39 @@ const navLinks = [
   { label: "Connect", anchor: "connect" },
 ];
 
-const Header = () => {
+const Header = ({ theme = "dark", onThemeToggle }) => {
   const [scrolled, setScrolled] = useState(false);
+  const [docsOpen, setDocsOpen] = useState(false);
+  const docsRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handlePointerDown = (event) => {
+      if (docsRef.current && !docsRef.current.contains(event.target)) {
+        setDocsOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setDocsOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   const handleClick = (anchor) => () => {
@@ -71,104 +107,106 @@ const Header = () => {
   return (
     <MotionBox
       as="header"
-      position="fixed"
-      top={0}
-      left={0}
-      right={0}
-      zIndex="9999"
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+      className={`home-header ${scrolled ? "is-scrolled" : ""}`}
+      initial={{ y: -96, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.65, ease: "easeOut" }}
     >
-      <Box
-        backgroundColor={scrolled ? "rgba(10, 10, 15, 0.8)" : "transparent"}
-        backdropFilter={scrolled ? "blur(20px)" : "none"}
-        borderBottom={scrolled ? "1px solid rgba(255, 255, 255, 0.06)" : "none"}
-        transition="all 0.3s ease"
-      >
-        <Box maxWidth="1280px" margin="0 auto">
-          <HStack px={{ base: 6, md: 16 }} py={4} justifyContent="space-between">
-            <nav>
-              <HStack spacing={4}>
-                {socials.map((social, index) => (
-                  <MotionLink
-                    key={social.label}
-                    href={social.url}
-                    isExternal
-                    aria-label={social.label}
-                    color="#8b8b9a"
-                    _hover={{ color: "#f0f0f5" }}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1, duration: 0.3 }}
-                  >
-                    <FontAwesomeIcon icon={social.icon} size="lg" />
-                  </MotionLink>
-                ))}
-              </HStack>
-            </nav>
-            <nav>
-              <HStack spacing={{ base: 3, md: 6 }} fontSize="sm">
-                {navLinks.map((link, index) => (
-                  <MotionLink
-                    key={link.label}
-                    onClick={handleClick(link.anchor)}
-                    cursor="pointer"
-                    color="#8b8b9a"
-                    fontWeight="500"
-                    position="relative"
-                    _hover={{ color: "#f0f0f5", textDecoration: "none" }}
-                    display={{ base: index > 3 ? "none" : "block", md: "block" }}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 + index * 0.05, duration: 0.3 }}
-                    sx={{
-                      "&::after": {
-                        content: '""',
-                        position: "absolute",
-                        left: 0,
-                        bottom: "-4px",
-                        width: "0%",
-                        height: "2px",
-                        background: "linear-gradient(90deg, #6366f1, #8b5cf6)",
-                        transition: "width 0.3s ease",
-                      },
-                      "&:hover::after": {
-                        width: "100%",
-                      },
-                    }}
-                  >
-                    {link.label}
-                  </MotionLink>
-                ))}
-                <MotionLink
-                  href={Resume}
-                  isExternal
-                  fontWeight="600"
-                  color="#f0f0f5"
-                  px={4}
-                  py={2}
-                  borderRadius="full"
-                  background="linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2))"
-                  border="1px solid rgba(99, 102, 241, 0.3)"
-                  _hover={{
-                    background: "linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3))",
-                    textDecoration: "none",
-                    transform: "translateY(-1px)",
-                  }}
-                  transition="all 0.3s ease"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  Resume
-                </MotionLink>
-              </HStack>
-            </nav>
+      <Box className="home-nav-shell liquid-glass">
+        <Box as="nav" aria-label="Social links" className="home-social-nav">
+          <HStack className="home-social-stack" spacing={0}>
+            {socials.map((social, index) => (
+              <MotionLink
+                key={social.label}
+                href={social.url}
+                isExternal
+                aria-label={social.label}
+                className="home-glass-icon"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.08, duration: 0.3 }}
+              >
+                <FontAwesomeIcon icon={social.icon} />
+              </MotionLink>
+            ))}
           </HStack>
+        </Box>
+
+        <Box as="nav" aria-label="Primary navigation" className="home-main-nav">
+          <HStack className="home-nav-links" spacing={0}>
+            {navLinks.map((link, index) => (
+              <MotionLink
+                key={link.label}
+                onClick={handleClick(link.anchor)}
+                className="home-nav-link"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 + index * 0.05, duration: 0.3 }}
+              >
+                {link.label}
+              </MotionLink>
+            ))}
+          </HStack>
+        </Box>
+
+        <Box className="home-actions">
+          <Box
+            as="button"
+            type="button"
+            className="home-theme-toggle liquid-glass"
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            onClick={onThemeToggle}
+          >
+            <FontAwesomeIcon icon={theme === "dark" ? faSun : faMoon} />
+          </Box>
+
+          <Box className="home-docs-control" ref={docsRef}>
+            <Box className="home-docs-frame">
+              <Box
+                as="button"
+                type="button"
+                className="home-docs-button"
+                aria-haspopup="menu"
+                aria-expanded={docsOpen}
+                onClick={() => setDocsOpen((open) => !open)}
+              >
+                <span>Resume/CV</span>
+                <FontAwesomeIcon
+                  icon={faChevronDown}
+                  className={`home-docs-chevron ${docsOpen ? "is-open" : ""}`}
+                />
+              </Box>
+            </Box>
+
+            {docsOpen && (
+              <MotionBox
+                className="home-docs-menu liquid-glass"
+                role="menu"
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.18, ease: "easeOut" }}
+              >
+                {documents.map((documentLink) => (
+                  <Link
+                    key={documentLink.label}
+                    href={documentLink.url}
+                    isExternal
+                    role="menuitem"
+                    className="home-docs-item"
+                    onClick={() => setDocsOpen(false)}
+                  >
+                    <FontAwesomeIcon icon={faFileLines} />
+                    <span>{documentLink.label}</span>
+                  </Link>
+                ))}
+              </MotionBox>
+            )}
+          </Box>
         </Box>
       </Box>
     </MotionBox>
   );
 };
+
 export default Header;
