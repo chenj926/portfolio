@@ -64,7 +64,7 @@ const NewsSection = () => {
   return (
     <FullScreenSection
       id="news-section"
-      backgroundColor="#0a0a0f"
+      backgroundColor="var(--bg-primary)"
       px={{ base: 6, md: 12 }}
       py={{ base: 12, md: 20 }}
       alignItems="stretch"
@@ -75,15 +75,15 @@ const NewsSection = () => {
           fontSize="sm"
           textTransform="uppercase"
           letterSpacing="0.2em"
-          color="#6366f1"
+          color="var(--accent-primary)"
           fontWeight="600"
         >
           Updates
         </Text>
-        <Heading size="lg" color="#f0f0f5">
+        <Heading size="lg" color="var(--text-primary)">
           Latest News
         </Heading>
-        <Text maxW="640px" color="#8b8b9a">
+        <Text maxW="640px" color="var(--text-secondary)">
           Highlights from recent work, reviews, and updates.
         </Text>
       </VStack>
@@ -101,7 +101,7 @@ const NewsSection = () => {
               className="glass-card"
               padding={{ base: 4, md: 5 }}
               _hover={{
-                borderColor: "rgba(99, 102, 241, 0.3)",
+                borderColor: "var(--accent-border)",
               }}
             >
               <HStack
@@ -113,30 +113,30 @@ const NewsSection = () => {
                   fontSize="xs"
                   textTransform="uppercase"
                   letterSpacing="0.1em"
-                  color="#5a5a6e"
+                  color="var(--text-muted)"
                   minW={{ md: "100px" }}
                   fontFamily="mono"
                 >
                   {item.date}
                 </Text>
                 <Box flex="1">
-                  <Heading size="sm" color="#f0f0f5" fontWeight="500">
+                  <Heading size="sm" color="var(--text-primary)" fontWeight="500">
                     {item.title}
                   </Heading>
-                  <Text fontSize="sm" color="#8b8b9a" mt={1}>
+                  <Text fontSize="sm" color="var(--text-secondary)" mt={1}>
                     {item.source}
                   </Text>
                 </Box>
                 <Link
                   href={item.url}
                   isExternal
-                  color="#6366f1"
+                  color="var(--accent-primary)"
                   fontWeight="500"
                   fontSize="sm"
                   display="inline-flex"
                   alignItems="center"
                   gap={2}
-                  _hover={{ color: "#8b5cf6", textDecoration: "none" }}
+                  _hover={{ color: "var(--accent-secondary)", textDecoration: "none" }}
                 >
                   View
                   <FontAwesomeIcon icon={faArrowRight} size="sm" />
@@ -152,12 +152,12 @@ const NewsSection = () => {
           alignSelf="center"
           variant="ghost"
           size="sm"
-          color="#8b8b9a"
+          color="var(--text-secondary)"
           rightIcon={<FontAwesomeIcon icon={showAll ? faChevronUp : faChevronDown} />}
           onClick={() => setShowAll((prev) => !prev)}
           _hover={{
-            color: "#f0f0f5",
-            bg: "rgba(255, 255, 255, 0.05)",
+            color: "var(--text-primary)",
+            bg: "var(--glass-hover)",
           }}
         >
           {showAll ? "Show less" : "Show all"}

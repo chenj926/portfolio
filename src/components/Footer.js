@@ -7,15 +7,15 @@ import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 const Footer = () => {
   return (
     <Box
-      backgroundColor="#0a0a0f"
-      borderTop="1px solid rgba(255, 255, 255, 0.06)"
+      backgroundColor="var(--bg-primary)"
+      borderTop="1px solid var(--border-subtle)"
     >
       <footer>
         <Flex
           margin="0 auto"
           px={{ base: 6, md: 12 }}
           py={8}
-          color="#8b8b9a"
+          color="var(--text-secondary)"
           justifyContent="space-between"
           alignItems="center"
           flexDirection={{ base: "column", md: "row" }}
@@ -29,8 +29,8 @@ const Footer = () => {
             <Link
               href="mailto:jialuo.chen@utoronto.ca"
               isExternal
-              color="#8b8b9a"
-              _hover={{ color: "#6366f1" }}
+              color="var(--text-secondary)"
+              _hover={{ color: "var(--accent-primary)" }}
               transition="color 0.3s ease"
             >
               <FontAwesomeIcon icon={faEnvelope} />
@@ -38,8 +38,8 @@ const Footer = () => {
             <Link
               href="https://github.com/chenj926"
               isExternal
-              color="#8b8b9a"
-              _hover={{ color: "#6366f1" }}
+              color="var(--text-secondary)"
+              _hover={{ color: "var(--accent-primary)" }}
               transition="color 0.3s ease"
             >
               <FontAwesomeIcon icon={faGithub} />
@@ -47,8 +47,8 @@ const Footer = () => {
             <Link
               href="https://www.linkedin.com/in/ericjialuochen/"
               isExternal
-              color="#8b8b9a"
-              _hover={{ color: "#6366f1" }}
+              color="var(--text-secondary)"
+              _hover={{ color: "var(--accent-primary)" }}
               transition="color 0.3s ease"
             >
               <FontAwesomeIcon icon={faLinkedin} />

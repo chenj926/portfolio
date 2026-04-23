@@ -1,29 +1,15 @@
 import React from "react";
-import {
-  Avatar,
-  Box,
-  Button,
-  Heading,
-  HStack,
-  Link,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Link } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import {
   faGithub,
   faInstagram,
   faLinkedin,
 } from "@fortawesome/free-brands-svg-icons";
 import { motion } from "framer-motion";
-import FullScreenSection from "./FullScreenSection";
 import profilePic from "../assets/images/profile pic.jpg";
-
-const MotionBox = motion(Box);
-const MotionVStack = motion(VStack);
-const MotionHeading = motion(Heading);
-const MotionText = motion(Text);
+import "./HomeGlass.css";
 
 const socials = [
   {
@@ -48,19 +34,55 @@ const socials = [
   },
 ];
 
+const statusOptions = [
+  {
+    key: "opportunity",
+    label: "Open to opportunities",
+    tone: "green",
+  },
+  {
+    key: "collaborate",
+    label: "Open to collaborate",
+    tone: "blue",
+  },
+  {
+    key: "communicate",
+    label: "Open to communicate",
+    tone: "pink",
+  },
+  {
+    key: "vacation",
+    label: "Currently on vacation",
+    tone: "red",
+  },
+];
+
+const activeStatusKeys = [
+  "opportunity",
+  "collaborate",
+];
+
+const avatarParticles = Array.from({ length: 64 }, (_, index) => ({
+  angle: (index * 137.5) % 360,
+  distance: 112 + (index % 8) * 9,
+  size: 2 + (index % 5) * 0.7,
+  duration: 3.2 + (index % 7) * 0.28,
+  delay: (index % 12) * -0.22,
+}));
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.3,
+      staggerChildren: 0.08,
+      delayChildren: 0.22,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 18 },
   visible: {
     opacity: 1,
     y: 0,
@@ -69,230 +91,138 @@ const itemVariants = {
 };
 
 const LandingSection = () => {
+  const activeStatuses = statusOptions.filter((status) =>
+    activeStatusKeys.includes(status.key)
+  );
+
   return (
-    <FullScreenSection
-      id="home-section"
-      backgroundColor="#0a0a0f"
-      px={{ base: 6, md: 12 }}
-      py={{ base: 24, md: 32 }}
-      spacing={10}
-      alignItems="stretch"
-      position="relative"
-      overflow="hidden"
-    >
-      {/* Background Grid */}
-      <Box className="grid-bg" />
-
-      {/* Glow Effects */}
-      <Box
-        className="glow-accent"
-        top="-200px"
-        right="-100px"
-      />
-      <Box
-        className="glow-secondary"
-        bottom="-100px"
-        left="-50px"
-      />
-
-      <HStack
-        spacing={{ base: 10, md: 16 }}
-        align={{ base: "flex-start", md: "center" }}
-        flexDirection={{ base: "column", md: "row" }}
-        position="relative"
-        zIndex={1}
-      >
-        <MotionVStack
-          align="flex-start"
-          spacing={6}
-          flex="1"
+    <Box as="section" id="home-section" className="home-landing">
+      <Box className="home-shell">
+        <motion.div
+          className="home-copy"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          <MotionText
-            variants={itemVariants}
-            fontSize="sm"
-            textTransform="uppercase"
-            letterSpacing="0.3em"
-            color="#6366f1"
-            fontWeight="600"
-          >
-            AI Researcher & Engineer
-          </MotionText>
+          <motion.p className="home-eyebrow" variants={itemVariants}>
+            AI Researcher &amp; Engineer
+          </motion.p>
 
-          <MotionHeading
-            variants={itemVariants}
-            size={{ base: "xl", md: "2xl" }}
-            lineHeight="1.1"
-            color="#f0f0f5"
-          >
-            Jialuo (Eric) Chen{" "}
-            <Text as="span" color="#8b8b9a" fontWeight="400">
-              陈佳洛
-            </Text>
-          </MotionHeading>
+          <motion.h1 className="home-title" variants={itemVariants}>
+            Jialuo (Eric) Chen <span>陈佳洛</span>
+          </motion.h1>
 
-          <MotionText
-            variants={itemVariants}
-            fontSize={{ base: "md", md: "lg" }}
-            maxW="540px"
-            color="#8b8b9a"
-            lineHeight="1.7"
-          >
+          <motion.p className="home-lede" variants={itemVariants}>
             Industrial Engineering student with a dual focus on{" "}
-            <Text as="span" color="#f0f0f5" fontWeight="500">
-              Machine Learning
-            </Text>{" "}
-            and{" "}
-            <Text as="span" color="#f0f0f5" fontWeight="500">
-              Software Architecture
-            </Text>
-            . I thrive at the intersection of complex algorithms and intuitive product design.
-          </MotionText>
+            <strong>Machine Learning</strong> and{" "}
+            <strong>Software Architecture</strong>. I thrive at the intersection
+            of complex algorithms and intuitive product design.
+          </motion.p>
 
-          <MotionBox
+          <motion.div
+            className="home-current liquid-glass"
             variants={itemVariants}
-            borderLeft="2px solid"
-            borderColor="#6366f1"
-            pl={4}
-            py={2}
-            maxW="540px"
           >
-            <Text fontSize={{ base: "sm", md: "md" }} color="#8b8b9a" lineHeight="1.7">
-              Currently engineering risk platforms at{" "}
-              <Text as="span" color="#f0f0f5" fontWeight="500">JANA Corp</Text>, researching{" "}
-              <Text as="span" color="#f0f0f5" fontWeight="500">Trustworthy AI</Text> at{" "}
-              <Link href="https://www.utoronto.ca/" isExternal color="#6366f1" _hover={{ color: "#8b5cf6" }}>
+            <p>
+              Currently engineering risk platforms at <strong>JANA Corp</strong>,
+              researching <strong>Bayesian Optimization Machine Learning</strong> at{" "}
+              <a
+                href="https://www.utoronto.ca/"
+                target="_blank"
+                rel="noreferrer"
+              >
                 UofT
-              </Link>{" "}
-              and{" "}
-              <Text as="span" color="#f0f0f5" fontWeight="500">Efficient AI</Text> at{" "}
-              <Link href="https://www.sjtu.edu.cn/" isExternal color="#6366f1" _hover={{ color: "#8b5cf6" }}>
+              </a>{" "}
+              and <strong>AI Reasoning</strong> at{" "}
+              <a href="https://www.sjtu.edu.cn/" target="_blank" rel="noreferrer">
                 SJTU
+              </a>
+              . Open to <strong>AI Engineering</strong> or{" "}
+              <strong>AI/ML Research</strong> roles.
+            </p>
+          </motion.div>
+
+          <motion.div className="home-social-row" variants={itemVariants}>
+            {socials.map((social) => (
+              <Link
+                key={social.label}
+                href={social.url}
+                isExternal
+                className="home-social-pill liquid-glass"
+              >
+                <FontAwesomeIcon icon={social.icon} />
+                <span>{social.label}</span>
               </Link>
-              . Open to{" "}
-              <Text as="span" color="#f0f0f5" fontWeight="500">AI Engineering</Text> or{" "}
-              <Text as="span" color="#f0f0f5" fontWeight="500">Applied Research</Text> roles.
-            </Text>
-          </MotionBox>
+            ))}
+          </motion.div>
 
-          <MotionBox variants={itemVariants}>
-            <HStack spacing={4} flexWrap="wrap">
-              {socials.map((social, index) => (
-                <Link
-                  key={social.label}
-                  href={social.url}
-                  isExternal
-                  display="inline-flex"
-                  alignItems="center"
-                  gap={2}
-                  fontSize="sm"
-                  color="#8b8b9a"
-                  px={3}
-                  py={2}
-                  borderRadius="lg"
-                  border="1px solid"
-                  borderColor="rgba(255, 255, 255, 0.08)"
-                  bg="rgba(255, 255, 255, 0.02)"
-                  _hover={{
-                    color: "#f0f0f5",
-                    borderColor: "rgba(99, 102, 241, 0.4)",
-                    bg: "rgba(99, 102, 241, 0.1)",
-                    textDecoration: "none",
-                  }}
-                  transition="all 0.3s ease"
-                >
-                  <FontAwesomeIcon icon={social.icon} />
-                  {social.label}
-                </Link>
-              ))}
-            </HStack>
-          </MotionBox>
-
-          <MotionBox variants={itemVariants}>
-            <Button
-              size="md"
-              rightIcon={<FontAwesomeIcon icon={faArrowRight} />}
-              bg="linear-gradient(135deg, #6366f1, #8b5cf6)"
-              color="white"
-              fontWeight="600"
-              px={6}
-              _hover={{
-                transform: "translateY(-2px)",
-                boxShadow: "0 10px 30px rgba(99, 102, 241, 0.4)",
-              }}
-              transition="all 0.3s ease"
+          <motion.div className="home-connect-row" variants={itemVariants}>
+            <button
+              className="home-connect-button"
+              type="button"
               onClick={() =>
                 document
                   .getElementById("connect-section")
                   ?.scrollIntoView({ behavior: "smooth", block: "start" })
               }
             >
-              Let&apos;s connect
-            </Button>
-          </MotionBox>
-        </MotionVStack>
+              <span>Let&apos;s connect</span>
+              <FontAwesomeIcon icon={faArrowRight} />
+            </button>
+          </motion.div>
+        </motion.div>
 
-        <MotionBox
-          flex="0.8"
-          display="flex"
-          justifyContent={{ base: "center", md: "flex-end" }}
-          initial={{ opacity: 0, scale: 0.9, x: 50 }}
-          animate={{ opacity: 1, scale: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+        <motion.div
+          className="home-profile-wrap"
+          initial={{ opacity: 0, x: 48, scale: 0.96 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          transition={{ duration: 0.65, delay: 0.35, ease: "easeOut" }}
         >
-          <VStack
-            className="glass-card card-shine"
-            padding={{ base: 6, md: 8 }}
-            align="center"
-            textAlign="center"
-            spacing={4}
-            position="relative"
-          >
-            {/* Subtle glow behind avatar */}
-            <Box
-              position="absolute"
-              top="50%"
-              left="50%"
-              transform="translate(-50%, -50%)"
-              width="200px"
-              height="200px"
-              background="radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%)"
-              filter="blur(30px)"
-              zIndex={0}
-            />
-            <Avatar
-              size="2xl"
-              name="Jialuo (Eric) Chen"
-              src={profilePic}
-              boxSize={{ base: "160px", md: "200px" }}
-              border="3px solid rgba(99, 102, 241, 0.3)"
-              position="relative"
-              zIndex={1}
-            />
-            <Text fontWeight="600" color="#f0f0f5" fontSize="lg">
-              Software & AI/ML Engineer
-            </Text>
-            <Text fontSize="sm" color="#8b8b9a">
-              Industrial Engineering · University of Toronto
-            </Text>
-            <HStack spacing={2} mt={2}>
-              <Box
-                w={2}
-                h={2}
-                borderRadius="full"
-                bg="#10b981"
-                className="pulse"
+          <div className="home-profile-card liquid-glass">
+            <div className="home-avatar-stage">
+              <span className="home-avatar-halo" aria-hidden="true" />
+              <span className="home-avatar-rim" aria-hidden="true" />
+              <div className="home-avatar-particles" aria-hidden="true">
+                {avatarParticles.map((particle, index) => (
+                  <span
+                    key={index}
+                    style={{
+                      "--particle-angle": `${particle.angle}deg`,
+                      "--particle-distance": `${particle.distance}px`,
+                      "--particle-size": `${particle.size}px`,
+                      "--particle-duration": `${particle.duration}s`,
+                      "--particle-delay": `${particle.delay}s`,
+                    }}
+                  />
+                ))}
+              </div>
+              <img
+                src={profilePic}
+                alt="Jialuo (Eric) Chen"
+                className="home-avatar"
               />
-              <Text fontSize="xs" color="#10b981">
-                Open to opportunities
-              </Text>
-            </HStack>
-          </VStack>
-        </MotionBox>
-      </HStack>
-    </FullScreenSection>
+            </div>
+
+            <h2>Software &amp; AI/ML Engineer</h2>
+            <p className="home-profile-subtitle">
+              Industrial Engineering &middot; University of Toronto
+            </p>
+
+            <div className="home-status-grid">
+              {activeStatuses.map((status) => (
+                <div
+                  key={status.key}
+                  className={`home-status-chip liquid-glass is-${status.tone}`}
+                >
+                  <span className="home-status-dot" />
+                  <span>{status.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </Box>
+    </Box>
   );
 };
 

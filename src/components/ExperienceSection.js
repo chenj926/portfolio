@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Box,
   Heading,
@@ -43,7 +43,7 @@ const experiences = [
   },
   {
     year: "2025",
-    title: "Jana Corporation",
+    title: "JANA Corporation",
     description:
       "Developing production-level probabilistic risk models (Python) and full-stack analysis tools (C#/React) for utility infrastructure.",
     logo: "JN",
@@ -58,10 +58,143 @@ const experiences = [
 ];
 
 const ExperienceSection = () => {
+  const scrollRef = useRef(null);
+  const cardPausedRef = useRef(false);
+  const pointerPausedRef = useRef(false);
+  const inViewRef = useRef(false);
+  const directionRef = useRef(1);
+  const pointerResumeTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    const scrollElement = scrollRef.current;
+    if (!scrollElement) {
+      return undefined;
+    }
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReducedMotion) {
+      return undefined;
+    }
+
+    let animationFrameId;
+    let lastTimestamp = 0;
+    const pixelsPerSecond = 26;
+
+    const shouldPause = () =>
+      !inViewRef.current ||
+      cardPausedRef.current ||
+      pointerPausedRef.current;
+
+    const clearPointerResumeTimeout = () => {
+      if (pointerResumeTimeoutRef.current) {
+        window.clearTimeout(pointerResumeTimeoutRef.current);
+        pointerResumeTimeoutRef.current = null;
+      }
+    };
+
+    const pauseForInteraction = () => {
+      pointerPausedRef.current = true;
+      clearPointerResumeTimeout();
+    };
+
+    const resumeAfterInteraction = () => {
+      clearPointerResumeTimeout();
+      pointerResumeTimeoutRef.current = window.setTimeout(() => {
+        pointerPausedRef.current = false;
+        pointerResumeTimeoutRef.current = null;
+      }, 900);
+    };
+
+    const animate = (timestamp) => {
+      if (!lastTimestamp) {
+        lastTimestamp = timestamp;
+      }
+
+      const delta = timestamp - lastTimestamp;
+      lastTimestamp = timestamp;
+
+      const maxScrollLeft = scrollElement.scrollWidth - scrollElement.clientWidth;
+
+      if (!shouldPause() && maxScrollLeft > 0) {
+        const scrollDistance =
+          (pixelsPerSecond * delta * directionRef.current) / 1000;
+        const nextScrollLeft = scrollElement.scrollLeft + scrollDistance;
+
+        if (nextScrollLeft >= maxScrollLeft) {
+          scrollElement.scrollLeft = maxScrollLeft;
+          directionRef.current = -1;
+        } else if (nextScrollLeft <= 0) {
+          scrollElement.scrollLeft = 0;
+          directionRef.current = 1;
+        } else {
+          scrollElement.scrollLeft = nextScrollLeft;
+        }
+      }
+
+      animationFrameId = window.requestAnimationFrame(animate);
+    };
+
+    const handlePointerDown = () => {
+      pauseForInteraction();
+    };
+
+    const handlePointerUp = () => {
+      resumeAfterInteraction();
+    };
+
+    const handleWheel = () => {
+      pauseForInteraction();
+      resumeAfterInteraction();
+    };
+
+    const handleKeyDown = (event) => {
+      const horizontalKeys = ["ArrowLeft", "ArrowRight", "Home", "End"];
+      if (horizontalKeys.includes(event.key)) {
+        pauseForInteraction();
+        resumeAfterInteraction();
+      }
+    };
+
+    let observer;
+    if ("IntersectionObserver" in window) {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          inViewRef.current =
+            entry.isIntersecting && entry.intersectionRatio > 0.15;
+        },
+        { threshold: [0, 0.15, 0.5, 1] }
+      );
+      observer.observe(scrollElement);
+    } else {
+      inViewRef.current = true;
+    }
+
+    scrollElement.addEventListener("pointerdown", handlePointerDown);
+    scrollElement.addEventListener("wheel", handleWheel, { passive: true });
+    scrollElement.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("pointerup", handlePointerUp);
+    window.addEventListener("pointercancel", handlePointerUp);
+    animationFrameId = window.requestAnimationFrame(animate);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrameId);
+      clearPointerResumeTimeout();
+      observer?.disconnect();
+      scrollElement.removeEventListener("pointerdown", handlePointerDown);
+      scrollElement.removeEventListener("wheel", handleWheel);
+      scrollElement.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointercancel", handlePointerUp);
+    };
+  }, []);
+
   return (
     <FullScreenSection
       id="experience-section"
-      backgroundColor="#0a0a0f"
+      backgroundColor="var(--bg-primary)"
       px={{ base: 6, md: 12 }}
       py={{ base: 12, md: 20 }}
       alignItems="stretch"
@@ -73,15 +206,15 @@ const ExperienceSection = () => {
           fontSize="sm"
           textTransform="uppercase"
           letterSpacing="0.2em"
-          color="#6366f1"
+          color="var(--accent-primary)"
           fontWeight="600"
         >
           Journey
         </Text>
-        <Heading size="lg" color="#f0f0f5">
+        <Heading size="lg" color="var(--text-primary)">
           Experience Timeline
         </Heading>
-        <Text maxW="640px" color="#8b8b9a">
+        <Text maxW="640px" color="var(--text-secondary)">
           Scroll horizontally to explore each milestone in my career journey.
         </Text>
       </VStack>
@@ -94,7 +227,7 @@ const ExperienceSection = () => {
           top={0}
           bottom={0}
           width="60px"
-          background="linear-gradient(90deg, rgba(10,10,15,1) 0%, rgba(10,10,15,0) 100%)"
+          background="linear-gradient(90deg, rgba(var(--bg-primary-rgb), 1) 0%, rgba(var(--bg-primary-rgb), 0) 100%)"
           pointerEvents="none"
           zIndex={2}
         />
@@ -104,112 +237,135 @@ const ExperienceSection = () => {
           top={0}
           bottom={0}
           width="60px"
-          background="linear-gradient(270deg, rgba(10,10,15,1) 0%, rgba(10,10,15,0) 100%)"
+          background="linear-gradient(270deg, rgba(var(--bg-primary-rgb), 1) 0%, rgba(var(--bg-primary-rgb), 0) 100%)"
           pointerEvents="none"
           zIndex={2}
         />
 
         <Box
+          ref={scrollRef}
           position="relative"
           width="100%"
           overflowX="auto"
           pb={4}
           className="timeline-scroll"
         >
-          {/* Timeline line */}
-          <Box
-            position="absolute"
-            top="48px"
-            left={0}
-            right={0}
-            height="2px"
-            background="linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3), transparent)"
-          />
+          <Box position="relative" minW="max-content" className="timeline-track">
+            {/* Timeline line */}
+            <Box
+              position="absolute"
+              top="48px"
+              left={0}
+              right={0}
+              height="2px"
+              background="linear-gradient(90deg, transparent, var(--accent-border), var(--accent-border), transparent)"
+            />
 
-          <HStack spacing={8} align="flex-start" position="relative" px={4} py={2}>
-            {experiences.map((experience, index) => (
-              <MotionBox
-                key={experience.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-              >
-                <VStack
-                  align="flex-start"
-                  spacing={3}
-                  minW="280px"
-                  maxW="280px"
+            <HStack spacing={8} align="flex-start" position="relative" px={4} py={2}>
+              {experiences.map((experience, index) => (
+                <MotionBox
+                  key={experience.title}
+                  className="timeline-item"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 0.4,
+                    delay: index * 0.1,
+                  }}
                 >
-                  <Badge
-                    bg="rgba(99, 102, 241, 0.15)"
-                    color="#6366f1"
-                    borderRadius="full"
-                    px={3}
-                    py={1}
-                    fontSize="xs"
-                    fontWeight="600"
-                    border="1px solid rgba(99, 102, 241, 0.3)"
+                  <VStack
+                    align="flex-start"
+                    spacing={3}
+                    minW="280px"
+                    maxW="280px"
                   >
-                    {experience.year}
-                  </Badge>
+                    <Badge
+                      bg="var(--accent-wash)"
+                      color="var(--accent-primary)"
+                      borderRadius="full"
+                      px={3}
+                      py={1}
+                      fontSize="xs"
+                      fontWeight="600"
+                      border="1px solid var(--accent-border)"
+                    >
+                      {experience.year}
+                    </Badge>
 
-                  {/* Timeline dot */}
-                  <Box
-                    width="12px"
-                    height="12px"
-                    borderRadius="full"
-                    bg="linear-gradient(135deg, #6366f1, #8b5cf6)"
-                    boxShadow="0 0 20px rgba(99, 102, 241, 0.5)"
-                    position="relative"
-                    _before={{
-                      content: '""',
-                      position: "absolute",
-                      top: "12px",
-                      left: "5px",
-                      width: "2px",
-                      height: "20px",
-                      background: "linear-gradient(180deg, rgba(99, 102, 241, 0.5), transparent)",
-                    }}
-                  />
+                    {/* Timeline dot */}
+                    <Box
+                      width="12px"
+                      height="12px"
+                      borderRadius="full"
+                      bg="var(--accent-gradient)"
+                      boxShadow="0 0 20px var(--accent-glow)"
+                      position="relative"
+                      _before={{
+                        content: '""',
+                        position: "absolute",
+                        top: "12px",
+                        left: "5px",
+                        width: "2px",
+                        height: "20px",
+                        background:
+                          "linear-gradient(180deg, var(--accent-glow), transparent)",
+                      }}
+                    />
 
-                  <Box
-                    className="glass-card card-shine"
-                    padding={5}
-                    minH="200px"
-                    display="flex"
-                    flexDirection="column"
-                    gap={3}
-                    cursor="default"
-                  >
-                    <HStack spacing={3}>
-                      <Box
-                        width="40px"
-                        height="40px"
-                        borderRadius="lg"
-                        bg="rgba(99, 102, 241, 0.15)"
-                        border="1px solid rgba(99, 102, 241, 0.3)"
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        fontWeight="700"
-                        color="#6366f1"
+                    <Box
+                      className="glass-card card-shine"
+                      padding={5}
+                      minH="200px"
+                      display="flex"
+                      flexDirection="column"
+                      gap={3}
+                      cursor="default"
+                      onPointerEnter={() => {
+                        cardPausedRef.current = true;
+                      }}
+                      onPointerLeave={() => {
+                        cardPausedRef.current = false;
+                      }}
+                    >
+                      <HStack spacing={3}>
+                        <Box
+                          width="40px"
+                          height="40px"
+                          borderRadius="lg"
+                          bg="var(--accent-wash)"
+                          border="1px solid var(--accent-border)"
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                          fontWeight="700"
+                          color="var(--accent-primary)"
+                          fontSize="sm"
+                        >
+                          {experience.logo}
+                        </Box>
+                        <Heading
+                          size="sm"
+                          color="var(--text-primary)"
+                          fontWeight="600"
+                        >
+                          {experience.title}
+                        </Heading>
+                      </HStack>
+                      <Text
                         fontSize="sm"
+                        color="var(--text-secondary)"
+                        flex="1"
+                        lineHeight="1.7"
                       >
-                        {experience.logo}
-                      </Box>
-                      <Heading size="sm" color="#f0f0f5" fontWeight="600">
-                        {experience.title}
-                      </Heading>
-                    </HStack>
-                    <Text fontSize="sm" color="#8b8b9a" flex="1" lineHeight="1.7">
-                      {experience.description}
-                    </Text>
-                  </Box>
-                </VStack>
-              </MotionBox>
-            ))}
-          </HStack>
+                        {experience.description}
+                      </Text>
+                    </Box>
+                  </VStack>
+                </MotionBox>
+              ))}
+            </HStack>
+          </Box>
         </Box>
       </Box>
     </FullScreenSection>

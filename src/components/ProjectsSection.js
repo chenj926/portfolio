@@ -25,6 +25,8 @@ import {
   faArrowUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import NeuroCommuteImage from "../assets/images/NeuroCommute.png";
+import ADHDImage from "../assets/images/ADHD.png";
 
 const MotionBox = motion(Box);
 
@@ -41,8 +43,7 @@ const projects = [
     title: "NeuroCommute Agent",
     description:
       "Agentic AI route planner using OpenAI & Qwen LLMs to critique A* pathfinding, optimizing for complex user constraints.",
-    image:
-      "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80",
+    image: NeuroCommuteImage,
     tags: ["Agentic AI", "Routing", "LLM"],
     links: [
       { label: "GitHub", url: "https://github.com/chenj926/NeuroCommute", type: "github" },
@@ -52,8 +53,7 @@ const projects = [
     title: "ADHD Scholarship Copilot",
     description:
       "RAG-powered Chrome extension decomposing applications into micro-tasks using Claude AI and ChromaDB context retention.",
-    image:
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80",
+    image: ADHDImage,
     tags: ["RAG", "Chrome", "Education"],
     links: [
       { label: "GitHub", url: "https://github.com/chenj926/adhd-scholarship-copilot", type: "github" },
@@ -113,7 +113,7 @@ const ProjectsSection = () => {
   return (
     <FullScreenSection
       id="projects-section"
-      backgroundColor="#0a0a0f"
+      backgroundColor="var(--bg-primary)"
       px={{ base: 6, md: 12 }}
       py={{ base: 12, md: 20 }}
       alignItems="stretch"
@@ -124,15 +124,15 @@ const ProjectsSection = () => {
           fontSize="sm"
           textTransform="uppercase"
           letterSpacing="0.2em"
-          color="#6366f1"
+          color="var(--accent-primary)"
           fontWeight="600"
         >
           Portfolio
         </Text>
-        <Heading size="lg" color="#f0f0f5">
+        <Heading size="lg" color="var(--text-primary)">
           Projects & Research
         </Heading>
-        <Text maxW="640px" color="#8b8b9a">
+        <Text maxW="640px" color="var(--text-secondary)">
           Featured builds with visuals, context, and quick links to dive deeper.
         </Text>
       </VStack>
@@ -167,15 +167,15 @@ const ProjectsSection = () => {
                 <Box
                   position="absolute"
                   inset={0}
-                  bg="linear-gradient(180deg, transparent 50%, rgba(10, 10, 15, 0.9) 100%)"
+                  bg="linear-gradient(180deg, transparent 50%, rgba(var(--bg-primary-rgb), 0.9) 100%)"
                 />
               </Box>
 
               <Box p={5} display="flex" flexDirection="column" flex="1">
-                <Heading size="sm" mb={2} color="#f0f0f5" fontWeight="600">
+                <Heading size="sm" mb={2} color="var(--text-primary)" fontWeight="600">
                   {project.title}
                 </Heading>
-                <Text fontSize="sm" color="#8b8b9a" mb={4} flex="1" lineHeight="1.7">
+                <Text fontSize="sm" color="var(--text-secondary)" mb={4} flex="1" lineHeight="1.7">
                   {project.description}
                 </Text>
 
@@ -184,9 +184,9 @@ const ProjectsSection = () => {
                     <WrapItem key={tag}>
                       <Tag
                         size="sm"
-                        bg="rgba(99, 102, 241, 0.15)"
-                        color="#6366f1"
-                        border="1px solid rgba(99, 102, 241, 0.3)"
+                        bg="var(--accent-wash)"
+                        color="var(--accent-primary)"
+                        border="1px solid var(--accent-border)"
                         borderRadius="full"
                         fontWeight="500"
                       >
@@ -202,7 +202,7 @@ const ProjectsSection = () => {
                       key={link.label}
                       href={link.url}
                       isExternal
-                      color="#8b8b9a"
+                      color="var(--text-secondary)"
                       fontWeight="500"
                       display="inline-flex"
                       alignItems="center"
@@ -210,13 +210,13 @@ const ProjectsSection = () => {
                       fontSize="sm"
                       padding="8px 14px"
                       borderRadius="lg"
-                      border="1px solid rgba(255, 255, 255, 0.08)"
-                      bg="rgba(255, 255, 255, 0.02)"
+                      border="1px solid var(--glass-border)"
+                      bg="var(--glass-bg)"
                       _hover={{
                         textDecoration: "none",
-                        color: "#f0f0f5",
-                        borderColor: "rgba(99, 102, 241, 0.4)",
-                        bg: "rgba(99, 102, 241, 0.1)",
+                        color: "var(--text-primary)",
+                        borderColor: "var(--accent-border-strong)",
+                        bg: "var(--accent-wash)",
                       }}
                       transition="all 0.3s ease"
                     >
@@ -237,12 +237,12 @@ const ProjectsSection = () => {
           alignSelf="center"
           variant="ghost"
           size="sm"
-          color="#8b8b9a"
+          color="var(--text-secondary)"
           rightIcon={<FontAwesomeIcon icon={showAll ? faChevronUp : faChevronDown} />}
           onClick={() => setShowAll((prev) => !prev)}
           _hover={{
-            color: "#f0f0f5",
-            bg: "rgba(255, 255, 255, 0.05)",
+            color: "var(--text-primary)",
+            bg: "var(--glass-hover)",
           }}
         >
           {showAll ? "Show less" : "Show more"}
