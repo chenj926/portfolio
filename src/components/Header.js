@@ -15,6 +15,7 @@ import {
 import { Box, HStack, Link } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import Resume from "../assets/resume/Jialuo_Chen_Resume.pdf";
+import LiquidGlass from "./LiquidGlass";
 import "./HomeGlass.css";
 
 const MotionBox = motion(Box);
@@ -112,22 +113,39 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.65, ease: "easeOut" }}
     >
-      <Box className="home-nav-shell liquid-glass">
+      <LiquidGlass
+        as={Box}
+        className="home-nav-shell"
+        displacementScale={38}
+        blurAmount={0.14}
+        saturation={180}
+        aberrationIntensity={1.25}
+        elasticity={0.12}
+        cornerRadius={32}
+      >
         <Box as="nav" aria-label="Social links" className="home-social-nav">
           <HStack className="home-social-stack" spacing={0}>
             {socials.map((social, index) => (
-              <MotionLink
+              <LiquidGlass
+                as={MotionLink}
                 key={social.label}
                 href={social.url}
                 isExternal
                 aria-label={social.label}
                 className="home-glass-icon"
+                displacementScale={54}
+                blurAmount={0.1}
+                saturation={188}
+                aberrationIntensity={1.5}
+                elasticity={0.26}
+                cornerRadius={16}
+                padding="0"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.08, duration: 0.3 }}
               >
                 <FontAwesomeIcon icon={social.icon} />
-              </MotionLink>
+              </LiquidGlass>
             ))}
           </HStack>
         </Box>
@@ -150,15 +168,22 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
         </Box>
 
         <Box className="home-actions">
-          <Box
+          <LiquidGlass
             as="button"
             type="button"
-            className="home-theme-toggle liquid-glass"
+            className="home-theme-toggle"
+            displacementScale={54}
+            blurAmount={0.1}
+            saturation={188}
+            aberrationIntensity={1.5}
+            elasticity={0.26}
+            cornerRadius={16}
+            padding="0"
             aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             onClick={onThemeToggle}
           >
             <FontAwesomeIcon icon={theme === "dark" ? faSun : faMoon} />
-          </Box>
+          </LiquidGlass>
 
           <Box className="home-docs-control" ref={docsRef}>
             <Box className="home-docs-frame">
@@ -179,8 +204,15 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
             </Box>
 
             {docsOpen && (
-              <MotionBox
-                className="home-docs-menu liquid-glass"
+              <LiquidGlass
+                as={MotionBox}
+                className="home-docs-menu"
+                displacementScale={44}
+                blurAmount={0.16}
+                saturation={176}
+                aberrationIntensity={1.2}
+                elasticity={0.14}
+                cornerRadius={22}
                 role="menu"
                 initial={{ opacity: 0, y: -6 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -200,11 +232,11 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
                     <span>{documentLink.label}</span>
                   </Link>
                 ))}
-              </MotionBox>
+              </LiquidGlass>
             )}
           </Box>
         </Box>
-      </Box>
+      </LiquidGlass>
     </MotionBox>
   );
 };

@@ -2,65 +2,69 @@
 
 .liquid-glass {
   position: relative;
-  border: 1px solid var(--glass-border);
+  border: 1px solid color-mix(in srgb, var(--glass-border) 78%, transparent);
+  border-radius: var(--lg-radius, inherit);
+  padding: var(--lg-padding);
   background:
     radial-gradient(
-      circle at 14% 0%,
-      rgba(255, 255, 255, 0.2),
-      transparent 30%
+      circle at var(--lg-highlight-x, 50%) var(--lg-highlight-y, 0%),
+      rgba(255, 255, 255, 0.24),
+      rgba(255, 255, 255, 0.055) 32%,
+      transparent 62%
     ),
-    radial-gradient(
-      circle at 86% 18%,
-      rgba(255, 255, 255, 0.065),
-      transparent 34%
-    ),
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.07),
-      rgba(255, 255, 255, 0.012)
-    ),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.095), rgba(255, 255, 255, 0.018)),
     var(--glass-bg);
   box-shadow:
-    0 22px 54px rgba(0, 0, 0, 0.2),
-    0 0 26px rgba(240, 113, 103, 0.055),
-    inset 0 1px 0 rgba(255, 255, 255, 0.34),
-    inset 0 -28px 60px rgba(255, 255, 255, 0.025);
-  backdrop-filter: blur(42px) saturate(1.7);
-  -webkit-backdrop-filter: blur(42px) saturate(1.7);
+    0 24px 58px rgba(0, 0, 0, 0.22),
+    0 0 30px rgba(240, 113, 103, 0.055),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -30px 64px rgba(255, 255, 255, 0.035);
   isolation: isolate;
+  overflow: hidden;
+  transform: var(--lg-transform, translateZ(0));
+  transform-origin: center;
+  transition:
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
 }
 
-.liquid-glass::before {
-  content: "";
+.ios-liquid-glass-filter {
   position: absolute;
-  inset: 1px;
-  z-index: 0;
+  width: 0;
+  height: 0;
   pointer-events: none;
-  border-radius: inherit;
-  background:
-    linear-gradient(
-      112deg,
-      rgba(255, 255, 255, 0.22),
-      rgba(255, 255, 255, 0.018) 38%,
-      rgba(255, 255, 255, 0.08)
-    );
-  opacity: 0.52;
 }
 
-.liquid-glass::after {
-  content: "";
+.liquid-glass__backdrop,
+.liquid-glass__sheen {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   border-radius: inherit;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.06), transparent 34%, rgba(255, 255, 255, 0.03)),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 44%, rgba(255, 255, 255, 0.02));
-  opacity: 0.3;
 }
 
-.liquid-glass > * {
+.liquid-glass__backdrop {
+  backdrop-filter: var(--lg-filter) blur(var(--lg-blur, 24px)) saturate(var(--lg-saturation, 176%));
+  -webkit-backdrop-filter: blur(var(--lg-blur, 24px)) saturate(var(--lg-saturation, 176%));
+  opacity: 0.92;
+}
+
+.liquid-glass__sheen {
+  background:
+    linear-gradient(112deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.018) 38%, rgba(255, 255, 255, 0.095)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.07), transparent 34%, rgba(255, 255, 255, 0.04));
+  mix-blend-mode: screen;
+  opacity: 0.42;
+}
+
+.liquid-glass__content {
+  display: contents;
+}
+
+.liquid-glass > :not(.ios-liquid-glass-filter):not(.liquid-glass__backdrop):not(.liquid-glass__sheen) {
   position: relative;
   z-index: 1;
 }
