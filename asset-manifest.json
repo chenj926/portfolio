@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/portfolio/static/css/main.9e259d73.css",
-    "main.js": "/portfolio/static/js/main.96af7d51.js",
+    "main.css": "/portfolio/static/css/main.bc922b58.css",
+    "main.js": "/portfolio/static/js/main.5c179035.js",
     "static/js/488.9561f9b8.chunk.js": "/portfolio/static/js/488.9561f9b8.chunk.js",
     "static/media/ADHD.png": "/portfolio/static/media/ADHD.0d65b2880e8e372c35d5.png",
     "static/media/NeuroCommute.png": "/portfolio/static/media/NeuroCommute.c7c77c7927b25ad57b82.png",
@@ -9,12 +9,12 @@
     "static/media/Jialuo_Chen_Resume.pdf": "/portfolio/static/media/Jialuo_Chen_Resume.40238f907f14f7bc5090.pdf",
     "static/media/Guqin.jpg": "/portfolio/static/media/Guqin.013161726372e7f972e7.jpg",
     "index.html": "/portfolio/index.html",
-    "main.9e259d73.css.map": "/portfolio/static/css/main.9e259d73.css.map",
-    "main.96af7d51.js.map": "/portfolio/static/js/main.96af7d51.js.map",
+    "main.bc922b58.css.map": "/portfolio/static/css/main.bc922b58.css.map",
+    "main.5c179035.js.map": "/portfolio/static/js/main.5c179035.js.map",
     "488.9561f9b8.chunk.js.map": "/portfolio/static/js/488.9561f9b8.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9e259d73.css",
-    "static/js/main.96af7d51.js"
+    "static/css/main.bc922b58.css",
+    "static/js/main.5c179035.js"
   ]
 }
