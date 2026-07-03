@@ -116,11 +116,19 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
       <LiquidGlass
         as={Box}
         className="home-nav-shell"
+<<<<<<< codex/replace-liquid-glass-with-liquid-glass-react-viqfua
+        displacementScale={56}
+        blurAmount={0.075}
+        saturation={132}
+        aberrationIntensity={1.8}
+        elasticity={0.16}
+=======
         displacementScale={38}
         blurAmount={0.14}
         saturation={180}
         aberrationIntensity={1.25}
         elasticity={0.12}
+>>>>>>> main
         cornerRadius={32}
       >
         <Box as="nav" aria-label="Social links" className="home-social-nav">
@@ -133,11 +141,19 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
                 isExternal
                 aria-label={social.label}
                 className="home-glass-icon"
+<<<<<<< codex/replace-liquid-glass-with-liquid-glass-react-viqfua
+                displacementScale={64}
+                blurAmount={0.1}
+                saturation={130}
+                aberrationIntensity={2}
+                elasticity={0.35}
+=======
                 displacementScale={54}
                 blurAmount={0.1}
                 saturation={188}
                 aberrationIntensity={1.5}
                 elasticity={0.26}
+>>>>>>> main
                 cornerRadius={16}
                 padding="0"
                 initial={{ opacity: 0, y: -10 }}
@@ -172,11 +188,19 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
             as="button"
             type="button"
             className="home-theme-toggle"
+<<<<<<< codex/replace-liquid-glass-with-liquid-glass-react-viqfua
+            displacementScale={64}
+            blurAmount={0.1}
+            saturation={130}
+            aberrationIntensity={2}
+            elasticity={0.35}
+=======
             displacementScale={54}
             blurAmount={0.1}
             saturation={188}
             aberrationIntensity={1.5}
             elasticity={0.26}
+>>>>>>> main
             cornerRadius={16}
             padding="0"
             aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
@@ -207,11 +231,19 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
               <LiquidGlass
                 as={MotionBox}
                 className="home-docs-menu"
+<<<<<<< codex/replace-liquid-glass-with-liquid-glass-react-viqfua
+                displacementScale={64}
+                blurAmount={0.08}
+                saturation={132}
+                aberrationIntensity={2}
+                elasticity={0.18}
+=======
                 displacementScale={44}
                 blurAmount={0.16}
                 saturation={176}
                 aberrationIntensity={1.2}
                 elasticity={0.14}
+>>>>>>> main
                 cornerRadius={22}
                 role="menu"
                 initial={{ opacity: 0, y: -6 }}

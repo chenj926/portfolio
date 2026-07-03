@@ -1,12 +1,21 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 
 const defaultConfig = {
+<<<<<<< codex/replace-liquid-glass-with-liquid-glass-react-viqfua
+  displacementScale: 70,
+  blurAmount: 0.0625,
+  saturation: 140,
+  aberrationIntensity: 2,
+  elasticity: 0.15,
+  cornerRadius: 999,
+=======
   displacementScale: 46,
   blurAmount: 0.18,
   saturation: 176,
   aberrationIntensity: 1.35,
   elasticity: 0.18,
   cornerRadius: 28,
+>>>>>>> main
   padding: undefined,
   overLight: false,
 };
@@ -16,8 +25,13 @@ const LiquidGlassFilter = ({ id, displacementScale, aberrationIntensity }) => (
     <filter id={id} x="-20%" y="-20%" width="140%" height="140%" colorInterpolationFilters="sRGB">
       <feTurbulence
         type="fractalNoise"
+<<<<<<< codex/replace-liquid-glass-with-liquid-glass-react-viqfua
+        baseFrequency="0.009 0.014"
+        numOctaves="3"
+=======
         baseFrequency="0.012 0.018"
         numOctaves="2"
+>>>>>>> main
         seed="8"
         result="noise"
       />
@@ -107,7 +121,11 @@ const LiquidGlass = ({
       style={{
         ...style,
         "--lg-filter": `url(#${filterId})`,
+<<<<<<< codex/replace-liquid-glass-with-liquid-glass-react-viqfua
+        "--lg-blur": `${Math.round((overLight ? 12 : 4) + blurAmount * 32)}px`,
+=======
         "--lg-blur": `${Math.round((overLight ? 18 : 10) + blurAmount * 72)}px`,
+>>>>>>> main
         "--lg-saturation": `${saturation}%`,
         "--lg-radius": `${cornerRadius}px`,
         "--lg-padding": padding,
