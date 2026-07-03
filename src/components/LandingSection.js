@@ -9,6 +9,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { motion } from "framer-motion";
 import profilePic from "../assets/images/profile pic.jpg";
+import LiquidGlass from "./LiquidGlass";
 import "./HomeGlass.css";
 
 const socials = [
@@ -119,9 +120,16 @@ const LandingSection = () => {
             of complex algorithms and intuitive product design.
           </motion.p>
 
-          <motion.div
-            className="home-current liquid-glass"
+          <LiquidGlass
+            as={motion.div}
+            className="home-current"
             variants={itemVariants}
+            displacementScale={42}
+            blurAmount={0.16}
+            saturation={178}
+            aberrationIntensity={1.15}
+            elasticity={0.14}
+            cornerRadius={28}
           >
             <p>
               Currently engineering risk platforms at <strong>JANA Corp</strong>,
@@ -140,19 +148,27 @@ const LandingSection = () => {
               . Open to <strong>AI Engineering</strong> or{" "}
               <strong>AI/ML Research</strong> roles.
             </p>
-          </motion.div>
+          </LiquidGlass>
 
           <motion.div className="home-social-row" variants={itemVariants}>
             {socials.map((social) => (
-              <Link
+              <LiquidGlass
+                as={Link}
                 key={social.label}
                 href={social.url}
                 isExternal
-                className="home-social-pill liquid-glass"
+                className="home-social-pill"
+                displacementScale={58}
+                blurAmount={0.12}
+                saturation={185}
+                aberrationIntensity={1.6}
+                elasticity={0.28}
+                cornerRadius={999}
+                padding="0"
               >
                 <FontAwesomeIcon icon={social.icon} />
                 <span>{social.label}</span>
-              </Link>
+              </LiquidGlass>
             ))}
           </motion.div>
 
@@ -178,7 +194,15 @@ const LandingSection = () => {
           animate={{ opacity: 1, x: 0, scale: 1 }}
           transition={{ duration: 0.65, delay: 0.35, ease: "easeOut" }}
         >
-          <div className="home-profile-card liquid-glass">
+          <LiquidGlass
+            className="home-profile-card"
+            displacementScale={34}
+            blurAmount={0.22}
+            saturation={165}
+            aberrationIntensity={1.05}
+            elasticity={0.1}
+            cornerRadius={34}
+          >
             <div className="home-avatar-stage">
               <span className="home-avatar-halo" aria-hidden="true" />
               <span className="home-avatar-rim" aria-hidden="true" />
@@ -210,16 +234,23 @@ const LandingSection = () => {
 
             <div className="home-status-grid">
               {activeStatuses.map((status) => (
-                <div
+                <LiquidGlass
                   key={status.key}
-                  className={`home-status-chip liquid-glass is-${status.tone}`}
+                  className={`home-status-chip is-${status.tone}`}
+                  displacementScale={52}
+                  blurAmount={0.1}
+                  saturation={190}
+                  aberrationIntensity={1.4}
+                  elasticity={0.22}
+                  cornerRadius={999}
+                  padding="0"
                 >
                   <span className="home-status-dot" />
                   <span>{status.label}</span>
-                </div>
+                </LiquidGlass>
               ))}
             </div>
-          </div>
+          </LiquidGlass>
         </motion.div>
       </Box>
     </Box>
