@@ -124,11 +124,11 @@ const LandingSection = () => {
             as={motion.div}
             className="home-current"
             variants={itemVariants}
-            displacementScale={64}
-            blurAmount={0.08}
-            saturation={132}
-            aberrationIntensity={2}
-            elasticity={0.18}
+            displacementScale={42}
+            blurAmount={0.16}
+            saturation={178}
+            aberrationIntensity={1.15}
+            elasticity={0.14}
             cornerRadius={28}
           >
             <p>
@@ -158,11 +158,11 @@ const LandingSection = () => {
                 href={social.url}
                 isExternal
                 className="home-social-pill"
-                displacementScale={64}
-                blurAmount={0.1}
-                saturation={130}
-                aberrationIntensity={2}
-                elasticity={0.35}
+                displacementScale={58}
+                blurAmount={0.12}
+                saturation={185}
+                aberrationIntensity={1.6}
+                elasticity={0.28}
                 cornerRadius={999}
                 padding="0"
               >
@@ -196,11 +196,11 @@ const LandingSection = () => {
         >
           <LiquidGlass
             className="home-profile-card"
-            displacementScale={64}
-            blurAmount={0.075}
-            saturation={138}
-            aberrationIntensity={1.8}
-            elasticity={0.15}
+            displacementScale={34}
+            blurAmount={0.22}
+            saturation={165}
+            aberrationIntensity={1.05}
+            elasticity={0.1}
             cornerRadius={34}
           >
             <div className="home-avatar-stage">
@@ -237,11 +237,11 @@ const LandingSection = () => {
                 <LiquidGlass
                   key={status.key}
                   className={`home-status-chip is-${status.tone}`}
-                  displacementScale={64}
+                  displacementScale={52}
                   blurAmount={0.1}
-                  saturation={130}
-                  aberrationIntensity={2}
-                  elasticity={0.28}
+                  saturation={190}
+                  aberrationIntensity={1.4}
+                  elasticity={0.22}
                   cornerRadius={999}
                   padding="0"
                 >
