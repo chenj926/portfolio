@@ -1,16 +1,7 @@
-import React, { useEffect, useRef } from "react";
-import {
-  Box,
-  Heading,
-  HStack,
-  Text,
-  VStack,
-  Badge,
-} from "@chakra-ui/react";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { Box, Heading, Text, VStack } from "@chakra-ui/react";
 import FullScreenSection from "./FullScreenSection";
-
-const MotionBox = motion(Box);
+import "./ExperienceRiver.css";
 
 const experiences = [
   {
@@ -57,139 +48,84 @@ const experiences = [
   },
 ];
 
+const ExperienceCycle = ({ isClone = false }) => (
+  <ol
+    className={`experience-horizon-cycle${isClone ? " is-clone" : ""}`}
+    aria-label={isClone ? undefined : "Career milestones from 2022 to 2026"}
+    aria-hidden={isClone || undefined}
+  >
+    {experiences.map((experience, index) => (
+      <li
+        className="experience-horizon-item"
+        key={`${isClone ? "clone" : "primary"}-${experience.title}`}
+      >
+        <div className="experience-year-row">
+          <span className="experience-year">{experience.year}</span>
+          <span className="experience-waypoint" aria-hidden="true" />
+        </div>
+
+        <article
+          className="experience-milestone-card"
+          aria-labelledby={isClone ? undefined : `experience-title-${index}`}
+        >
+          <div className="experience-card-heading">
+            <span className="experience-logo" aria-hidden="true">
+              {experience.logo}
+            </span>
+            <h3 id={isClone ? undefined : `experience-title-${index}`}>
+              {experience.title}
+            </h3>
+          </div>
+          <p>{experience.description}</p>
+        </article>
+      </li>
+    ))}
+  </ol>
+);
+
 const ExperienceSection = () => {
-  const scrollRef = useRef(null);
-  const cardPausedRef = useRef(false);
-  const pointerPausedRef = useRef(false);
-  const inViewRef = useRef(false);
-  const directionRef = useRef(1);
-  const pointerResumeTimeoutRef = useRef(null);
+  const stageRef = useRef(null);
+  const [isInView, setIsInView] = useState(false);
+  const [manualPaused, setManualPaused] = useState(false);
+  const [pointerPaused, setPointerPaused] = useState(false);
+  const [focusPaused, setFocusPaused] = useState(false);
 
   useEffect(() => {
-    const scrollElement = scrollRef.current;
-    if (!scrollElement) {
+    const stage = stageRef.current;
+    if (!stage) {
       return undefined;
     }
 
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    if (prefersReducedMotion) {
+    if (!("IntersectionObserver" in window)) {
+      setIsInView(true);
       return undefined;
     }
 
-    let animationFrameId;
-    let lastTimestamp = 0;
-    const pixelsPerSecond = 26;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting && entry.intersectionRatio > 0.08);
+      },
+      { threshold: [0, 0.08, 0.35] },
+    );
 
-    const shouldPause = () =>
-      !inViewRef.current ||
-      cardPausedRef.current ||
-      pointerPausedRef.current;
-
-    const clearPointerResumeTimeout = () => {
-      if (pointerResumeTimeoutRef.current) {
-        window.clearTimeout(pointerResumeTimeoutRef.current);
-        pointerResumeTimeoutRef.current = null;
-      }
-    };
-
-    const pauseForInteraction = () => {
-      pointerPausedRef.current = true;
-      clearPointerResumeTimeout();
-    };
-
-    const resumeAfterInteraction = () => {
-      clearPointerResumeTimeout();
-      pointerResumeTimeoutRef.current = window.setTimeout(() => {
-        pointerPausedRef.current = false;
-        pointerResumeTimeoutRef.current = null;
-      }, 900);
-    };
-
-    const animate = (timestamp) => {
-      if (!lastTimestamp) {
-        lastTimestamp = timestamp;
-      }
-
-      const delta = timestamp - lastTimestamp;
-      lastTimestamp = timestamp;
-
-      const maxScrollLeft = scrollElement.scrollWidth - scrollElement.clientWidth;
-
-      if (!shouldPause() && maxScrollLeft > 0) {
-        const scrollDistance =
-          (pixelsPerSecond * delta * directionRef.current) / 1000;
-        const nextScrollLeft = scrollElement.scrollLeft + scrollDistance;
-
-        if (nextScrollLeft >= maxScrollLeft) {
-          scrollElement.scrollLeft = maxScrollLeft;
-          directionRef.current = -1;
-        } else if (nextScrollLeft <= 0) {
-          scrollElement.scrollLeft = 0;
-          directionRef.current = 1;
-        } else {
-          scrollElement.scrollLeft = nextScrollLeft;
-        }
-      }
-
-      animationFrameId = window.requestAnimationFrame(animate);
-    };
-
-    const handlePointerDown = () => {
-      pauseForInteraction();
-    };
-
-    const handlePointerUp = () => {
-      resumeAfterInteraction();
-    };
-
-    const handleWheel = () => {
-      pauseForInteraction();
-      resumeAfterInteraction();
-    };
-
-    const handleKeyDown = (event) => {
-      const horizontalKeys = ["ArrowLeft", "ArrowRight", "Home", "End"];
-      if (horizontalKeys.includes(event.key)) {
-        pauseForInteraction();
-        resumeAfterInteraction();
-      }
-    };
-
-    let observer;
-    if ("IntersectionObserver" in window) {
-      observer = new IntersectionObserver(
-        ([entry]) => {
-          inViewRef.current =
-            entry.isIntersecting && entry.intersectionRatio > 0.15;
-        },
-        { threshold: [0, 0.15, 0.5, 1] }
-      );
-      observer.observe(scrollElement);
-    } else {
-      inViewRef.current = true;
-    }
-
-    scrollElement.addEventListener("pointerdown", handlePointerDown);
-    scrollElement.addEventListener("wheel", handleWheel, { passive: true });
-    scrollElement.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("pointerup", handlePointerUp);
-    window.addEventListener("pointercancel", handlePointerUp);
-    animationFrameId = window.requestAnimationFrame(animate);
-
-    return () => {
-      window.cancelAnimationFrame(animationFrameId);
-      clearPointerResumeTimeout();
-      observer?.disconnect();
-      scrollElement.removeEventListener("pointerdown", handlePointerDown);
-      scrollElement.removeEventListener("wheel", handleWheel);
-      scrollElement.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("pointerup", handlePointerUp);
-      window.removeEventListener("pointercancel", handlePointerUp);
-    };
+    observer.observe(stage);
+    return () => observer.disconnect();
   }, []);
+
+  const motionPaused =
+    manualPaused || pointerPaused || focusPaused || !isInView;
+
+  const handlePointerEnter = (event) => {
+    if (event.pointerType === "mouse" || event.pointerType === "pen") {
+      setPointerPaused(true);
+    }
+  };
+
+  const handlePointerLeave = (event) => {
+    if (event.pointerType === "mouse" || event.pointerType === "pen") {
+      setPointerPaused(false);
+    }
+  };
 
   return (
     <FullScreenSection
@@ -211,162 +147,76 @@ const ExperienceSection = () => {
         >
           Journey
         </Text>
-        <Heading size="lg" color="var(--text-primary)">
+        <Heading
+          id="experience-timeline-heading"
+          size="lg"
+          color="var(--text-primary)"
+        >
           Experience Timeline
         </Heading>
-        <Text maxW="640px" color="var(--text-secondary)">
-          Scroll horizontally to explore each milestone in my career journey.
+        <Text maxW="680px" color="var(--text-secondary)">
+          Follow the river through each milestone in my career journey.
         </Text>
       </VStack>
 
-      <Box position="relative" width="100%">
-        {/* Fade edges */}
-        <Box
-          position="absolute"
-          left={0}
-          top={0}
-          bottom={0}
-          width="60px"
-          background="linear-gradient(90deg, rgba(var(--bg-primary-rgb), 1) 0%, rgba(var(--bg-primary-rgb), 0) 100%)"
-          pointerEvents="none"
-          zIndex={2}
-        />
-        <Box
-          position="absolute"
-          right={0}
-          top={0}
-          bottom={0}
-          width="60px"
-          background="linear-gradient(270deg, rgba(var(--bg-primary-rgb), 1) 0%, rgba(var(--bg-primary-rgb), 0) 100%)"
-          pointerEvents="none"
-          zIndex={2}
-        />
+      <Box
+        ref={stageRef}
+        className="experience-river-stage"
+        data-motion-paused={motionPaused ? "true" : "false"}
+        role="region"
+        aria-labelledby="experience-timeline-heading"
+      >
+        <div className="experience-river-toolbar">
+          <p id="experience-motion-help" className="experience-motion-help">
+            <span className="experience-motion-copy experience-motion-copy--animated">
+              The horizon drifts automatically. Hover or focus it to pause.
+            </span>
+            <span className="experience-motion-copy experience-motion-copy--reduced">
+              Motion is reduced. Scroll horizontally to explore the timeline.
+            </span>
+          </p>
 
-        <Box
-          ref={scrollRef}
-          position="relative"
-          width="100%"
-          overflowX="auto"
-          pb={4}
-          className="timeline-scroll"
-        >
-          <Box position="relative" minW="max-content" className="timeline-track">
-            {/* Timeline line */}
-            <Box
-              position="absolute"
-              top="48px"
-              left={0}
-              right={0}
-              height="2px"
-              background="linear-gradient(90deg, transparent, var(--accent-border), var(--accent-border), transparent)"
+          <button
+            className="experience-motion-toggle"
+            type="button"
+            aria-pressed={manualPaused}
+            aria-controls="experience-horizon-track"
+            onClick={() => setManualPaused((paused) => !paused)}
+          >
+            <span
+              className={`experience-motion-toggle-icon${manualPaused ? " is-play" : ""}`}
+              aria-hidden="true"
             />
+            <span>{manualPaused ? "Resume horizon" : "Pause horizon"}</span>
+          </button>
+        </div>
 
-            <HStack spacing={8} align="flex-start" position="relative" px={4} py={2}>
-              {experiences.map((experience, index) => (
-                <MotionBox
-                  key={experience.title}
-                  className="timeline-item"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    duration: 0.4,
-                    delay: index * 0.1,
-                  }}
-                >
-                  <VStack
-                    align="flex-start"
-                    spacing={3}
-                    minW="280px"
-                    maxW="280px"
-                  >
-                    <Badge
-                      bg="var(--accent-wash)"
-                      color="var(--accent-primary)"
-                      borderRadius="full"
-                      px={3}
-                      py={1}
-                      fontSize="xs"
-                      fontWeight="600"
-                      border="1px solid var(--accent-border)"
-                    >
-                      {experience.year}
-                    </Badge>
+        <div className="experience-river" aria-hidden="true">
+          <div className="experience-river-bank experience-river-bank--far" />
+          <div className="experience-river-current experience-river-current--far" />
+          <div className="experience-river-current experience-river-current--near" />
+          <div className="experience-river-glints" />
+          <div className="experience-river-bank experience-river-bank--near" />
+        </div>
 
-                    {/* Timeline dot */}
-                    <Box
-                      width="12px"
-                      height="12px"
-                      borderRadius="full"
-                      bg="var(--accent-gradient)"
-                      boxShadow="0 0 20px var(--accent-glow)"
-                      position="relative"
-                      _before={{
-                        content: '""',
-                        position: "absolute",
-                        top: "12px",
-                        left: "5px",
-                        width: "2px",
-                        height: "20px",
-                        background:
-                          "linear-gradient(180deg, var(--accent-glow), transparent)",
-                      }}
-                    />
-
-                    <Box
-                      className="glass-card card-shine"
-                      padding={5}
-                      minH="200px"
-                      display="flex"
-                      flexDirection="column"
-                      gap={3}
-                      cursor="default"
-                      onPointerEnter={() => {
-                        cardPausedRef.current = true;
-                      }}
-                      onPointerLeave={() => {
-                        cardPausedRef.current = false;
-                      }}
-                    >
-                      <HStack spacing={3}>
-                        <Box
-                          width="40px"
-                          height="40px"
-                          borderRadius="lg"
-                          bg="var(--accent-wash)"
-                          border="1px solid var(--accent-border)"
-                          display="flex"
-                          alignItems="center"
-                          justifyContent="center"
-                          fontWeight="700"
-                          color="var(--accent-primary)"
-                          fontSize="sm"
-                        >
-                          {experience.logo}
-                        </Box>
-                        <Heading
-                          size="sm"
-                          color="var(--text-primary)"
-                          fontWeight="600"
-                        >
-                          {experience.title}
-                        </Heading>
-                      </HStack>
-                      <Text
-                        fontSize="sm"
-                        color="var(--text-secondary)"
-                        flex="1"
-                        lineHeight="1.7"
-                      >
-                        {experience.description}
-                      </Text>
-                    </Box>
-                  </VStack>
-                </MotionBox>
-              ))}
-            </HStack>
-          </Box>
-        </Box>
+        <div
+          className="experience-horizon-viewport"
+          tabIndex={0}
+          aria-describedby="experience-motion-help"
+          aria-label="Experience timeline"
+          onPointerEnter={handlePointerEnter}
+          onPointerLeave={handlePointerLeave}
+          onFocus={() => setFocusPaused(true)}
+          onBlur={() => setFocusPaused(false)}
+        >
+          <div
+            id="experience-horizon-track"
+            className="experience-horizon-track"
+          >
+            <ExperienceCycle />
+            <ExperienceCycle isClone />
+          </div>
+        </div>
       </Box>
     </FullScreenSection>
   );

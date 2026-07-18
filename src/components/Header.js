@@ -1,41 +1,35 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Box, HStack, Link } from "@chakra-ui/react";
+import { motion, useReducedMotion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faBars,
   faChevronDown,
   faEnvelope,
   faMoon,
   faSun,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { faFileLines } from "@fortawesome/free-regular-svg-icons";
 import {
   faGithub,
-  faLinkedin,
   faInstagram,
+  faLinkedin,
 } from "@fortawesome/free-brands-svg-icons";
-import { Box, HStack, Link } from "@chakra-ui/react";
-import { motion } from "framer-motion";
 import Resume from "../assets/resume/Jialuo_Chen_Resume.pdf";
+import CV from "../assets/resume/Eric_CV.pdf";
 import "./HomeGlass.css";
 
 const MotionBox = motion(Box);
-const MotionLink = motion(Link);
 
 const documents = [
   { label: "Resume", url: Resume },
-  { label: "CV", url: Resume },
+  { label: "CV", url: CV },
 ];
 
 const socials = [
-  {
-    icon: faEnvelope,
-    url: "mailto:jialuo.chen@utoronto.ca",
-    label: "Email",
-  },
-  {
-    icon: faGithub,
-    url: "https://github.com/chenj926",
-    label: "GitHub",
-  },
+  { icon: faEnvelope, url: "mailto:jialuo.chen@utoronto.ca", label: "Email" },
+  { icon: faGithub, url: "https://github.com/chenj926", label: "GitHub" },
   {
     icon: faLinkedin,
     url: "https://www.linkedin.com/in/ericjialuochen/",
@@ -58,30 +52,52 @@ const navLinks = [
   { label: "Connect", anchor: "connect" },
 ];
 
-const Header = ({ theme = "dark", onThemeToggle }) => {
-  const [scrolled, setScrolled] = useState(false);
-  const [docsOpen, setDocsOpen] = useState(false);
-  const docsRef = useRef(null);
+const scrollToSection = (anchor, requestedBehavior = "smooth") => {
+  const scroll = () => {
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    document.getElementById(`${anchor}-section`)?.scrollIntoView({
+      behavior: reducedMotion ? "auto" : requestedBehavior,
+      block: "start",
+    });
+  };
+
+  if (window.location.hash.startsWith("#/")) {
+    window.location.hash = "";
+    window.setTimeout(scroll, 0);
+    return;
+  }
+
+  scroll();
+};
+
+const Header = ({ theme = "dark", onThemeToggle }) => {
+  const [docsOpen, setDocsOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [keyboardDocsAction, setKeyboardDocsAction] = useState(false);
+  const docsRef = useRef(null);
+  const docsButtonRef = useRef(null);
+  const firstDocumentRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     const handlePointerDown = (event) => {
       if (docsRef.current && !docsRef.current.contains(event.target)) {
+        setKeyboardDocsAction(false);
         setDocsOpen(false);
       }
     };
 
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
-        setDocsOpen(false);
+        if (docsOpen) {
+          setKeyboardDocsAction(true);
+          setDocsOpen(false);
+          docsButtonRef.current?.focus();
+        }
+        setMobileOpen(false);
       }
     };
 
@@ -91,60 +107,70 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
       document.removeEventListener("pointerdown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [docsOpen]);
 
-  const handleClick = (anchor) => () => {
-    const id = `${anchor}-section`;
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+  const handleNavClick = (anchor) => (event) => {
+    event.preventDefault();
+    setMobileOpen(false);
+    scrollToSection(anchor, event.detail === 0 ? "auto" : "smooth");
+  };
+
+  const toggleDocuments = (event) => {
+    const fromKeyboard = event.detail === 0;
+    setKeyboardDocsAction(fromKeyboard);
+    setDocsOpen((open) => !open);
+  };
+
+  const handleDocumentsKeyDown = (event) => {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setKeyboardDocsAction(true);
+      setDocsOpen(true);
+      window.setTimeout(() => firstDocumentRef.current?.focus(), 0);
     }
   };
 
+  const menuMotionless = shouldReduceMotion || keyboardDocsAction;
+
+  const handleDocumentSelect = (event) => {
+    setKeyboardDocsAction(event.detail === 0);
+    setDocsOpen(false);
+  };
+
   return (
-    <MotionBox
+    <Box
       as="header"
-      className={`home-header ${scrolled ? "is-scrolled" : ""}`}
-      initial={{ y: -96, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.65, ease: "easeOut" }}
+      className="home-header"
     >
       <Box className="home-nav-shell liquid-glass">
         <Box as="nav" aria-label="Social links" className="home-social-nav">
           <HStack className="home-social-stack" spacing={0}>
-            {socials.map((social, index) => (
-              <MotionLink
+            {socials.map((social) => (
+              <Link
                 key={social.label}
                 href={social.url}
-                isExternal
+                isExternal={social.url.startsWith("http")}
                 aria-label={social.label}
-                className="home-glass-icon"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.08, duration: 0.3 }}
+                title={social.label}
+                className="home-glass-icon pressable"
               >
                 <FontAwesomeIcon icon={social.icon} />
-              </MotionLink>
+              </Link>
             ))}
           </HStack>
         </Box>
 
         <Box as="nav" aria-label="Primary navigation" className="home-main-nav">
           <HStack className="home-nav-links" spacing={0}>
-            {navLinks.map((link, index) => (
-              <MotionLink
+            {navLinks.map((link) => (
+              <Link
                 key={link.label}
-                onClick={handleClick(link.anchor)}
+                href={`#${link.anchor}-section`}
+                onClick={handleNavClick(link.anchor)}
                 className="home-nav-link"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 + index * 0.05, duration: 0.3 }}
               >
                 {link.label}
-              </MotionLink>
+              </Link>
             ))}
           </HStack>
         </Box>
@@ -153,7 +179,7 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
           <Box
             as="button"
             type="button"
-            className="home-theme-toggle liquid-glass"
+            className="home-theme-toggle liquid-glass pressable"
             aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             onClick={onThemeToggle}
           >
@@ -163,49 +189,92 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
           <Box className="home-docs-control" ref={docsRef}>
             <Box className="home-docs-frame">
               <Box
+                ref={docsButtonRef}
                 as="button"
                 type="button"
-                className="home-docs-button"
+                className="home-docs-button pressable"
                 aria-haspopup="menu"
                 aria-expanded={docsOpen}
-                onClick={() => setDocsOpen((open) => !open)}
+                onClick={toggleDocuments}
+                onKeyDown={handleDocumentsKeyDown}
               >
                 <span>Resume/CV</span>
                 <FontAwesomeIcon
                   icon={faChevronDown}
-                  className={`home-docs-chevron ${docsOpen ? "is-open" : ""}`}
+                  className={`home-docs-chevron ${docsOpen ? "is-open" : ""} ${
+                    menuMotionless ? "is-motionless" : ""
+                  }`}
                 />
               </Box>
             </Box>
 
-            {docsOpen && (
-              <MotionBox
-                className="home-docs-menu liquid-glass"
-                role="menu"
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.18, ease: "easeOut" }}
-              >
-                {documents.map((documentLink) => (
-                  <Link
-                    key={documentLink.label}
-                    href={documentLink.url}
-                    isExternal
-                    role="menuitem"
-                    className="home-docs-item"
-                    onClick={() => setDocsOpen(false)}
-                  >
-                    <FontAwesomeIcon icon={faFileLines} />
-                    <span>{documentLink.label}</span>
-                  </Link>
-                ))}
-              </MotionBox>
-            )}
+            <MotionBox
+              className="home-docs-menu liquid-glass"
+              role="menu"
+              aria-hidden={!docsOpen}
+              initial={false}
+              animate={
+                docsOpen
+                  ? {
+                      opacity: 1,
+                      transform: "translate3d(0,0,0) scale(1)",
+                    }
+                  : {
+                      opacity: 0,
+                      transform: "translate3d(0,-3px,0) scale(.98)",
+                    }
+              }
+              transition={{
+                duration: menuMotionless ? 0 : 0.18,
+                ease: [0.23, 1, 0.32, 1],
+              }}
+              style={{ pointerEvents: docsOpen ? "auto" : "none" }}
+            >
+              {documents.map((documentLink, index) => (
+                <Link
+                  ref={index === 0 ? firstDocumentRef : undefined}
+                  key={documentLink.label}
+                  href={documentLink.url}
+                  isExternal
+                  role="menuitem"
+                  tabIndex={docsOpen ? 0 : -1}
+                  className="home-docs-item pressable"
+                  onClick={handleDocumentSelect}
+                >
+                  <FontAwesomeIcon icon={faFileLines} />
+                  <span>{documentLink.label}</span>
+                </Link>
+              ))}
+            </MotionBox>
+          </Box>
+
+          <Box
+            as="button"
+            type="button"
+            className="home-mobile-toggle pressable"
+            aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((open) => !open)}
+          >
+            <FontAwesomeIcon icon={mobileOpen ? faXmark : faBars} />
           </Box>
         </Box>
+
+        {mobileOpen && (
+          <Box className="home-mobile-menu" aria-label="Mobile navigation">
+            {navLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={`#${link.anchor}-section`}
+                onClick={handleNavClick(link.anchor)}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </Box>
+        )}
       </Box>
-    </MotionBox>
+    </Box>
   );
 };
 

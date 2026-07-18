@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import {
   Box,
@@ -12,14 +12,23 @@ import {
   Textarea,
   VStack,
 } from "@chakra-ui/react";
-import { motion } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
 import * as Yup from "yup";
 import FullScreenSection from "./FullScreenSection";
+import "./ContactEnvelope.css";
 
-const MotionBox = motion(Box);
+const OPEN_FOCUS_DELAY = 300;
+const CLOSE_FOCUS_DELAY = 270;
 
 const ContactMeSection = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [motionlessAction, setMotionlessAction] = useState(false);
+  const nameInputRef = useRef(null);
+  const openButtonRef = useRef(null);
+  const hasOpenedRef = useRef(false);
+  const focusTimerRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
+
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -27,7 +36,7 @@ const ContactMeSection = () => {
       comment: "",
     },
     onSubmit: (values, { resetForm }) => {
-      const mailtoLink = `mailto:jialuo.chen@mail.utoronto.ca?subject=Let%27s%20Connect&body=Name:%20${encodeURIComponent(
+      const mailtoLink = `mailto:jialuo.chen@utoronto.ca?subject=Let%27s%20Connect&body=Name:%20${encodeURIComponent(
         values.firstName
       )}%0AEmail:%20${encodeURIComponent(
         values.email
@@ -42,6 +51,55 @@ const ContactMeSection = () => {
       comment: Yup.string().required("Required"),
     }),
   });
+
+  useEffect(() => {
+    const clearFocusTimer = () => {
+      if (focusTimerRef.current) {
+        window.clearTimeout(focusTimerRef.current);
+        focusTimerRef.current = null;
+      }
+    };
+
+    clearFocusTimer();
+
+    if (isOpen) {
+      hasOpenedRef.current = true;
+      focusTimerRef.current = window.setTimeout(
+        () => {
+          nameInputRef.current?.focus({ preventScroll: true });
+          focusTimerRef.current = null;
+        },
+        shouldReduceMotion || motionlessAction ? 0 : OPEN_FOCUS_DELAY
+      );
+    } else if (hasOpenedRef.current) {
+      focusTimerRef.current = window.setTimeout(
+        () => {
+          openButtonRef.current?.focus({ preventScroll: true });
+          focusTimerRef.current = null;
+        },
+        shouldReduceMotion || motionlessAction ? 0 : CLOSE_FOCUS_DELAY
+      );
+    }
+
+    return clearFocusTimer;
+  }, [isOpen, motionlessAction, shouldReduceMotion]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return undefined;
+    }
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setMotionlessAction(true);
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
 
   return (
     <FullScreenSection
@@ -70,119 +128,176 @@ const ContactMeSection = () => {
         </Text>
       </VStack>
 
-      <MotionBox
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-      >
+      <Box>
         <Box
-          className={`envelope ${isOpen ? "is-open" : ""}`}
-          maxW={{ base: "100%", md: "640px" }}
-          alignSelf="center"
+          className={`contact-envelope ${isOpen ? "is-open" : "is-closed"} ${
+            motionlessAction ? "is-motionless" : ""
+          }`}
+          aria-label={isOpen ? "Open contact letter" : "Closed contact envelope"}
         >
-          <Box className="envelope-flap" />
-          <Box className="envelope-body">
-            <Button
-              className="envelope-seal"
-              onClick={() => setIsOpen((prev) => !prev)}
-              variant="unstyled"
+          <div className="contact-envelope-stage">
+            <div className="contact-envelope-base" aria-hidden="true">
+              <div className="contact-envelope-back" />
+              <div className="contact-envelope-flap" />
+              <div className="contact-envelope-front" />
+            </div>
+
+            <button
+              ref={openButtonRef}
+              type="button"
+              className="contact-envelope-seal"
               aria-expanded={isOpen}
+              aria-controls="contact-letter-panel"
+              aria-hidden={isOpen}
+              disabled={isOpen}
+              tabIndex={isOpen ? -1 : 0}
+              onClick={(event) => {
+                setMotionlessAction(event.detail === 0);
+                setIsOpen(true);
+              }}
             >
-              {isOpen ? "Close" : "Open to Connect"}
-            </Button>
-          </Box>
-          <Box className="envelope-letter">
-            <form onSubmit={formik.handleSubmit}>
-              <VStack spacing={4}>
-                <FormControl
-                  isInvalid={formik.touched.firstName && formik.errors.firstName}
-                >
-                  <FormLabel htmlFor="firstName" color="var(--text-primary)" fontSize="sm">
-                    Name
-                  </FormLabel>
-                  <Input
-                    id="firstName"
-                    name="firstName"
-                    bg="var(--glass-hover)"
-                    border="1px solid var(--glass-border)"
-                    color="var(--text-primary)"
-                    _hover={{ borderColor: "var(--accent-border-strong)" }}
-                    _focus={{
-                      borderColor: "var(--accent-primary)",
-                      boxShadow: "0 0 0 1px var(--accent-primary)",
-                    }}
-                    _placeholder={{ color: "var(--text-muted)" }}
-                    {...formik.getFieldProps("firstName")}
-                  />
-                  <FormErrorMessage color="#ef4444">{formik.errors.firstName}</FormErrorMessage>
-                </FormControl>
+              <span className="contact-envelope-seal-mark" aria-hidden="true">
+                EC
+              </span>
+              <span>Open to connect</span>
+            </button>
 
-                <FormControl isInvalid={formik.touched.email && formik.errors.email}>
-                  <FormLabel htmlFor="email" color="var(--text-primary)" fontSize="sm">
-                    Email
-                  </FormLabel>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    bg="var(--glass-hover)"
-                    border="1px solid var(--glass-border)"
-                    color="var(--text-primary)"
-                    _hover={{ borderColor: "var(--accent-border-strong)" }}
-                    _focus={{
-                      borderColor: "var(--accent-primary)",
-                      boxShadow: "0 0 0 1px var(--accent-primary)",
-                    }}
-                    _placeholder={{ color: "var(--text-muted)" }}
-                    {...formik.getFieldProps("email")}
-                  />
-                  <FormErrorMessage color="#ef4444">{formik.errors.email}</FormErrorMessage>
-                </FormControl>
-
-                <FormControl
-                  isInvalid={formik.touched.comment && formik.errors.comment}
-                >
-                  <FormLabel htmlFor="comment" color="var(--text-primary)" fontSize="sm">
-                    Message
-                  </FormLabel>
-                  <Textarea
-                    id="comment"
-                    name="comment"
-                    height={{ base: 140, md: 160 }}
-                    bg="var(--glass-hover)"
-                    border="1px solid var(--glass-border)"
-                    color="var(--text-primary)"
-                    _hover={{ borderColor: "var(--accent-border-strong)" }}
-                    _focus={{
-                      borderColor: "var(--accent-primary)",
-                      boxShadow: "0 0 0 1px var(--accent-primary)",
-                    }}
-                    _placeholder={{ color: "var(--text-muted)" }}
-                    {...formik.getFieldProps("comment")}
-                  />
-                  <FormErrorMessage color="#ef4444">{formik.errors.comment}</FormErrorMessage>
-                </FormControl>
-
-                <Button
-                  type="submit"
-                  width="full"
-                  bg="var(--accent-gradient)"
-                  color="white"
-                  fontWeight="600"
-                  _hover={{
-                    transform: "translateY(-2px)",
-                    boxShadow: "0 10px 30px var(--accent-border-strong)",
+            <div
+              id="contact-letter-panel"
+              className="contact-envelope-letter"
+              aria-hidden={!isOpen}
+            >
+              <div className="contact-letter-heading">
+                <div>
+                  <Text className="contact-letter-kicker">A personal note</Text>
+                  <Heading as="h3" size="md" className="contact-letter-title">
+                    Write to Eric
+                  </Heading>
+                </div>
+                <button
+                  type="button"
+                  className="contact-letter-close"
+                  aria-label="Close contact letter"
+                  disabled={!isOpen}
+                  tabIndex={isOpen ? 0 : -1}
+                  onClick={(event) => {
+                    setMotionlessAction(event.detail === 0);
+                    setIsOpen(false);
                   }}
-                  transition="all 0.3s ease"
                 >
-                  Send message
-                </Button>
-              </VStack>
-            </form>
-          </Box>
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+              <form
+                className="contact-letter-form"
+                aria-hidden={!isOpen}
+                onSubmit={formik.handleSubmit}
+              >
+                <VStack spacing={3} align="stretch">
+                  <FormControl
+                    isDisabled={!isOpen}
+                    isInvalid={formik.touched.firstName && formik.errors.firstName}
+                  >
+                    <FormLabel htmlFor="firstName" className="contact-letter-label">
+                      Name
+                    </FormLabel>
+                    <Input
+                      ref={nameInputRef}
+                      id="firstName"
+                      name="firstName"
+                      className="contact-letter-input"
+                      isDisabled={!isOpen}
+                      tabIndex={isOpen ? 0 : -1}
+                      bg="var(--contact-letter-field)"
+                      border="1px solid var(--contact-letter-line)"
+                      color="var(--contact-letter-ink)"
+                      _focusVisible={{
+                        borderColor: "var(--accent-primary)",
+                        boxShadow: "0 0 0 2px var(--accent-border-strong)",
+                      }}
+                      {...formik.getFieldProps("firstName")}
+                    />
+                    <FormErrorMessage className="contact-letter-error">
+                      {formik.errors.firstName}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl
+                    isDisabled={!isOpen}
+                    isInvalid={formik.touched.email && formik.errors.email}
+                  >
+                    <FormLabel htmlFor="email" className="contact-letter-label">
+                      Email
+                    </FormLabel>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      className="contact-letter-input"
+                      isDisabled={!isOpen}
+                      tabIndex={isOpen ? 0 : -1}
+                      bg="var(--contact-letter-field)"
+                      border="1px solid var(--contact-letter-line)"
+                      color="var(--contact-letter-ink)"
+                      _focusVisible={{
+                        borderColor: "var(--accent-primary)",
+                        boxShadow: "0 0 0 2px var(--accent-border-strong)",
+                      }}
+                      {...formik.getFieldProps("email")}
+                    />
+                    <FormErrorMessage className="contact-letter-error">
+                      {formik.errors.email}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl
+                    isDisabled={!isOpen}
+                    isInvalid={formik.touched.comment && formik.errors.comment}
+                  >
+                    <FormLabel htmlFor="comment" className="contact-letter-label">
+                      Message
+                    </FormLabel>
+                    <Textarea
+                      id="comment"
+                      name="comment"
+                      className="contact-letter-textarea"
+                      isDisabled={!isOpen}
+                      tabIndex={isOpen ? 0 : -1}
+                      resize="none"
+                      minH={{ base: "104px", md: "118px" }}
+                      bg="var(--contact-letter-field)"
+                      border="1px solid var(--contact-letter-line)"
+                      color="var(--contact-letter-ink)"
+                      _focusVisible={{
+                        borderColor: "var(--accent-primary)",
+                        boxShadow: "0 0 0 2px var(--accent-border-strong)",
+                      }}
+                      {...formik.getFieldProps("comment")}
+                    />
+                    <FormErrorMessage className="contact-letter-error">
+                      {formik.errors.comment}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  <Button
+                    type="submit"
+                    className="contact-letter-submit"
+                    isDisabled={!isOpen}
+                    tabIndex={isOpen ? 0 : -1}
+                    width="full"
+                    bg="var(--accent-gradient)"
+                    color="#fff9ed"
+                    fontWeight="700"
+                  >
+                    Send message
+                  </Button>
+                </VStack>
+              </form>
+            </div>
+          </div>
         </Box>
-      </MotionBox>
+      </Box>
     </FullScreenSection>
   );
 };

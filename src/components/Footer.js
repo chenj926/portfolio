@@ -31,7 +31,6 @@ const Footer = () => {
               isExternal
               color="var(--text-secondary)"
               _hover={{ color: "var(--accent-primary)" }}
-              transition="color 0.3s ease"
             >
               <FontAwesomeIcon icon={faEnvelope} />
             </Link>
@@ -40,7 +39,6 @@ const Footer = () => {
               isExternal
               color="var(--text-secondary)"
               _hover={{ color: "var(--accent-primary)" }}
-              transition="color 0.3s ease"
             >
               <FontAwesomeIcon icon={faGithub} />
             </Link>
@@ -49,7 +47,6 @@ const Footer = () => {
               isExternal
               color="var(--text-secondary)"
               _hover={{ color: "var(--accent-primary)" }}
-              transition="color 0.3s ease"
             >
               <FontAwesomeIcon icon={faLinkedin} />
             </Link>

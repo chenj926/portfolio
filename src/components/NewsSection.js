@@ -8,12 +8,9 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import FullScreenSection from "./FullScreenSection";
-
-const MotionBox = motion(Box);
 
 const news = [
   {
@@ -89,20 +86,11 @@ const NewsSection = () => {
       </VStack>
 
       <VStack align="stretch" spacing={3}>
-        {visibleNews.map((item, index) => (
-          <MotionBox
-            key={item.title}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: index * 0.05 }}
-          >
+        {visibleNews.map((item) => (
+          <Box key={item.title}>
             <Box
               className="glass-card"
               padding={{ base: 4, md: 5 }}
-              _hover={{
-                borderColor: "var(--accent-border)",
-              }}
             >
               <HStack
                 spacing={{ base: 3, md: 6 }}
@@ -143,7 +131,7 @@ const NewsSection = () => {
                 </Link>
               </HStack>
             </Box>
-          </MotionBox>
+          </Box>
         ))}
       </VStack>
 

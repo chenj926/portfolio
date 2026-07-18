@@ -9,7 +9,6 @@ import {
   WrapItem,
   SimpleGrid,
 } from "@chakra-ui/react";
-import { motion } from "framer-motion";
 import FullScreenSection from "./FullScreenSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,8 +19,6 @@ import {
   faDiagramProject,
 } from "@fortawesome/free-solid-svg-icons";
 import { faReact, faNodeJs, faPython } from "@fortawesome/free-brands-svg-icons";
-
-const MotionBox = motion(Box);
 
 const skills = [
   {
@@ -85,14 +82,8 @@ const SkillsSection = () => {
       </VStack>
 
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
-        {skills.map((skillGroup, index) => (
-          <MotionBox
-            key={skillGroup.category}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
-          >
+        {skills.map((skillGroup) => (
+          <Box key={skillGroup.category}>
             <Box
               className="glass-card"
               padding={6}
@@ -132,7 +123,7 @@ const SkillsSection = () => {
                 ))}
               </Wrap>
             </Box>
-          </MotionBox>
+          </Box>
         ))}
       </SimpleGrid>
     </FullScreenSection>

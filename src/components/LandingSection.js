@@ -7,21 +7,12 @@ import {
   faInstagram,
   faLinkedin,
 } from "@fortawesome/free-brands-svg-icons";
-import { motion } from "framer-motion";
 import profilePic from "../assets/images/profile pic.jpg";
 import "./HomeGlass.css";
 
 const socials = [
-  {
-    icon: faEnvelope,
-    label: "Email",
-    url: "mailto:jialuo.chen@utoronto.ca",
-  },
-  {
-    icon: faGithub,
-    label: "GitHub",
-    url: "https://github.com/chenj926",
-  },
+  { icon: faEnvelope, label: "Email", url: "mailto:jialuo.chen@utoronto.ca" },
+  { icon: faGithub, label: "GitHub", url: "https://github.com/chenj926" },
   {
     icon: faLinkedin,
     label: "LinkedIn",
@@ -34,103 +25,68 @@ const socials = [
   },
 ];
 
-const statusOptions = [
-  {
-    key: "opportunity",
-    label: "Open to opportunities",
-    tone: "green",
-  },
-  {
-    key: "collaborate",
-    label: "Open to collaborate",
-    tone: "blue",
-  },
-  {
-    key: "communicate",
-    label: "Open to communicate",
-    tone: "pink",
-  },
-  {
-    key: "vacation",
-    label: "Currently on vacation",
-    tone: "red",
-  },
+const statuses = [
+  { key: "opportunity", label: "Open to opportunities", tone: "green" },
+  { key: "collaborate", label: "Open to collaborate", tone: "blue" },
+  { key: "communicate", label: "Open to communicate", tone: "pink" },
+  { key: "vacation", label: "Currently on vacation", tone: "red" },
 ];
 
-const activeStatusKeys = [
-  "opportunity",
-  "collaborate",
-];
-
-const avatarParticles = Array.from({ length: 64 }, (_, index) => ({
-  angle: (index * 137.5) % 360,
-  distance: 112 + (index % 8) * 9,
-  size: 2 + (index % 5) * 0.7,
-  duration: 3.2 + (index % 7) * 0.28,
-  delay: (index % 12) * -0.22,
-}));
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.22,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 18 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: "easeOut" },
-  },
-};
+const BotanicalMark = () => (
+  <svg viewBox="0 0 72 72" role="img" aria-label="Growing branch motif">
+    <path d="M23 58C40 49 41 31 39 14" />
+    <path d="M38 28C31 25 27 20 27 14C34 15 39 20 38 28Z" />
+    <path d="M38 38C47 35 53 29 54 22C45 22 39 28 38 38Z" />
+    <path d="M34 48C27 46 21 41 19 35C27 34 33 39 34 48Z" />
+    <path d="M19 58H54" />
+  </svg>
+);
 
 const LandingSection = () => {
-  const activeStatuses = statusOptions.filter((status) =>
-    activeStatusKeys.includes(status.key)
-  );
+  const goToConnect = (event) => {
+    const shouldMove =
+      event.detail !== 0 &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    document.getElementById("connect-section")?.scrollIntoView({
+      behavior: shouldMove ? "smooth" : "auto",
+      block: "start",
+    });
+  };
 
   return (
     <Box as="section" id="home-section" className="home-landing">
+      <Box className="home-journey-rail" aria-hidden="true">
+        <span className="home-journey-knot">
+          <i />
+          <i />
+          <i />
+        </span>
+      </Box>
+
       <Box className="home-shell">
-        <motion.div
-          className="home-copy"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <motion.p className="home-eyebrow" variants={itemVariants}>
-            AI Researcher &amp; Engineer
-          </motion.p>
+        <Box className="home-copy">
+          <p className="home-eyebrow">AI Researcher &amp; Engineer</p>
 
-          <motion.h1 className="home-title" variants={itemVariants}>
-            Jialuo (Eric) Chen <span>陈佳洛</span>
-          </motion.h1>
+          <h1 className="home-title">
+            Jialuo (Eric) Chen <span lang="zh-Hans">陈佳洛</span>
+          </h1>
 
-          <motion.p className="home-lede" variants={itemVariants}>
+          <p className="home-lede">
             Industrial Engineering student with a dual focus on{" "}
             <strong>Machine Learning</strong> and{" "}
             <strong>Software Architecture</strong>. I thrive at the intersection
             of complex algorithms and intuitive product design.
-          </motion.p>
+          </p>
 
-          <motion.div
-            className="home-current liquid-glass"
-            variants={itemVariants}
-          >
+          <div className="home-current">
+            <div className="home-current-mark">
+              <BotanicalMark />
+            </div>
             <p>
               Currently engineering risk platforms at <strong>JANA Corp</strong>,
-              researching <strong>Bayesian Optimization Machine Learning</strong> at{" "}
-              <a
-                href="https://www.utoronto.ca/"
-                target="_blank"
-                rel="noreferrer"
-              >
+              researching <strong>Bayesian Optimization</strong> at{" "}
+              <a href="https://www.utoronto.ca/" target="_blank" rel="noreferrer">
                 UofT
               </a>{" "}
               and <strong>AI Reasoning</strong> at{" "}
@@ -138,64 +94,39 @@ const LandingSection = () => {
                 SJTU
               </a>
               . Open to <strong>AI Engineering</strong> or{" "}
-              <strong>AI/ML Research</strong> roles.
+              <strong>Applied Research</strong> roles.
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div className="home-social-row" variants={itemVariants}>
+          <div className="home-social-row" aria-label="Profile links">
             {socials.map((social) => (
               <Link
                 key={social.label}
                 href={social.url}
-                isExternal
-                className="home-social-pill liquid-glass"
+                isExternal={social.url.startsWith("http")}
+                className="home-social-pill pressable"
               >
                 <FontAwesomeIcon icon={social.icon} />
                 <span>{social.label}</span>
               </Link>
             ))}
-          </motion.div>
+          </div>
 
-          <motion.div className="home-connect-row" variants={itemVariants}>
+          <div className="home-connect-row">
             <button
-              className="home-connect-button"
+              className="home-connect-button pressable"
               type="button"
-              onClick={() =>
-                document
-                  .getElementById("connect-section")
-                  ?.scrollIntoView({ behavior: "smooth", block: "start" })
-              }
+              onClick={goToConnect}
             >
               <span>Let&apos;s connect</span>
               <FontAwesomeIcon icon={faArrowRight} />
             </button>
-          </motion.div>
-        </motion.div>
+          </div>
+        </Box>
 
-        <motion.div
-          className="home-profile-wrap"
-          initial={{ opacity: 0, x: 48, scale: 0.96 }}
-          animate={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 0.65, delay: 0.35, ease: "easeOut" }}
-        >
-          <div className="home-profile-card liquid-glass">
+        <Box className="home-profile-wrap">
+          <article className="home-profile-card">
             <div className="home-avatar-stage">
-              <span className="home-avatar-halo" aria-hidden="true" />
-              <span className="home-avatar-rim" aria-hidden="true" />
-              <div className="home-avatar-particles" aria-hidden="true">
-                {avatarParticles.map((particle, index) => (
-                  <span
-                    key={index}
-                    style={{
-                      "--particle-angle": `${particle.angle}deg`,
-                      "--particle-distance": `${particle.distance}px`,
-                      "--particle-size": `${particle.size}px`,
-                      "--particle-duration": `${particle.duration}s`,
-                      "--particle-delay": `${particle.delay}s`,
-                    }}
-                  />
-                ))}
-              </div>
               <img
                 src={profilePic}
                 alt="Jialuo (Eric) Chen"
@@ -205,22 +136,24 @@ const LandingSection = () => {
 
             <h2>Software &amp; AI/ML Engineer</h2>
             <p className="home-profile-subtitle">
-              Industrial Engineering &middot; University of Toronto
+              Industrial Engineering <span aria-hidden="true">•</span> University of Toronto
             </p>
 
-            <div className="home-status-grid">
-              {activeStatuses.map((status) => (
+            <span className="home-profile-rule" aria-hidden="true" />
+
+            <div className="home-status-grid" aria-label="Current availability">
+              {statuses.map((status) => (
                 <div
                   key={status.key}
-                  className={`home-status-chip liquid-glass is-${status.tone}`}
+                  className={`home-status-chip is-${status.tone}`}
                 >
-                  <span className="home-status-dot" />
+                  <span className="home-status-dot" aria-hidden="true" />
                   <span>{status.label}</span>
                 </div>
               ))}
             </div>
-          </div>
-        </motion.div>
+          </article>
+        </Box>
       </Box>
     </Box>
   );

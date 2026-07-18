@@ -1,10 +1,7 @@
 import React from "react";
 import { Box, Heading, Image, SimpleGrid, Text, VStack } from "@chakra-ui/react";
-import { motion } from "framer-motion";
 import FullScreenSection from "./FullScreenSection";
 import GuqinImage from "../assets/images/Guqin.jpg";
-
-const MotionBox = motion(Box);
 
 const hobbies = [
   {
@@ -74,14 +71,8 @@ const HobbiesSection = () => {
       </VStack>
 
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-        {hobbies.map((hobby, index) => (
-          <MotionBox
-            key={hobby.title}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: index * 0.08 }}
-          >
+        {hobbies.map((hobby) => (
+          <Box key={hobby.title}>
             <Box
               className="glass-card card-shine"
               padding={5}
@@ -98,8 +89,6 @@ const HobbiesSection = () => {
                   height="280px"
                   objectFit="cover"
                   width="100%"
-                  transition="transform 0.5s ease"
-                  _groupHover={{ transform: "scale(1.05)" }}
                 />
                 <Box
                   position="absolute"
@@ -116,7 +105,7 @@ const HobbiesSection = () => {
                 </Text>
               </Box>
             </Box>
-          </MotionBox>
+          </Box>
         ))}
       </SimpleGrid>
     </FullScreenSection>
