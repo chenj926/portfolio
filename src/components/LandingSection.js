@@ -1,260 +1,132 @@
-import React from "react";
-import { Box, Link } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import {
-  faGithub,
-  faInstagram,
-  faLinkedin,
-} from "@fortawesome/free-brands-svg-icons";
-import { motion } from "framer-motion";
-import profilePic from "../assets/images/profile pic.jpg";
-import LiquidGlass from "./LiquidGlass";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { profile, statusOptions } from "../data/profile";
+import SocialLinks from "./SocialLinks";
+import Blossom from "./Blossom";
+import Material from "./Material";
+import profilePic from "../assets/images/profile.webp";
+import inkStudy from "../assets/decorations/ink-study.webp";
 import "./HomeGlass.css";
 
-const socials = [
-  {
-    icon: faEnvelope,
-    label: "Email",
-    url: "mailto:jialuo.chen@utoronto.ca",
-  },
-  {
-    icon: faGithub,
-    label: "GitHub",
-    url: "https://github.com/chenj926",
-  },
-  {
-    icon: faLinkedin,
-    label: "LinkedIn",
-    url: "https://www.linkedin.com/in/ericjialuochen/",
-  },
-  {
-    icon: faInstagram,
-    label: "Instagram",
-    url: "https://www.instagram.com/ericchen7161/",
-  },
-];
-
-const statusOptions = [
-  {
-    key: "opportunity",
-    label: "Open to opportunities",
-    tone: "green",
-  },
-  {
-    key: "collaborate",
-    label: "Open to collaborate",
-    tone: "blue",
-  },
-  {
-    key: "communicate",
-    label: "Open to communicate",
-    tone: "pink",
-  },
-  {
-    key: "vacation",
-    label: "Currently on vacation",
-    tone: "red",
-  },
-];
-
-const activeStatusKeys = [
-  "opportunity",
-  "collaborate",
-];
-
-const avatarParticles = Array.from({ length: 64 }, (_, index) => ({
-  angle: (index * 137.5) % 360,
-  distance: 112 + (index % 8) * 9,
-  size: 2 + (index % 5) * 0.7,
-  duration: 3.2 + (index % 7) * 0.28,
-  delay: (index % 12) * -0.22,
-}));
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.22,
-    },
-  },
+const institutions = {
+  UofT: "https://www.utoronto.ca/",
+  SJTU: "https://www.sjtu.edu.cn/",
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 18 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: "easeOut" },
-  },
-};
-
-const LandingSection = () => {
-  const activeStatuses = statusOptions.filter((status) =>
-    activeStatusKeys.includes(status.key)
+function workWithLinks(text) {
+  return text.split(/\b(UofT|SJTU)\b/).map((part, index) =>
+    institutions[part] ? (
+      <a
+        key={index}
+        href={institutions[part]}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {part}
+      </a>
+    ) : (
+      part
+    ),
   );
+}
 
+export default function LandingSection() {
+  const status = statusOptions[profile.currentStatus];
   return (
-    <Box as="section" id="home-section" className="home-landing">
-      <Box className="home-shell">
-        <motion.div
-          className="home-copy"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <motion.p className="home-eyebrow" variants={itemVariants}>
-            AI Researcher &amp; Engineer
-          </motion.p>
-
-          <motion.h1 className="home-title" variants={itemVariants}>
-            Jialuo (Eric) Chen <span>陈佳洛</span>
-          </motion.h1>
-
-          <motion.p className="home-lede" variants={itemVariants}>
-            Industrial Engineering student with a dual focus on{" "}
-            <strong>Machine Learning</strong> and{" "}
-            <strong>Software Architecture</strong>. I thrive at the intersection
-            of complex algorithms and intuitive product design.
-          </motion.p>
-
-          <LiquidGlass
-            as={motion.div}
-            className="home-current"
-            variants={itemVariants}
-            displacementScale={42}
-            blurAmount={0.16}
-            saturation={178}
-            aberrationIntensity={1.15}
-            elasticity={0.14}
-            cornerRadius={28}
-          >
-            <p>
-              Currently engineering risk platforms at <strong>JANA Corp</strong>,
-              researching <strong>Bayesian Optimization Machine Learning</strong> at{" "}
-              <a
-                href="https://www.utoronto.ca/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                UofT
-              </a>{" "}
-              and <strong>AI Reasoning</strong> at{" "}
-              <a href="https://www.sjtu.edu.cn/" target="_blank" rel="noreferrer">
-                SJTU
-              </a>
-              . Open to <strong>AI Engineering</strong> or{" "}
-              <strong>AI/ML Research</strong> roles.
-            </p>
-          </LiquidGlass>
-
-          <motion.div className="home-social-row" variants={itemVariants}>
-            {socials.map((social) => (
-              <LiquidGlass
-                as={Link}
-                key={social.label}
-                href={social.url}
-                isExternal
-                className="home-social-pill"
-                displacementScale={58}
-                blurAmount={0.12}
-                saturation={185}
-                aberrationIntensity={1.6}
-                elasticity={0.28}
-                cornerRadius={999}
-                padding="0"
-              >
-                <FontAwesomeIcon icon={social.icon} />
-                <span>{social.label}</span>
-              </LiquidGlass>
-            ))}
-          </motion.div>
-
-          <motion.div className="home-connect-row" variants={itemVariants}>
-            <button
-              className="home-connect-button"
-              type="button"
-              onClick={() =>
-                document
-                  .getElementById("connect-section")
-                  ?.scrollIntoView({ behavior: "smooth", block: "start" })
-              }
+    <section
+      id="home-section"
+      className="home-landing"
+      aria-labelledby="home-title"
+    >
+      <img
+        className="home-ink home-ink-mountains"
+        src={inkStudy}
+        width="800"
+        height="800"
+        alt=""
+        aria-hidden="true"
+      />
+      <img
+        className="home-ink home-ink-branch"
+        src={inkStudy}
+        width="800"
+        height="800"
+        alt=""
+        aria-hidden="true"
+      />
+      <div className="home-journey-rail" aria-hidden="true" />
+      <span className="home-signature" lang="zh-Hans" aria-hidden="true">
+        佳洛
+      </span>
+      <div className="home-shell">
+        <div className="home-copy">
+          <p className="home-eyebrow">{profile.eyebrow}</p>
+          <h1 id="home-title" className="home-title">
+            <span className="home-name-en">{profile.name}</span>{" "}
+            <span lang="zh-Hans">{profile.chineseName}</span>
+          </h1>
+          <p className="home-lede">{profile.introduction}</p>
+          <Material quiet className="home-current home-reading-surface">
+            <Blossom />
+            <div className="home-current-copy">
+              <p>{workWithLinks(profile.currentWork)}</p>
+            </div>
+          </Material>
+          <SocialLinks labelled className="home-social-row" />
+          <div className="home-connect-row">
+            <Material
+              as="a"
+              opaque
+              className="home-connect-button pressable"
+              href="#connect-section"
             >
-              <span>Let&apos;s connect</span>
-              <FontAwesomeIcon icon={faArrowRight} />
-            </button>
-          </motion.div>
-        </motion.div>
-
-        <motion.div
-          className="home-profile-wrap"
-          initial={{ opacity: 0, x: 48, scale: 0.96 }}
-          animate={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 0.65, delay: 0.35, ease: "easeOut" }}
+              <span>Let's connect</span>
+              <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" />
+            </Material>
+          </div>
+        </div>
+        <Material
+          as="article"
+          quiet
+          className="home-profile-card home-reading-surface"
+          aria-label="Profile"
         >
-          <LiquidGlass
-            className="home-profile-card"
-            displacementScale={34}
-            blurAmount={0.22}
-            saturation={165}
-            aberrationIntensity={1.05}
-            elasticity={0.1}
-            cornerRadius={34}
+          <div className="home-avatar-stage">
+            <img
+              src={profilePic}
+              width="800"
+              height="600"
+              alt={profile.name}
+              className="home-avatar"
+              fetchPriority="high"
+            />
+          </div>
+          <h2>{profile.role}</h2>
+          <p className="home-profile-subtitle">
+            {profile.education.discipline} <span aria-hidden="true">·</span>{" "}
+            {profile.education.university}
+          </p>
+          <span className="home-profile-rule" aria-hidden="true" />
+          <div
+            className="home-status"
+            role="group"
+            aria-label="Current status"
+            data-status={profile.currentStatus}
           >
-            <div className="home-avatar-stage">
-              <span className="home-avatar-halo" aria-hidden="true" />
-              <span className="home-avatar-rim" aria-hidden="true" />
-              <div className="home-avatar-particles" aria-hidden="true">
-                {avatarParticles.map((particle, index) => (
-                  <span
-                    key={index}
-                    style={{
-                      "--particle-angle": `${particle.angle}deg`,
-                      "--particle-distance": `${particle.distance}px`,
-                      "--particle-size": `${particle.size}px`,
-                      "--particle-duration": `${particle.duration}s`,
-                      "--particle-delay": `${particle.delay}s`,
-                    }}
-                  />
-                ))}
-              </div>
-              <img
-                src={profilePic}
-                alt="Jialuo (Eric) Chen"
-                className="home-avatar"
-              />
-            </div>
-
-            <h2>Software &amp; AI/ML Engineer</h2>
-            <p className="home-profile-subtitle">
-              Industrial Engineering &middot; University of Toronto
-            </p>
-
-            <div className="home-status-grid">
-              {activeStatuses.map((status) => (
-                <LiquidGlass
-                  key={status.key}
-                  className={`home-status-chip is-${status.tone}`}
-                  displacementScale={52}
-                  blurAmount={0.1}
-                  saturation={190}
-                  aberrationIntensity={1.4}
-                  elasticity={0.22}
-                  cornerRadius={999}
-                  padding="0"
-                >
-                  <span className="home-status-dot" />
-                  <span>{status.label}</span>
-                </LiquidGlass>
-              ))}
-            </div>
-          </LiquidGlass>
-        </motion.div>
-      </Box>
-    </Box>
+            <span className="home-status-ink" aria-hidden="true" />
+            <span className="home-status-backplate" aria-hidden="true" />
+            <span
+              className="home-status-icon"
+              style={{ "--status-x": `${(status.spriteColumn / 3) * 100}%` }}
+              aria-hidden="true"
+            />
+            <Material quiet className="home-status-face">
+              <p className="home-status-kicker">CURRENT STATUS</p>
+              <p className="home-status-label">{status.label}</p>
+            </Material>
+          </div>
+        </Material>
+      </div>
+    </section>
   );
-};
-
-export default LandingSection;
+}

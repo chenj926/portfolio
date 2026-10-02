@@ -1,0 +1,341 @@
+/* One material contract for navigation and controls. Geometry stays with the
+   consuming component; these layers contain optics and interaction only. */
+.material-surface {
+  --light-x: 35%;
+  --light-y: 10%;
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --glass-tint: rgba(125, 151, 164, 0.045);
+  --material-rim: 2px;
+  position: relative;
+  isolation: isolate;
+  border: 1px solid rgba(227, 247, 255, 0.3);
+  background: var(--glass-tint);
+  box-shadow:
+    0 8px 20px -10px rgba(0, 0, 0, 0.52),
+    inset 0 1px 1px rgba(255, 255, 255, 0.58),
+    inset 0 -1px 1px rgba(206, 237, 248, 0.24);
+  -webkit-tap-highlight-color: transparent;
+}
+.material-lens,
+.material-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+}
+.material-lens {
+  overflow: hidden;
+  /* Displacement maps are computed only on resize. Browsers without SVG
+     backdrop support retain the same readable translucent surface. */
+  backdrop-filter: var(--material-filter, blur(8px)) saturate(1.35);
+  -webkit-backdrop-filter: var(--material-filter, blur(8px)) saturate(1.35);
+  background: linear-gradient(
+    165deg,
+    rgba(221, 243, 253, 0.055),
+    transparent 45% 65%,
+    rgba(176, 215, 233, 0.06)
+  );
+}
+.material-shine {
+  overflow: hidden;
+  background: radial-gradient(
+      ellipse 75% 115% at var(--light-x) var(--light-y),
+      rgba(238, 250, 255, 0.13),
+      transparent 67%
+    ),
+    linear-gradient(
+      172deg,
+      rgba(255, 255, 255, 0.075),
+      transparent 24% 68%,
+      rgba(205, 235, 249, 0.035)
+    );
+  box-shadow:
+    inset 0 3px 4px -3px rgba(255, 255, 255, 0.72),
+    inset 0 -4px 7px -5px rgba(235, 250, 255, 0.38);
+  transition: opacity 250ms ease;
+}
+.material-shine::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: var(--material-rim);
+  border-radius: inherit;
+  background: radial-gradient(
+      ellipse 5% 140% at 0% 28%,
+      rgba(235, 252, 255, 0.85),
+      rgba(218, 245, 255, 0.14) 40%,
+      transparent 78%
+    ),
+    radial-gradient(
+      ellipse 4% 140% at 100% 82%,
+      rgba(238, 253, 255, 0.82),
+      rgba(195, 224, 239, 0.08) 46%,
+      transparent 80%
+    ),
+    radial-gradient(
+      ellipse 24% 65% at var(--light-x) var(--light-y),
+      rgba(255, 255, 255, 0.78),
+      rgba(211, 234, 248, 0.12) 55%,
+      transparent 90%
+    ),
+    linear-gradient(
+      170deg,
+      rgba(255, 255, 255, 0.68),
+      transparent 22% 75%,
+      rgba(220, 247, 255, 0.4)
+    );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+.material-shine::after {
+  content: "";
+  position: absolute;
+  inset: var(--material-rim);
+  border-radius: inherit;
+  border: 0;
+  background: radial-gradient(
+      ellipse 6% 90% at 0% 50%,
+      rgba(214, 242, 255, 0.1),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 6% 90% at 100% 50%,
+      rgba(214, 242, 255, 0.08),
+      transparent
+    );
+}
+.home-nav-shell.material-surface {
+  --material-rim: 4px;
+  box-shadow:
+    0 12px 28px -13px rgba(0, 0, 0, 0.7),
+    inset 0 1px 1px rgba(255, 255, 255, 0.85),
+    inset 0 -1px 1px rgba(205, 234, 249, 0.45),
+    inset 2px 0 5px rgba(240, 249, 255, 0.16),
+    inset -2px 0 5px rgba(240, 249, 255, 0.12);
+}
+.home-nav-shell[data-scrolled="true"],
+.home-docs-menu,
+.home-mobile-menu {
+  --glass-tint: rgba(6, 20, 29, 0.82);
+}
+.home-status-face.material-surface {
+  --glass-tint: rgba(17, 41, 41, 0.66);
+  border-color: rgba(var(--status-rgb), 0.29);
+  box-shadow:
+    0 12px 26px -17px #000,
+    inset 0 1px rgba(224, 242, 220, 0.19);
+}
+.home-status-face > .material-shine {
+  opacity: 0.45;
+}
+.home-reading-surface.material-surface {
+  --material-rim: 1px;
+  background: rgba(25, 48, 56, 0.1);
+  border-color: rgba(215, 220, 198, 0.2);
+  box-shadow:
+    inset 0 1px 1px rgba(220, 240, 245, 0.07),
+    0 10px 30px -24px rgba(0, 0, 0, 0.3);
+}
+.home-reading-surface > .material-lens {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: none;
+}
+.home-reading-surface > .material-shine {
+  opacity: 0.3;
+}
+.home-connect-button.material-surface {
+  --glass-tint: var(--cinnabar);
+  border-color: rgba(255, 215, 182, 0.48);
+  box-shadow:
+    0 9px 18px -12px rgba(143, 44, 25, 0.8),
+    inset 0 1px 2px rgba(255, 241, 220, 0.55);
+}
+.home-connect-button > .material-shine {
+  opacity: 0.7;
+}
+.material-surface[data-material-opaque] > .material-lens {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: none;
+}
+.material-surface.pressable {
+  transform: perspective(650px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+  transition:
+    transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 250ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .material-surface.pressable:hover {
+    transform: perspective(650px) translateY(-2px) rotateX(var(--tilt-x))
+      rotateY(var(--tilt-y));
+    text-decoration: none;
+  }
+  .material-surface.pressable:hover > .material-shine {
+    background-color: rgba(230, 249, 255, 0.055);
+  }
+}
+.material-surface.pressable:active {
+  transform: perspective(650px) scale(0.96) rotateX(var(--tilt-x))
+    rotateY(var(--tilt-y));
+  transition-duration: 100ms;
+}
+.home-docs-menu,
+.home-mobile-menu {
+  animation: material-unfold 180ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform-origin: top right;
+}
+@keyframes material-unfold {
+  from {
+    opacity: 0;
+    transform: translateY(-5px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* Porcelain has an opaque ceramic body, a rounded lip, and a moving glaze
+   reflection. The microscopic image supplies variation, never illustration. */
+[data-theme="light"] .material-surface {
+  --material-rim: 4px;
+  background: #f8f5ee;
+  border-color: #dfd4c5;
+  box-shadow:
+    0 5px 9px -5px rgba(83, 61, 39, 0.22),
+    inset 0 2px 2px #fff,
+    inset 2px 0 3px rgba(255, 255, 255, 0.95),
+    inset 0 -3px 4px rgba(160, 136, 101, 0.13),
+    inset -1px 0 2px rgba(156, 132, 99, 0.09);
+}
+[data-theme="light"] .material-lens {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: url("../assets/decorations/porcelain-glaze.webp") center / 192px
+    192px;
+  opacity: 0.65;
+}
+[data-theme="light"] .material-shine {
+  background: radial-gradient(
+      ellipse 48% 85% at var(--light-x) var(--light-y),
+      rgba(255, 255, 255, 0.96),
+      transparent 78%
+    ),
+    linear-gradient(174deg, #ffffffb8, transparent 40% 62%, #c4af941c);
+  box-shadow:
+    inset 0 5px 6px -4px #fff,
+    inset 0 -5px 6px -4px #b9a48755;
+}
+[data-theme="light"] .material-shine::before {
+  background: linear-gradient(
+    174deg,
+    #fff 5%,
+    #fffdf6 21%,
+    #d5c6b3 45%,
+    #fffdf6 61%,
+    #c6b094 88%,
+    #fff 99%
+  );
+  opacity: 0.65;
+}
+[data-theme="light"] .material-shine::after {
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  background: none;
+  box-shadow:
+    inset 0 2px 2px #b6a18714,
+    inset 0 -2px 3px #fff;
+}
+[data-theme="light"] .home-nav-shell.material-surface {
+  --material-rim: 6px;
+  box-shadow:
+    0 9px 16px -8px rgba(90, 68, 45, 0.24),
+    0 2px 3px rgba(133, 108, 77, 0.12),
+    inset 0 3px 3px #fff,
+    inset 4px 0 6px #fff,
+    inset -4px 0 5px #fff,
+    inset 0 -5px 7px rgba(161, 137, 102, 0.18);
+}
+[data-theme="light"] .home-reading-surface.material-surface {
+  --material-rim: 4px;
+  background: #f8f5ee;
+  border-color: rgba(206, 190, 168, 0.55);
+  box-shadow:
+    inset 0 2px 3px #fff,
+    inset 0 -3px 5px rgba(175, 153, 123, 0.1),
+    0 9px 22px -18px rgba(87, 63, 33, 0.24);
+}
+[data-theme="light"] .home-reading-surface > .material-lens {
+  background: url("../assets/decorations/porcelain-glaze.webp") center / 192px
+    192px;
+  opacity: 0.65;
+}
+[data-theme="light"] .home-reading-surface > .material-shine {
+  opacity: 0.55;
+}
+[data-theme="light"] .home-status-face.material-surface {
+  background: #f1f2e8;
+  border-color: rgba(var(--status-rgb), 0.32);
+  box-shadow:
+    0 12px 20px -17px rgba(45, 71, 51, 0.45),
+    inset 0 1px 2px #fff;
+}
+[data-theme="light"] .home-status-face > .material-lens {
+  opacity: 0.38;
+}
+[data-theme="light"] .home-status-face > .material-shine {
+  opacity: 0.45;
+}
+[data-theme="light"] .home-connect-button.material-surface {
+  background: var(--cinnabar);
+  border-color: #a72d21;
+  box-shadow:
+    0 8px 16px -11px #77281d88,
+    inset 0 2px 3px #ffffff50,
+    inset 0 -2px 4px #68150833;
+}
+[data-theme="light"] .home-connect-button > .material-lens {
+  opacity: 0.035;
+}
+[data-theme="light"] .home-connect-button > .material-shine {
+  opacity: 0.28;
+}
+@media (prefers-reduced-motion: reduce) {
+  .material-surface,
+  .material-surface *,
+  .material-surface *::before,
+  .material-surface *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .material-surface.pressable {
+    transform: none !important;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .material-surface:not([data-material-opaque]) {
+    background: var(--canvas-elevated);
+  }
+  .material-lens {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+@media (forced-colors: active) {
+  .material-surface {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .material-lens,
+  .material-shine {
+    display: none;
+  }
+}

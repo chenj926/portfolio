@@ -11,6 +11,18 @@
 # production
 /build
 
+# Local design drafts and review records (runtime WebP assets stay tracked)
+/designs/
+/DESIGN.md
+/design-qa.md
+/.implementation-review-temp/
+/.revision-review-temp/
+/.material-review-temp/
+/dev-server.*.log
+/src/assets/decorations/ink-study.png
+/src/assets/decorations/porcelain-glaze.png
+/src/assets/decorations/status-icons.png
+
 # misc
 .DS_Store
 .env.local

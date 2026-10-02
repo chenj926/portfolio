@@ -1,53 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faBars,
   faChevronDown,
-  faEnvelope,
+  faFileLines,
   faMoon,
   faSun,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { faFileLines } from "@fortawesome/free-regular-svg-icons";
-import {
-  faGithub,
-  faLinkedin,
-  faInstagram,
-} from "@fortawesome/free-brands-svg-icons";
-import { Box, HStack, Link } from "@chakra-ui/react";
-import { motion } from "framer-motion";
-import Resume from "../assets/resume/Jialuo_Chen_Resume.pdf";
-import LiquidGlass from "./LiquidGlass";
+import { documents } from "../data/profile";
+import SocialLinks from "./SocialLinks";
+import Material from "./Material";
 import "./HomeGlass.css";
-
-const MotionBox = motion(Box);
-const MotionLink = motion(Link);
-
-const documents = [
-  { label: "Resume", url: Resume },
-  { label: "CV", url: Resume },
-];
-
-const socials = [
-  {
-    icon: faEnvelope,
-    url: "mailto:jialuo.chen@utoronto.ca",
-    label: "Email",
-  },
-  {
-    icon: faGithub,
-    url: "https://github.com/chenj926",
-    label: "GitHub",
-  },
-  {
-    icon: faLinkedin,
-    url: "https://www.linkedin.com/in/ericjialuochen/",
-    label: "LinkedIn",
-  },
-  {
-    icon: faInstagram,
-    url: "https://www.instagram.com/ericchen7161/",
-    label: "Instagram",
-  },
-];
 
 const navLinks = [
   { label: "About", anchor: "home" },
@@ -60,29 +24,49 @@ const navLinks = [
 ];
 
 const Header = ({ theme = "dark", onThemeToggle }) => {
-  const [scrolled, setScrolled] = useState(false);
   const [docsOpen, setDocsOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const docsRef = useRef(null);
+  const navigationRef = useRef(null);
+  const docsButtonRef = useRef(null);
+  const mobileButtonRef = useRef(null);
+  const menuItemsRef = useRef([]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    const updateSurface = () => setScrolled(window.scrollY > 80);
+    updateSurface();
+    window.addEventListener("scroll", updateSurface, { passive: true });
+    return () => window.removeEventListener("scroll", updateSurface);
   }, []);
+
+  useEffect(() => {
+    if (docsOpen) {
+      menuItemsRef.current[0]?.focus();
+    }
+  }, [docsOpen]);
 
   useEffect(() => {
     const handlePointerDown = (event) => {
       if (docsRef.current && !docsRef.current.contains(event.target)) {
         setDocsOpen(false);
       }
+      if (!navigationRef.current?.contains(event.target)) {
+        setMobileOpen(false);
+      }
     };
 
     const handleKeyDown = (event) => {
-      if (event.key === "Escape") {
+      if (event.key !== "Escape") return;
+
+      if (docsOpen) {
         setDocsOpen(false);
+        docsButtonRef.current?.focus();
+      }
+
+      if (mobileOpen) {
+        setMobileOpen(false);
+        mobileButtonRef.current?.focus();
       }
     };
 
@@ -92,184 +76,183 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
       document.removeEventListener("pointerdown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [docsOpen, mobileOpen]);
 
-  const handleClick = (anchor) => () => {
-    const id = `${anchor}-section`;
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
+  const toggleDocuments = () => {
+    const nextOpen = !docsOpen;
+    if (nextOpen) setMobileOpen(false);
+    setDocsOpen(nextOpen);
   };
 
-  return (
-    <MotionBox
-      as="header"
-      className={`home-header ${scrolled ? "is-scrolled" : ""}`}
-      initial={{ y: -96, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.65, ease: "easeOut" }}
-    >
-      <LiquidGlass
-        as={Box}
-        className="home-nav-shell"
-<<<<<<< codex/replace-liquid-glass-with-liquid-glass-react-viqfua
-        displacementScale={56}
-        blurAmount={0.075}
-        saturation={132}
-        aberrationIntensity={1.8}
-        elasticity={0.16}
-=======
-        displacementScale={38}
-        blurAmount={0.14}
-        saturation={180}
-        aberrationIntensity={1.25}
-        elasticity={0.12}
->>>>>>> main
-        cornerRadius={32}
-      >
-        <Box as="nav" aria-label="Social links" className="home-social-nav">
-          <HStack className="home-social-stack" spacing={0}>
-            {socials.map((social, index) => (
-              <LiquidGlass
-                as={MotionLink}
-                key={social.label}
-                href={social.url}
-                isExternal
-                aria-label={social.label}
-                className="home-glass-icon"
-<<<<<<< codex/replace-liquid-glass-with-liquid-glass-react-viqfua
-                displacementScale={64}
-                blurAmount={0.1}
-                saturation={130}
-                aberrationIntensity={2}
-                elasticity={0.35}
-=======
-                displacementScale={54}
-                blurAmount={0.1}
-                saturation={188}
-                aberrationIntensity={1.5}
-                elasticity={0.26}
->>>>>>> main
-                cornerRadius={16}
-                padding="0"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.08, duration: 0.3 }}
-              >
-                <FontAwesomeIcon icon={social.icon} />
-              </LiquidGlass>
-            ))}
-          </HStack>
-        </Box>
+  const handleDocumentsButtonKeyDown = (event) => {
+    if (event.key !== "ArrowDown") return;
+    event.preventDefault();
+    if (docsOpen) {
+      menuItemsRef.current[0]?.focus();
+      return;
+    }
+    setMobileOpen(false);
+    setDocsOpen(true);
+  };
 
-        <Box as="nav" aria-label="Primary navigation" className="home-main-nav">
-          <HStack className="home-nav-links" spacing={0}>
-            {navLinks.map((link, index) => (
-              <MotionLink
+  const handleMenuItemKeyDown = (event, currentIndex) => {
+    const count = documents.length;
+    let nextIndex;
+
+    if (event.key === "ArrowDown") nextIndex = (currentIndex + 1) % count;
+    else if (event.key === "ArrowUp")
+      nextIndex = (currentIndex - 1 + count) % count;
+    else if (event.key === "Home") nextIndex = 0;
+    else if (event.key === "End") nextIndex = count - 1;
+    else return;
+
+    event.preventDefault();
+    menuItemsRef.current[nextIndex]?.focus();
+  };
+
+  const closeMobileMenu = () => setMobileOpen(false);
+
+  return (
+    <header className="home-header">
+      <Material
+        className="home-nav-shell"
+        ref={navigationRef}
+        data-scrolled={scrolled}
+      >
+        <SocialLinks />
+
+        <nav aria-label="Primary navigation" className="home-main-nav">
+          <div className="home-nav-links">
+            {navLinks.map((link) => (
+              <a
                 key={link.label}
-                onClick={handleClick(link.anchor)}
+                href={`#${link.anchor}-section`}
+                onClick={closeMobileMenu}
                 className="home-nav-link"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 + index * 0.05, duration: 0.3 }}
               >
                 {link.label}
-              </MotionLink>
+              </a>
             ))}
-          </HStack>
-        </Box>
+          </div>
+        </nav>
 
-        <Box className="home-actions">
-          <LiquidGlass
+        <div className="home-actions">
+          <Material
             as="button"
             type="button"
-            className="home-theme-toggle"
-<<<<<<< codex/replace-liquid-glass-with-liquid-glass-react-viqfua
-            displacementScale={64}
-            blurAmount={0.1}
-            saturation={130}
-            aberrationIntensity={2}
-            elasticity={0.35}
-=======
-            displacementScale={54}
-            blurAmount={0.1}
-            saturation={188}
-            aberrationIntensity={1.5}
-            elasticity={0.26}
->>>>>>> main
-            cornerRadius={16}
-            padding="0"
+            className="home-theme-toggle pressable"
             aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             onClick={onThemeToggle}
           >
-            <FontAwesomeIcon icon={theme === "dark" ? faSun : faMoon} />
-          </LiquidGlass>
+            <FontAwesomeIcon
+              icon={theme === "dark" ? faSun : faMoon}
+              aria-hidden="true"
+            />
+          </Material>
 
-          <Box className="home-docs-control" ref={docsRef}>
-            <Box className="home-docs-frame">
-              <Box
+          <div
+            className="home-docs-control"
+            ref={docsRef}
+            onBlur={(event) => {
+              if (!docsRef.current?.contains(event.relatedTarget)) {
+                setDocsOpen(false);
+              }
+            }}
+          >
+            <div className="home-docs-frame">
+              <Material
                 as="button"
+                ref={docsButtonRef}
                 type="button"
-                className="home-docs-button"
+                className="home-docs-button pressable"
                 aria-haspopup="menu"
+                aria-controls={docsOpen ? "home-docs-menu" : undefined}
                 aria-expanded={docsOpen}
-                onClick={() => setDocsOpen((open) => !open)}
+                onClick={toggleDocuments}
+                onKeyDown={handleDocumentsButtonKeyDown}
               >
                 <span>Resume/CV</span>
                 <FontAwesomeIcon
                   icon={faChevronDown}
+                  aria-hidden="true"
                   className={`home-docs-chevron ${docsOpen ? "is-open" : ""}`}
                 />
-              </Box>
-            </Box>
+              </Material>
+            </div>
 
             {docsOpen && (
-              <LiquidGlass
-                as={MotionBox}
+              <Material
+                id="home-docs-menu"
                 className="home-docs-menu"
-<<<<<<< codex/replace-liquid-glass-with-liquid-glass-react-viqfua
-                displacementScale={64}
-                blurAmount={0.08}
-                saturation={132}
-                aberrationIntensity={2}
-                elasticity={0.18}
-=======
-                displacementScale={44}
-                blurAmount={0.16}
-                saturation={176}
-                aberrationIntensity={1.2}
-                elasticity={0.14}
->>>>>>> main
-                cornerRadius={22}
                 role="menu"
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.18, ease: "easeOut" }}
+                aria-label="Download documents"
               >
-                {documents.map((documentLink) => (
-                  <Link
+                {documents.map((documentLink, index) => (
+                  <a
+                    ref={(node) => {
+                      menuItemsRef.current[index] = node;
+                    }}
                     key={documentLink.label}
                     href={documentLink.url}
-                    isExternal
+                    target="_blank"
+                    rel="noreferrer"
                     role="menuitem"
-                    className="home-docs-item"
-                    onClick={() => setDocsOpen(false)}
+                    className="home-docs-item pressable"
+                    onClick={() => {
+                      setDocsOpen(false);
+                      docsButtonRef.current?.focus();
+                    }}
+                    onKeyDown={(event) => handleMenuItemKeyDown(event, index)}
                   >
-                    <FontAwesomeIcon icon={faFileLines} />
+                    <FontAwesomeIcon icon={faFileLines} aria-hidden="true" />
                     <span>{documentLink.label}</span>
-                  </Link>
+                  </a>
                 ))}
-              </LiquidGlass>
+              </Material>
             )}
-          </Box>
-        </Box>
-      </LiquidGlass>
-    </MotionBox>
+          </div>
+
+          <Material
+            as="button"
+            ref={mobileButtonRef}
+            type="button"
+            className="home-mobile-toggle pressable"
+            aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
+            aria-controls={mobileOpen ? "home-mobile-menu" : undefined}
+            aria-expanded={mobileOpen}
+            onClick={() => {
+              const nextOpen = !mobileOpen;
+              if (nextOpen) setDocsOpen(false);
+              setMobileOpen(nextOpen);
+            }}
+          >
+            <FontAwesomeIcon
+              icon={mobileOpen ? faXmark : faBars}
+              aria-hidden="true"
+            />
+          </Material>
+        </div>
+
+        {mobileOpen && (
+          <Material
+            as="nav"
+            id="home-mobile-menu"
+            aria-label="Mobile navigation"
+            className="home-mobile-menu"
+          >
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={`#${link.anchor}-section`}
+                onClick={closeMobileMenu}
+              >
+                {link.label}
+              </a>
+            ))}
+          </Material>
+        )}
+      </Material>
+    </header>
   );
 };
 

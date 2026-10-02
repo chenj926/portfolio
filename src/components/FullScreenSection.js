@@ -6,18 +6,26 @@ const FullScreenSection = ({
   isDarkBackground = true,
   ...boxProps
 }) => {
-  const { backgroundColor, ...sectionProps } = boxProps;
+  const { backgroundColor, id, ...sectionProps } = boxProps;
 
   return (
     <VStack
+      as="section"
+      id={id}
       data-section-bg={backgroundColor ? "custom" : "theme"}
-      backgroundColor="var(--bg-primary)"
-      color={isDarkBackground ? "var(--text-primary)" : "var(--bg-primary)"}
-      overflow="hidden"
+      backgroundColor={backgroundColor || "transparent"}
+      color={isDarkBackground ? "var(--text-primary)" : "var(--ink)"}
       width="100%"
       position="relative"
+      overflow="visible"
     >
-      <VStack maxWidth="1280px" width="100%" position="relative" zIndex={1} {...sectionProps}>
+      <VStack
+        maxWidth="var(--layout-max)"
+        width="100%"
+        position="relative"
+        zIndex={1}
+        {...sectionProps}
+      >
         {children}
       </VStack>
     </VStack>

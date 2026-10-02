@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { ChakraProvider } from "@chakra-ui/react";
+import { useLayoutEffect, useState } from "react";
+import { ChakraProvider, extendTheme, useColorMode } from "@chakra-ui/react";
 import Header from "./components/Header";
 import LandingSection from "./components/LandingSection";
 import NewsSection from "./components/NewsSection";
@@ -10,44 +10,96 @@ import HobbiesSection from "./components/HobbiesSection";
 import ContentSection from "./components/ContentSection";
 import SkillsSection from "./components/SkillsSection";
 import ContactMeSection from "./components/ContactMeSection";
+import PortfolioDetailPage, {
+  usePortfolioRoute,
+} from "./components/PortfolioDetailPage";
 import Footer from "./components/Footer";
 import { AlertProvider } from "./context/alertContext";
 import Alert from "./components/Alert";
 import "./App.css";
 
-function App() {
-  const [theme, setTheme] = useState(() => {
-    return window.localStorage.getItem("portfolio-theme") || "dark";
-  });
+// Chakra owns the document theme; this adapter keeps the existing preference key.
+const themeStorage = {
+  type: "localStorage",
+  get() {
+    try {
+      return window.localStorage.getItem("portfolio-theme") === "light"
+        ? "light"
+        : "dark";
+    } catch {
+      return "dark";
+    }
+  },
+  set(theme) {
+    try {
+      window.localStorage.setItem("portfolio-theme", theme);
+    } catch {
+      // A denied storage permission must not disable the theme control.
+    }
+  },
+};
 
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    window.localStorage.setItem("portfolio-theme", theme);
-  }, [theme]);
+function Portfolio() {
+  const portfolioEntry = usePortfolioRoute();
+  const { colorMode: theme, toggleColorMode } = useColorMode();
 
-  const toggleTheme = () => {
-    setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"));
-  };
+  useLayoutEffect(() => {
+    if (portfolioEntry || !/^#[a-z-]+-section$/i.test(window.location.hash)) {
+      return;
+    }
+
+    document
+      .getElementById(window.location.hash.slice(1))
+      ?.scrollIntoView({ behavior: "auto", block: "start" });
+  }, [portfolioEntry]);
 
   return (
-    <ChakraProvider>
-      <AlertProvider>
-        <main className="app-shell" data-theme={theme}>
-          <Header theme={theme} onThemeToggle={toggleTheme} />
-          <LandingSection />
-          {/* <StatusSection /> */}
-          <NewsSection />
-          <ExperienceSection />
-          <ProjectsSection />
-          <ResearchSection />
-          <HobbiesSection />
-          <ContentSection />
-          <SkillsSection />
-          <ContactMeSection />
-          <Footer />
-          <Alert />
+    <AlertProvider>
+      <div className="app-shell" data-theme={theme}>
+        <a className="skip-link" href="#main-content">
+          Skip to content
+        </a>
+        <Header theme={theme} onThemeToggle={toggleColorMode} />
+        <main id="main-content" tabIndex={-1}>
+          {portfolioEntry ? (
+            <PortfolioDetailPage entry={portfolioEntry} />
+          ) : (
+            <>
+              <LandingSection />
+              <NewsSection />
+              <ExperienceSection />
+              <ProjectsSection />
+              <ResearchSection />
+              <HobbiesSection />
+              <ContentSection />
+              <SkillsSection />
+              <ContactMeSection />
+            </>
+          )}
         </main>
-      </AlertProvider>
+        <Footer />
+        <Alert />
+      </div>
+    </AlertProvider>
+  );
+}
+
+function App() {
+  const [interfaceTheme] = useState(() =>
+    extendTheme({
+      config: {
+        initialColorMode: themeStorage.get(),
+        useSystemColorMode: false,
+      },
+      fonts: { body: "var(--font-body)", heading: "var(--font-body)" },
+      styles: {
+        global: { body: { bg: "var(--canvas)", color: "var(--ink)" } },
+      },
+    }),
+  );
+  return (
+    <ChakraProvider theme={interfaceTheme} colorModeManager={themeStorage}>
+      <Portfolio />
     </ChakraProvider>
   );
 }

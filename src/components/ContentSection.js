@@ -1,11 +1,8 @@
 import React from "react";
 import { Box, Heading, Link, Text, VStack, SimpleGrid } from "@chakra-ui/react";
-import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import FullScreenSection from "./FullScreenSection";
-
-const MotionBox = motion(Box);
 
 const channels = [
   {
@@ -49,14 +46,8 @@ const ContentSection = () => {
       </VStack>
 
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-        {channels.map((channel, index) => (
-          <MotionBox
-            key={channel.title}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
-          >
+        {channels.map((channel) => (
+          <Box key={channel.title}>
             <Box
               className="glass-card"
               padding={6}
@@ -84,7 +75,7 @@ const ContentSection = () => {
                 <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="xs" />
               </Link>
             </Box>
-          </MotionBox>
+          </Box>
         ))}
       </SimpleGrid>
     </FullScreenSection>

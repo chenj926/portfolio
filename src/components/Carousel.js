@@ -1,32 +1,62 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Box, Button, HStack } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import { useReducedMotion } from "framer-motion";
 import Card from "./Card";
 
-const Carousel = ({ items, autoRotate = true, showDots = true }) => {
+const Carousel = ({ items, autoRotate = false, showDots = true }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isInView, setIsInView] = useState(true);
+  const [pageVisible, setPageVisible] = useState(!document.hidden);
+  const [motionlessNavigation, setMotionlessNavigation] = useState(false);
   const [dotStartIndex, setDotStartIndex] = useState(0); // For scrolling dots when >8
+  const carouselRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
 
   const maxVisibleDots = 8;
 
+  useEffect(() => {
+    const handleVisibility = () => setPageVisible(!document.hidden);
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, []);
+
+  useEffect(() => {
+    if (!carouselRef.current || typeof IntersectionObserver === "undefined") {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { threshold: 0.15 },
+    );
+    observer.observe(carouselRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   // Auto-rotation effect
   useEffect(() => {
-    if (!autoRotate || isPaused) return;
+    if (!autoRotate || isPaused || shouldReduceMotion || !isInView || !pageVisible) {
+      return undefined;
+    }
 
     const interval = setInterval(() => {
+      setMotionlessNavigation(false);
       setActiveIndex((prevIndex) => (prevIndex + 1) % items.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [autoRotate, isPaused, items.length]);
+  }, [autoRotate, isInView, isPaused, items.length, pageVisible, shouldReduceMotion]);
 
   // Handlers for navigation
-  const handlePrevious = () => {
+  const handlePrevious = (event) => {
+    setMotionlessNavigation(event.detail === 0);
     setActiveIndex((prevIndex) => (prevIndex - 1 + items.length) % items.length);
   };
 
-  const handleNext = () => {
+  const handleNext = (event) => {
+    setMotionlessNavigation(event.detail === 0);
     setActiveIndex((prevIndex) => (prevIndex + 1) % items.length);
   };
 
@@ -42,11 +72,35 @@ const Carousel = ({ items, autoRotate = true, showDots = true }) => {
 
   return (
     <Box
+      ref={carouselRef}
       position="relative"
       width="400px"
       height="300px"
       margin="0 auto"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocusCapture={() => setIsPaused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+          setIsPaused(false);
+        }
+      }}
     >
+      {autoRotate && !shouldReduceMotion && (
+        <Button
+          size="xs"
+          position="absolute"
+          top="8px"
+          right="8px"
+          zIndex={3}
+          onClick={(event) => {
+            setMotionlessNavigation(event.detail === 0);
+            setIsPaused((paused) => !paused);
+          }}
+        >
+          {isPaused ? "Resume" : "Pause"}
+        </Button>
+      )}
       {/* Left Button */}
       <Button
         aria-label="Previous"
@@ -81,10 +135,12 @@ const Carousel = ({ items, autoRotate = true, showDots = true }) => {
           }
           
           transform={`translateX(${(index - activeIndex) * 100}%)`}
-          transition="transform 0.5s ease"
+          transition={
+            shouldReduceMotion || motionlessNavigation
+              ? "none"
+              : "transform 220ms cubic-bezier(0.77, 0, 0.175, 1)"
+          }
           zIndex={index === activeIndex ? 1 : 0}
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
         >
           <Card
             title={item.title}
@@ -152,7 +208,20 @@ const Carousel = ({ items, autoRotate = true, showDots = true }) => {
                 borderRadius="50%"
                 bg={globalIndex === activeIndex ? "#ffffff" : "#888888"}
                 cursor="pointer"
-                onClick={() => setActiveIndex(globalIndex)}
+                role="button"
+                tabIndex={0}
+                aria-label={`Show slide ${globalIndex + 1}`}
+                onClick={(event) => {
+                  setMotionlessNavigation(event.detail === 0);
+                  setActiveIndex(globalIndex);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    setMotionlessNavigation(true);
+                    setActiveIndex(globalIndex);
+                  }
+                }}
             />
             );
         })}
