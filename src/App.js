@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from "react";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, extendTheme, useColorMode } from "@chakra-ui/react";
 import Header from "./components/Header";
 import LandingSection from "./components/LandingSection";
 import NewsSection from "./components/NewsSection";
@@ -18,19 +18,30 @@ import { AlertProvider } from "./context/alertContext";
 import Alert from "./components/Alert";
 import "./App.css";
 
-function App() {
-  const portfolioEntry = usePortfolioRoute();
-  const [theme, setTheme] = useState(() => {
-    const storedTheme = window.localStorage.getItem("portfolio-theme");
-    const initialTheme = storedTheme === "light" ? "light" : "dark";
-    document.documentElement.dataset.theme = initialTheme;
-    return initialTheme;
-  });
+// Chakra owns the document theme; this adapter keeps the existing preference key.
+const themeStorage = {
+  type: "localStorage",
+  get() {
+    try {
+      return window.localStorage.getItem("portfolio-theme") === "light"
+        ? "light"
+        : "dark";
+    } catch {
+      return "dark";
+    }
+  },
+  set(theme) {
+    try {
+      window.localStorage.setItem("portfolio-theme", theme);
+    } catch {
+      // A denied storage permission must not disable the theme control.
+    }
+  },
+};
 
-  useLayoutEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    window.localStorage.setItem("portfolio-theme", theme);
-  }, [theme]);
+function Portfolio() {
+  const portfolioEntry = usePortfolioRoute();
+  const { colorMode: theme, toggleColorMode } = useColorMode();
 
   useLayoutEffect(() => {
     if (portfolioEntry || !/^#[a-z-]+-section$/i.test(window.location.hash)) {
@@ -42,32 +53,19 @@ function App() {
       ?.scrollIntoView({ behavior: "auto", block: "start" });
   }, [portfolioEntry]);
 
-  const toggleTheme = () => {
-    const root = document.documentElement;
-    root.classList.add("theme-switching");
-
-    setTheme((currentTheme) => {
-      const nextTheme = currentTheme === "dark" ? "light" : "dark";
-      root.dataset.theme = nextTheme;
-      return nextTheme;
-    });
-
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => root.classList.remove("theme-switching"));
-    });
-  };
-
   return (
-    <ChakraProvider>
-      <AlertProvider>
-        <main className="app-shell" data-theme={theme}>
+    <AlertProvider>
+      <div className="app-shell" data-theme={theme}>
+        <a className="skip-link" href="#main-content">
+          Skip to content
+        </a>
+        <Header theme={theme} onThemeToggle={toggleColorMode} />
+        <main id="main-content" tabIndex={-1}>
           {portfolioEntry ? (
             <PortfolioDetailPage entry={portfolioEntry} />
           ) : (
             <>
-              <Header theme={theme} onThemeToggle={toggleTheme} />
               <LandingSection />
-              {/* <StatusSection /> */}
               <NewsSection />
               <ExperienceSection />
               <ProjectsSection />
@@ -76,12 +74,32 @@ function App() {
               <ContentSection />
               <SkillsSection />
               <ContactMeSection />
-              <Footer />
-              <Alert />
             </>
           )}
         </main>
-      </AlertProvider>
+        <Footer />
+        <Alert />
+      </div>
+    </AlertProvider>
+  );
+}
+
+function App() {
+  const [interfaceTheme] = useState(() =>
+    extendTheme({
+      config: {
+        initialColorMode: themeStorage.get(),
+        useSystemColorMode: false,
+      },
+      fonts: { body: "var(--font-body)", heading: "var(--font-body)" },
+      styles: {
+        global: { body: { bg: "var(--canvas)", color: "var(--ink)" } },
+      },
+    }),
+  );
+  return (
+    <ChakraProvider theme={interfaceTheme} colorModeManager={themeStorage}>
+      <Portfolio />
     </ChakraProvider>
   );
 }

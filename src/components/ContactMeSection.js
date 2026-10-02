@@ -15,6 +15,7 @@ import {
 import { useReducedMotion } from "framer-motion";
 import * as Yup from "yup";
 import FullScreenSection from "./FullScreenSection";
+import { profile } from "../data/profile";
 import "./ContactEnvelope.css";
 
 const OPEN_FOCUS_DELAY = 300;
@@ -36,10 +37,10 @@ const ContactMeSection = () => {
       comment: "",
     },
     onSubmit: (values, { resetForm }) => {
-      const mailtoLink = `mailto:jialuo.chen@utoronto.ca?subject=Let%27s%20Connect&body=Name:%20${encodeURIComponent(
-        values.firstName
+      const mailtoLink = `mailto:${profile.email}?subject=Let%27s%20Connect&body=Name:%20${encodeURIComponent(
+        values.firstName,
       )}%0AEmail:%20${encodeURIComponent(
-        values.email
+        values.email,
       )}%0A%0AMessage:%0A${encodeURIComponent(values.comment)}`;
 
       window.location.href = mailtoLink;
@@ -69,7 +70,7 @@ const ContactMeSection = () => {
           nameInputRef.current?.focus({ preventScroll: true });
           focusTimerRef.current = null;
         },
-        shouldReduceMotion || motionlessAction ? 0 : OPEN_FOCUS_DELAY
+        shouldReduceMotion || motionlessAction ? 0 : OPEN_FOCUS_DELAY,
       );
     } else if (hasOpenedRef.current) {
       focusTimerRef.current = window.setTimeout(
@@ -77,7 +78,7 @@ const ContactMeSection = () => {
           openButtonRef.current?.focus({ preventScroll: true });
           focusTimerRef.current = null;
         },
-        shouldReduceMotion || motionlessAction ? 0 : CLOSE_FOCUS_DELAY
+        shouldReduceMotion || motionlessAction ? 0 : CLOSE_FOCUS_DELAY,
       );
     }
 
@@ -124,7 +125,8 @@ const ContactMeSection = () => {
           Let&apos;s Connect
         </Heading>
         <Text maxW="640px" color="var(--text-secondary)">
-          Want to collaborate or chat? Send a note and I&apos;ll get back to you soon.
+          Want to collaborate or chat? Send a note and I&apos;ll get back to you
+          soon.
         </Text>
       </VStack>
 
@@ -133,7 +135,9 @@ const ContactMeSection = () => {
           className={`contact-envelope ${isOpen ? "is-open" : "is-closed"} ${
             motionlessAction ? "is-motionless" : ""
           }`}
-          aria-label={isOpen ? "Open contact letter" : "Closed contact envelope"}
+          aria-label={
+            isOpen ? "Open contact letter" : "Closed contact envelope"
+          }
         >
           <div className="contact-envelope-stage">
             <div className="contact-envelope-base" aria-hidden="true">
@@ -197,9 +201,14 @@ const ContactMeSection = () => {
                 <VStack spacing={3} align="stretch">
                   <FormControl
                     isDisabled={!isOpen}
-                    isInvalid={formik.touched.firstName && formik.errors.firstName}
+                    isInvalid={
+                      formik.touched.firstName && formik.errors.firstName
+                    }
                   >
-                    <FormLabel htmlFor="firstName" className="contact-letter-label">
+                    <FormLabel
+                      htmlFor="firstName"
+                      className="contact-letter-label"
+                    >
                       Name
                     </FormLabel>
                     <Input
@@ -255,7 +264,10 @@ const ContactMeSection = () => {
                     isDisabled={!isOpen}
                     isInvalid={formik.touched.comment && formik.errors.comment}
                   >
-                    <FormLabel htmlFor="comment" className="contact-letter-label">
+                    <FormLabel
+                      htmlFor="comment"
+                      className="contact-letter-label"
+                    >
                       Message
                     </FormLabel>
                     <Textarea

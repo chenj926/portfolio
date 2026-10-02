@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, Heading, Image, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Image,
+  SimpleGrid,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import FullScreenSection from "./FullScreenSection";
 import GuqinImage from "../assets/images/Guqin.jpg";
 
@@ -14,7 +21,7 @@ const hobbies = [
     title: "Soccer",
     description: "Weekend matches and tactical deep-dives.",
     media:
-      "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80",
   },
   {
     title: "Art",
@@ -25,8 +32,7 @@ const hobbies = [
   {
     title: "Music",
     description: "Guqin, guitar, and curated focus playlists.",
-    media:
-      GuqinImage,
+    media: GuqinImage,
   },
   {
     title: "Workouts",
@@ -86,6 +92,8 @@ const HobbiesSection = () => {
                 <Image
                   src={hobby.media}
                   alt={hobby.title}
+                  loading="lazy"
+                  decoding="async"
                   height="280px"
                   objectFit="cover"
                   width="100%"
@@ -97,10 +105,19 @@ const HobbiesSection = () => {
                 />
               </Box>
               <Box>
-                <Heading size="sm" mb={2} color="var(--text-primary)" fontWeight="600">
+                <Heading
+                  size="sm"
+                  mb={2}
+                  color="var(--text-primary)"
+                  fontWeight="600"
+                >
                   {hobby.title}
                 </Heading>
-                <Text fontSize="sm" color="var(--text-secondary)" lineHeight="1.7">
+                <Text
+                  fontSize="sm"
+                  color="var(--text-secondary)"
+                  lineHeight="1.7"
+                >
                   {hobby.description}
                 </Text>
               </Box>

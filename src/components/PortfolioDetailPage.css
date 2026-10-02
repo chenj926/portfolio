@@ -1,6 +1,6 @@
 .portfolio-detail-page {
   min-height: 100vh;
-  padding: 42px 28px 72px;
+  padding: calc(var(--header-offset) + 32px) 28px 72px;
   background: radial-gradient(
       circle at 82% 12%,
       var(--accent-wash),
@@ -436,7 +436,7 @@
 
 @media (max-width: 560px) {
   .portfolio-detail-page {
-    padding: 22px 16px 52px;
+    padding: calc(var(--header-offset) + 24px) 16px 52px;
   }
 
   .portfolio-detail-back {

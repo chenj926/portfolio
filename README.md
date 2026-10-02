@@ -1,74 +1,41 @@
-<<<<<<< HEAD
-# portfolio
-=======
-# Getting Started with Create React App
+﻿# Jialuo (Eric) Chen — Portfolio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+AI/ML research, software projects, and contact information. React 19, Chakra UI 2, and Create React App; existing project and publication detail routes use URL hashes.
 
-## Available Scripts
+## Local development
 
-In the project directory, you can run:
+```powershell
+npm install
+npm start
+```
 
-### `npm start`
+Open http://localhost:3000/portfolio/. To check a release:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```powershell
+$env:CI = "true"
+npm test -- --watchAll=false --runInBand
+npm run build
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The existing deployment target is GitHub Pages at `/portfolio/`. Building does not publish the site.
 
-### `npm test`
+## Change the current status
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Edit **only `profile.currentStatus` in [src/data/profile.js](src/data/profile.js)**:
 
-### `npm run build`
+| Value           | Public label          |
+| --------------- | --------------------- |
+| `opportunities` | Open to opportunities |
+| `collaborate`   | Open to collaborate   |
+| `communicate`   | Open to communicate   |
+| `vacation`      | Currently on vacation |
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The page displays one status. Visitors cannot select a status, and it never rotates automatically. Light and dark icon materials follow the visitor's theme. Each option has a label and sprite position; there is no role subtitle. The opportunities state uses a quiet green glow and overlapping layers.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The same file owns the homepage biography, email, social destinations (including Google Scholar), and document imports. The CV is `src/assets/resume/Jialuo_Chen_CV.pdf`; Resume is a separate document.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Design and assets
 
-### `npm run eject`
+Design drafts, publication proposals, and local review records are excluded from Git. Production artwork, document downloads, fonts, and their licenses remain versioned with the application.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
->>>>>>> 24f8c91 (first commit)
+The production homepage uses WebP artwork and locally hosted OFL fonts. `Material` owns shared control optics and pointer feedback: opaque porcelain in light mode, translucent glass with progressive SVG edge refraction in dark mode. Small displacement maps are cached and rebuilt only on resize. Pointer work is coalesced into one animation frame; no permanent render loop or 3D dependency is added. Flowers greet briefly when first visible and respond to pointer entry; reduced motion disables both. Temporary browser screenshots are removed after review.

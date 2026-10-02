@@ -1,8 +1,11 @@
 import React from "react";
 import { Box, Flex, Text, HStack, Link } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import { profile, socialLinks } from "../data/profile";
+
+const footerLinks = socialLinks.filter(({ label }) =>
+  ["Email", "GitHub", "LinkedIn"].includes(label),
+);
 
 const Footer = () => {
   return (
@@ -23,33 +26,21 @@ const Footer = () => {
           maxWidth="1280px"
         >
           <Text fontSize="sm">
-            Jialuo (Eric) Chen · © {new Date().getFullYear()}
+            {profile.name} · © {new Date().getFullYear()}
           </Text>
           <HStack spacing={6}>
-            <Link
-              href="mailto:jialuo.chen@utoronto.ca"
-              isExternal
-              color="var(--text-secondary)"
-              _hover={{ color: "var(--accent-primary)" }}
-            >
-              <FontAwesomeIcon icon={faEnvelope} />
-            </Link>
-            <Link
-              href="https://github.com/chenj926"
-              isExternal
-              color="var(--text-secondary)"
-              _hover={{ color: "var(--accent-primary)" }}
-            >
-              <FontAwesomeIcon icon={faGithub} />
-            </Link>
-            <Link
-              href="https://www.linkedin.com/in/ericjialuochen/"
-              isExternal
-              color="var(--text-secondary)"
-              _hover={{ color: "var(--accent-primary)" }}
-            >
-              <FontAwesomeIcon icon={faLinkedin} />
-            </Link>
+            {footerLinks.map(({ label, url, icon }) => (
+              <Link
+                key={label}
+                href={url}
+                aria-label={label}
+                isExternal={url.startsWith("http")}
+                color="var(--text-secondary)"
+                _hover={{ color: "var(--accent-primary)" }}
+              >
+                <FontAwesomeIcon icon={icon} aria-hidden="true" />
+              </Link>
+            ))}
           </HStack>
         </Flex>
       </footer>

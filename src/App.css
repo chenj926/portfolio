@@ -1,27 +1,25 @@
-.App {
-  text-align: center;
-}
-
 .app-shell {
   min-height: 100vh;
   overflow: clip;
-  background:
-    radial-gradient(circle at 80% 10%, var(--accent-wash), transparent 24rem),
-    var(--canvas);
+  background: var(--canvas);
   color: var(--ink);
 }
 
-.theme-switching *,
-.theme-switching *::before,
-.theme-switching *::after {
-  transition: none !important;
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 200;
+  padding: 12px 20px;
+  background: var(--canvas-elevated);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: 8px;
+  transform: translateY(-180%);
 }
 
-[data-theme="light"] .app-shell {
-  background:
-    repeating-linear-gradient(102deg, rgba(94, 67, 42, 0.018) 0 1px, transparent 1px 5px),
-    repeating-linear-gradient(7deg, rgba(255, 255, 255, 0.2) 0 1px, transparent 1px 7px),
-    var(--canvas);
+.skip-link:focus {
+  transform: none;
 }
 
 section[id] {
@@ -32,8 +30,11 @@ section[id] {
 .glass-card {
   border: 1px solid var(--hairline);
   border-radius: var(--radius-lg);
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.055), transparent 42%),
+  background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.055),
+      transparent 42%
+    ),
     var(--glass-fill);
   box-shadow:
     var(--glass-shadow),
@@ -51,7 +52,6 @@ section[id] {
     border-color: var(--hairline-strong);
     transform: translate3d(0, -2px, 0);
   }
-
 }
 
 .gradient-text {
@@ -64,8 +64,7 @@ section[id] {
   z-index: 0;
   pointer-events: none;
   opacity: 0.32;
-  background-image:
-    linear-gradient(var(--accent-wash) 1px, transparent 1px),
+  background-image: linear-gradient(var(--accent-wash) 1px, transparent 1px),
     linear-gradient(90deg, var(--accent-wash) 1px, transparent 1px);
   background-size: 60px 60px;
 }
@@ -91,7 +90,9 @@ section[id] {
 }
 
 .skill-tag {
-  transition: background-color var(--duration-fast) ease, border-color var(--duration-fast) ease;
+  transition:
+    background-color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -143,7 +144,6 @@ section[id] {
   .interactive-card:hover {
     transform: none;
   }
-
 }
 
 @media (prefers-reduced-transparency: reduce) {

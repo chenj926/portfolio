@@ -18,37 +18,44 @@ import {
   faDatabase,
   faDiagramProject,
 } from "@fortawesome/free-solid-svg-icons";
-import { faReact, faNodeJs, faPython } from "@fortawesome/free-brands-svg-icons";
+import { faReact, faPython } from "@fortawesome/free-brands-svg-icons";
 
 const skills = [
   {
     category: "Engineering",
-    description: "Production-grade apps, scalable services, and UI foundations.",
+    description:
+      "Full-stack development, software architecture, and data systems.",
     items: [
-      { label: "React", icon: faReact },
-      { label: "Node.js", icon: faNodeJs },
-      { label: "Data Systems", icon: faDatabase },
-      { label: "Version Control", icon: faCodeBranch },
+      { label: "React · TypeScript", icon: faReact },
+      { label: "Python · FastAPI", icon: faPython },
+      { label: "C# · .NET", icon: faCodeBranch },
+      { label: "PostgreSQL · ChromaDB", icon: faDatabase },
+      { label: "Git · Linux · Docker", icon: faCodeBranch },
+      { label: "Software Architecture", icon: faDiagramProject },
     ],
   },
   {
     category: "Machine Learning",
-    description: "Model training, evaluation, and robust deployment workflows.",
+    description: "Deep learning, NLP, computer vision, and generative AI.",
     items: [
-      { label: "Python", icon: faPython },
-      { label: "Applied ML", icon: faBrain },
-      { label: "Model Ops", icon: faDiagramProject },
-      { label: "Analytics", icon: faChartLine },
+      { label: "PyTorch", icon: faBrain },
+      { label: "NLP · Transformers", icon: faDiagramProject },
+      { label: "Computer Vision · GANs", icon: faChartLine },
+      { label: "RAG · LLM Agents", icon: faCodeBranch },
+      { label: "scikit-learn · OpenCV", icon: faBrain },
+      { label: "Model Evaluation", icon: faChartLine },
     ],
   },
   {
-    category: "Product",
-    description: "User research, product strategy, and growth experimentation.",
+    category: "Research & Methods",
+    description: "Probabilistic modeling, planning, and empirical evaluation.",
     items: [
-      { label: "Design Systems", icon: faDiagramProject },
-      { label: "Research", icon: faBrain },
-      { label: "Experiments", icon: faChartLine },
-      { label: "Stakeholder Comms", icon: faCodeBranch },
+      { label: "Bayesian Optimization", icon: faChartLine },
+      { label: "Gaussian Processes", icon: faDiagramProject },
+      { label: "Reinforcement Learning", icon: faBrain },
+      { label: "A* Search · MCTS", icon: faCodeBranch },
+      { label: "Multi-Armed Bandits", icon: faChartLine },
+      { label: "Ablation Studies", icon: faDatabase },
     ],
   },
 ];
@@ -77,7 +84,8 @@ const SkillsSection = () => {
           Skills
         </Heading>
         <Text maxW="640px" color="var(--text-secondary)">
-          A snapshot of the tools and focus areas I enjoy using most.
+          Tools and methods drawn from my research and software engineering
+          work.
         </Text>
       </VStack>
 
@@ -96,7 +104,12 @@ const SkillsSection = () => {
                 <Heading size="sm" color="var(--text-primary)" fontWeight="600">
                   {skillGroup.category}
                 </Heading>
-                <Text fontSize="sm" color="var(--text-secondary)" mt={2} lineHeight="1.7">
+                <Text
+                  fontSize="sm"
+                  color="var(--text-secondary)"
+                  mt={2}
+                  lineHeight="1.7"
+                >
                   {skillGroup.description}
                 </Text>
               </Box>
@@ -116,7 +129,10 @@ const SkillsSection = () => {
                       color="var(--text-primary)"
                       cursor="default"
                     >
-                      <FontAwesomeIcon icon={skill.icon} style={{ color: "var(--accent-primary)" }} />
+                      <FontAwesomeIcon
+                        icon={skill.icon}
+                        style={{ color: "var(--accent-primary)" }}
+                      />
                       <Text>{skill.label}</Text>
                     </HStack>
                   </WrapItem>
