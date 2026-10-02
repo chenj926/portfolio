@@ -4,8 +4,10 @@ AI/ML research, software projects, and contact information. React 19, Chakra UI 
 
 ## Local development
 
+Use the Node.js version in [.node-version](.node-version), which is also used by CI.
+
 ```powershell
-npm install
+npm ci
 npm start
 ```
 
@@ -17,7 +19,17 @@ npm test -- --watchAll=false --runInBand
 npm run build
 ```
 
-The existing deployment target is GitHub Pages at `/portfolio/`. Building does not publish the site.
+The deployment target is [GitHub Pages](https://chenj926.github.io/portfolio/) at `/portfolio/`. Building locally does not publish the site.
+
+## Release workflow
+
+Open a pull request into `main`. The **Test and build** job rejects unresolved merge conflicts, installs the lockfile with `npm ci`, runs the tests, and builds with `CI=true`. npm downloads are cached by the lockfile; newer PR runs cancel obsolete checks.
+
+After merging, the workflow validates `main` and uploads that build as a short-lived Pages artifact. A separate **Deploy and verify** job uses GitHub's Pages/OIDC permissions and checks that the live `deployment.json` reports the deployed commit. Production runs are serialized, so a new push cannot interrupt an active deployment. The Actions page also supports a manual run on `main`.
+
+Repository configuration: **Settings → Pages → Source: GitHub Actions**; the `github-pages` environment allows deployments from the `main` branch. The repository's default workflow token is read-only, with deployment permissions granted only to the deploy job. Action versions are pinned to commit SHAs and maintained by grouped Dependabot pull requests.
+
+To roll back an application change, revert its commit through a new pull request and merge after validation. Re-running an old workflow would intentionally redeploy that old revision; use the current `main` workflow for a deployment retry.
 
 ## Change the current status
 

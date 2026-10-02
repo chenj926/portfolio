@@ -1,32 +1,104 @@
-name: Deploy to GitHub Pages
+name: CI and Pages
 
 on:
+  pull_request:
+    branches: [main]
   push:
-    branches:
-      - main # Replace with your default branch name if different
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Cancel outdated PR checks, but let an active production deployment finish.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
+  build:
+    name: Test and build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CI: "true"
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: 16
+          persist-credentials: false
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build the project
+      - name: Reject unresolved merge conflicts
+        shell: bash
         run: |
-          CI=false npm run build
+          result=0
+          git grep -nI -E '^(<{7}|={7}|>{7})( |$)' -- . || result=$?
+          if [ "$result" -ne 1 ]; then
+            echo "::error::Conflict markers found, or source inspection failed."
+            exit 1
+          fi
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+          node-version-file: .node-version
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Run tests
+        run: npm test -- --watchAll=false --runInBand
+
+      - name: Build production site
+        run: npm run build
+
+      - name: Record deployed revision
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: |
+          node -e "require('node:fs').writeFileSync('build/deployment.json', JSON.stringify({ commit: process.env.GITHUB_SHA }))"
+
+      - name: Upload Pages artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: build
+          retention-days: 1
+
+  deploy:
+    name: Deploy and verify
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy verified artifact
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+
+      - name: Verify live revision
+        env:
+          SITE_URL: ${{ steps.deployment.outputs.page_url }}
+          EXPECTED_SHA: ${{ github.sha }}
+        shell: bash
+        run: |
+          for attempt in {1..12}; do
+            if actual=$(curl --fail --silent --show-error --max-time 15 \
+              "${SITE_URL%/}/deployment.json?run=${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}-${attempt}" \
+              | jq -r '.commit'); then
+              if [ "$actual" = "$EXPECTED_SHA" ]; then
+                echo "Verified live revision $actual"
+                exit 0
+              fi
+            fi
+            sleep 10
+          done
+          echo "::error::The live site did not report the expected revision."
+          exit 1
