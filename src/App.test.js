@@ -22,7 +22,60 @@ test("renders the portfolio home and document controls", () => {
   const cvLink = screen.getByRole("menuitem", { name: "CV" });
   expect(resumeLink.getAttribute("href")).not.toBe(cvLink.getAttribute("href"));
   expect(
-    screen.getByRole("heading", { name: /Projects & Research/i }),
+    screen.getByRole("heading", { name: "Projects", exact: true }),
+  ).toBeInTheDocument();
+});
+
+test("separates CV research and publications before projects, while retaining older news", () => {
+  render(<App />);
+  const ids = [...document.querySelectorAll("main section[id]")].map(
+    (section) => section.id,
+  );
+  const experience = ids.indexOf("experience-section");
+  expect(ids.slice(experience, experience + 5)).toEqual([
+    "experience-section",
+    "education-section",
+    "research-section",
+    "publications-section",
+    "projects-section",
+  ]);
+  const research = within(document.getElementById("research-section"));
+  expect(research.getAllByRole("article")).toHaveLength(3);
+  expect(
+    research.getByRole("heading", { name: "Li Shuai Research Lab" }),
+  ).toBeInTheDocument();
+  expect(research.queryByText("Under review")).not.toBeInTheDocument();
+  const publications = within(document.getElementById("publications-section"));
+  expect(publications.getByText("Under review")).toBeInTheDocument();
+  expect(publications.getByText("Accepted")).toBeInTheDocument();
+  expect(
+    screen.queryByRole("heading", { name: /2nd in Commerce/ }),
+  ).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Earlier updates" }));
+  expect(
+    screen.getByRole("heading", { name: /2nd in Commerce/ }),
+  ).toBeInTheDocument();
+});
+
+test("the manuscript has its own detail route and returns to publications", () => {
+  window.history.replaceState(
+    null,
+    "",
+    "/portfolio/#/publication/role-aware-bayesian-optimization",
+  );
+  render(<App />);
+  expect(
+    screen.getByRole("heading", {
+      name: "Role-Aware Learning for Bayesian Optimization under Uncertainty",
+      level: 1,
+    }),
+  ).toHaveFocus();
+  expect(screen.getByText("Under review at NeurIPS 2026")).toBeInTheDocument();
+  expect(
+    screen.getByRole("link", { name: /Back to portfolio/ }),
+  ).toHaveAttribute("href", "#publications-section");
+  expect(
+    screen.getByText(/A public paper link is not available yet/),
   ).toBeInTheDocument();
 });
 

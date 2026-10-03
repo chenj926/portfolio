@@ -1,0 +1,32 @@
+.portfolio-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: fit-content;
+  min-height: 46px;
+  padding: 10px 19px;
+  border-radius: 14px;
+  color: var(--ink);
+  font: 600 0.96rem/1.4 var(--font-body);
+  text-decoration: none;
+  cursor: pointer;
+}
+.portfolio-action > svg:not([width="0"]) {
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  color: var(--accent-secondary);
+}
+.portfolio-action[aria-disabled="true"] {
+  cursor: wait;
+}
+.portfolio-visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  clip-path: inset(50%) !important;
+}

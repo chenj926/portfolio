@@ -76,7 +76,6 @@ export default function LandingSection() {
           <div className="home-connect-row">
             <Material
               as="a"
-              opaque
               className="home-connect-button pressable"
               href="#connect-section"
             >

@@ -157,17 +157,26 @@ export const publications = [
     kind: "publication",
     slug: "hmitl-manager-governed-llm-iteration",
     title:
-      "(Accepted) HMITL Manager-Governed LLM Iteration with Guardrails and Rollback for Reproducible Healthcare Machine Learning Pipelines",
+      "HMITL: Manager-Governed LLM Iteration with Guardrails and Rollback for Reproducible Healthcare Machine Learning Pipelines",
     venue: "IEEE ICHI 2026",
-    year: "June 2026",
+    year: "2026",
     status: "Accepted",
+    authors: ["Jialuo Chen", "Haijing Wang", "Siyu Shao"],
+    // Bibliographic metadata: current CV (authors/pages), IEEE Xplore 11634837 (venue/DOI).
+    citation: {
+      key: "chen2026hmitl",
+      booktitle:
+        "2026 IEEE 14th International Conference on Healthcare Informatics (ICHI)",
+      pages: "1218--1226",
+      doi: "10.1109/ICHI69079.2026.00156",
+    },
     description:
       "We introduce Human-Manager-in-the-Loop (HMITL), a collaboration protocol that assigns the human the role of workflow manager. The manager maintains a task brief, enforces data-integrity guardrails, runs deterministic evaluation, and rolls back regressions.",
     tags: ["Agent Harness", "Human-AI Collaboration"],
     details: [
       { label: "Status", value: "Accepted" },
       { label: "Venue", value: "IEEE ICHI 2026" },
-      { label: "Date", value: "June 2026" },
+      { label: "Year", value: "2026" },
       { label: "Protocol", value: "Human-Manager-in-the-Loop" },
     ],
     highlights: [
@@ -176,13 +185,43 @@ export const publications = [
       "Deterministic evaluation and rollback are used to handle regressions.",
     ],
     links: [
-      { label: "Paper", url: "https://arxiv.org/", type: "paper" },
+      {
+        label: "Paper",
+        url: "https://ieeexplore.ieee.org/document/11634837",
+        type: "paper",
+      },
       {
         label: "GitHub",
         url: "https://github.com/chenj926/ICHI_AgentDS_clai",
         type: "github",
       },
     ],
+  },
+  {
+    kind: "publication",
+    slug: "role-aware-bayesian-optimization",
+    title: "Role-Aware Learning for Bayesian Optimization under Uncertainty",
+    venue: "NeurIPS 2026",
+    year: "2026",
+    status: "Under review",
+    authors: ["Jialuo Chen", "Justin Beland"],
+    description:
+      "Role-aware Bayesian optimization uses the distinct roles of decision, execution, and environmental inputs to guide modelling and experiment selection for expected deployment performance under uncertainty.",
+    tags: ["Bayesian Optimization", "Learning under Uncertainty"],
+    details: [
+      { label: "Status", value: "Under review at NeurIPS 2026" },
+      { label: "Year", value: "2026" },
+      {
+        label: "Research group",
+        value: "JB Research Group · University of Toronto",
+      },
+    ],
+    highlights: [
+      "Uses input roles to guide surrogate modelling and experiment selection under execution and environmental uncertainty.",
+      "Combines multiscale execution kernels with analytic or semi-analytic marginalization of expected deployment performance.",
+      "Studies target-aligned acquisition and evaluates the framework in quadrotor control experiments.",
+    ],
+    links: [],
   },
 ];
 

@@ -1,5 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { resolvePortfolioHash } from "../data/portfolio";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import Material from "./Material";
+import PortfolioAction from "./PortfolioAction";
+import PublicationAuthors from "./PublicationAuthors";
+import PublicationCitation from "./PublicationCitation";
 import "./PortfolioDetailPage.css";
 
 const readPortfolioRoute = () =>
@@ -51,10 +56,13 @@ const PortfolioDetailPage = ({ entry }) => {
       aria-labelledby="portfolio-detail-title"
     >
       <div className="portfolio-detail-shell">
-        <a className="portfolio-detail-back" href="#/">
-          <span aria-hidden="true">&larr;</span>
-          <span>Back to portfolio</span>
-        </a>
+        <PortfolioAction
+          className="portfolio-detail-back"
+          href={isPublication ? "#publications-section" : "#projects-section"}
+          icon={faArrowLeft}
+        >
+          Back to portfolio
+        </PortfolioAction>
 
         <article className="portfolio-detail-article">
           <header className="portfolio-detail-hero">
@@ -79,6 +87,11 @@ const PortfolioDetailPage = ({ entry }) => {
               >
                 {entry.title}
               </h1>
+              {isPublication && (
+                <p className="portfolio-detail-authors">
+                  <PublicationAuthors authors={entry.authors} />
+                </p>
+              )}
               <p className="portfolio-detail-summary">{entry.description}</p>
 
               <ul
@@ -99,8 +112,10 @@ const PortfolioDetailPage = ({ entry }) => {
           </header>
 
           <div className="portfolio-detail-content">
-            <section
-              className="portfolio-detail-panel portfolio-detail-facts"
+            <Material
+              as="section"
+              quiet
+              className="portfolio-detail-panel home-reading-surface portfolio-detail-facts"
               aria-labelledby="portfolio-detail-facts-title"
             >
               <p className="portfolio-detail-section-kicker">At a glance</p>
@@ -114,11 +129,19 @@ const PortfolioDetailPage = ({ entry }) => {
                     <dd>{detail.value}</dd>
                   </div>
                 ))}
+                {entry.citation && (
+                  <div>
+                    <dt>Pages</dt>
+                    <dd>{entry.citation.pages.replace("--", "–")}</dd>
+                  </div>
+                )}
               </dl>
-            </section>
+            </Material>
 
-            <section
-              className="portfolio-detail-panel portfolio-detail-highlights"
+            <Material
+              as="section"
+              quiet
+              className="portfolio-detail-panel home-reading-surface portfolio-detail-highlights"
               aria-labelledby="portfolio-detail-highlights-title"
             >
               <p className="portfolio-detail-section-kicker">Scope</p>
@@ -130,10 +153,12 @@ const PortfolioDetailPage = ({ entry }) => {
                   <li key={highlight}>{highlight}</li>
                 ))}
               </ul>
-            </section>
+            </Material>
 
-            <section
-              className="portfolio-detail-panel portfolio-detail-links"
+            <Material
+              as="section"
+              quiet
+              className="portfolio-detail-panel home-reading-surface portfolio-detail-links"
               aria-labelledby="portfolio-detail-links-title"
             >
               <p className="portfolio-detail-section-kicker">Explore</p>
@@ -141,39 +166,39 @@ const PortfolioDetailPage = ({ entry }) => {
               {entry.links.length > 0 ? (
                 <div className="portfolio-detail-link-list">
                   {entry.links.map((link) => (
-                    <a
+                    <PortfolioAction
                       href={link.url}
                       key={`${link.label}-${link.url}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
                     >
-                      <span>{link.label}</span>
-                      <span
-                        className="portfolio-detail-link-arrow"
-                        aria-hidden="true"
-                      >
-                        &nearr;
-                      </span>
-                      <span className="portfolio-visually-hidden">
-                        {" "}
-                        (opens in a new tab)
-                      </span>
-                    </a>
+                      {link.label}
+                    </PortfolioAction>
                   ))}
                 </div>
               ) : (
                 <p className="portfolio-detail-empty-link">
-                  No public link is listed for this project yet.
+                  {isPublication
+                    ? "This manuscript is under review. A public paper link is not available yet."
+                    : "No public link is listed for this project yet."}
                 </p>
               )}
-            </section>
+            </Material>
+            {entry.citation && (
+              <PublicationCitation key={entry.slug} publication={entry} />
+            )}
           </div>
         </article>
 
-        <a className="portfolio-detail-footer-link" href="#/">
-          <span aria-hidden="true">&larr;</span>
-          <span>Return to all projects and publications</span>
-        </a>
+        <PortfolioAction
+          className="portfolio-detail-footer-link"
+          href={isPublication ? "#publications-section" : "#projects-section"}
+          icon={faArrowLeft}
+        >
+          <span>
+            {isPublication
+              ? "Return to all publications"
+              : "Return to all projects"}
+          </span>
+        </PortfolioAction>
       </div>
     </section>
   );

@@ -23,7 +23,8 @@
 }
 
 section[id] {
-  scroll-margin-top: var(--header-offset);
+  /* The document's scroll-padding owns the fixed-header offset. */
+  scroll-margin-top: 0;
 }
 
 /* A quiet editorial surface. Motion is opt-in via .interactive-card. */

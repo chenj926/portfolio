@@ -4,8 +4,10 @@ import Header from "./components/Header";
 import LandingSection from "./components/LandingSection";
 import NewsSection from "./components/NewsSection";
 import ExperienceSection from "./components/ExperienceSection.js";
+import EducationSection from "./components/EducationSection";
 import ProjectsSection from "./components/ProjectsSection";
 import ResearchSection from "./components/ResearchSection";
+import PublicationsSection from "./components/PublicationsSection";
 import HobbiesSection from "./components/HobbiesSection";
 import ContentSection from "./components/ContentSection";
 import SkillsSection from "./components/SkillsSection";
@@ -68,8 +70,10 @@ function Portfolio() {
               <LandingSection />
               <NewsSection />
               <ExperienceSection />
-              <ProjectsSection />
+              <EducationSection />
               <ResearchSection />
+              <PublicationsSection />
+              <ProjectsSection />
               <HobbiesSection />
               <ContentSection />
               <SkillsSection />

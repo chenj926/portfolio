@@ -4,8 +4,8 @@ export const MAX_MAP_HEIGHT = 160;
 export const MAX_ENCODED_MAPS = 24;
 
 const NEUTRAL_CHANNEL = 128;
-const RIM_WIDTH = 16;
-const MAX_INWARD_DISPLACEMENT = 8.5;
+const RIM_WIDTH = 24;
+const MAX_INWARD_DISPLACEMENT = 11;
 const encodedMapCache = new Map();
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
@@ -94,9 +94,10 @@ export const generateRefractionField = (width, height, cornerRadius = 0) => {
       );
       const innerDepth = -signedDistance;
       if (innerDepth > 0 && innerDepth < RIM_WIDTH) {
+        const normalizedDepth = innerDepth / RIM_WIDTH;
         const displacement =
           MAX_INWARD_DISPLACEMENT *
-          Math.sin((Math.PI * innerDepth) / RIM_WIDTH);
+          Math.sin(Math.PI * Math.pow(normalizedDepth, 0.82));
         const channelDelta = (displacement / REFRACTION_SCALE) * 255;
         // feDisplacementMap samples opposite the outward surface normal.
         red = clamp(

@@ -31,6 +31,28 @@ test("encodes inward sampling symmetrically along opposite edges", () => {
   expect(topGreen + bottomGreen).toBe(256);
 });
 
+test("concentrates a bounded bend near the rim and clears before the center", () => {
+  const field = generateRefractionField(160, 100, 20);
+  const outerRim = channelAt(field, 0, 50, 0);
+  const strongestRim = channelAt(field, 10, 50, 0);
+  const innerRim = channelAt(field, 138, 50, 0);
+
+  expect(Math.abs(strongestRim - 128)).toBeGreaterThan(
+    Math.abs(outerRim - 128),
+  );
+  expect(Math.abs(strongestRim - 128)).toBeGreaterThan(
+    Math.abs(innerRim - 128),
+  );
+  expect(channelAt(field, 80, 50, 0)).toBe(128);
+  expect(channelAt(field, 80, 50, 1)).toBe(128);
+
+  const maxChannelOffset = field.pixels.reduce((maximum, value, index) => {
+    if (index % 4 > 1) return maximum;
+    return Math.max(maximum, Math.abs(value - 128));
+  }, 0);
+  expect((maxChannelOffset * 24) / 255).toBeLessThanOrEqual(11.1);
+});
+
 test("bounds map buffers and returns an empty field for zero-sized surfaces", () => {
   const largeField = generateRefractionField(10000, 5000, 24);
   expect(largeField.width).toBeLessThanOrEqual(MAX_MAP_WIDTH);

@@ -7,6 +7,7 @@ import {
   faMoon,
   faSun,
   faXmark,
+  faArrowUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { documents } from "../data/profile";
 import SocialLinks from "./SocialLinks";
@@ -17,8 +18,9 @@ const navLinks = [
   { label: "About", anchor: "home" },
   { label: "News", anchor: "news" },
   { label: "Experience", anchor: "experience" },
-  { label: "Projects", anchor: "projects" },
   { label: "Research", anchor: "research" },
+  { label: "Publications", anchor: "publications" },
+  { label: "Projects", anchor: "projects" },
   { label: "Skills", anchor: "skills" },
   { label: "Connect", anchor: "connect" },
 ];
@@ -32,6 +34,8 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
   const docsButtonRef = useRef(null);
   const mobileButtonRef = useRef(null);
   const menuItemsRef = useRef([]);
+  const documentsMenuRef = useRef(null);
+  const initialDocumentRef = useRef(0);
 
   useEffect(() => {
     const updateSurface = () => setScrolled(window.scrollY > 80);
@@ -42,7 +46,7 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
 
   useEffect(() => {
     if (docsOpen) {
-      menuItemsRef.current[0]?.focus();
+      menuItemsRef.current[initialDocumentRef.current]?.focus();
     }
   }, [docsOpen]);
 
@@ -79,16 +83,19 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
   }, [docsOpen, mobileOpen]);
 
   const toggleDocuments = () => {
+    initialDocumentRef.current = 0;
     const nextOpen = !docsOpen;
     if (nextOpen) setMobileOpen(false);
     setDocsOpen(nextOpen);
   };
 
   const handleDocumentsButtonKeyDown = (event) => {
-    if (event.key !== "ArrowDown") return;
+    if (!["ArrowDown", "ArrowUp"].includes(event.key)) return;
     event.preventDefault();
+    initialDocumentRef.current =
+      event.key === "ArrowUp" ? documents.length - 1 : 0;
     if (docsOpen) {
-      menuItemsRef.current[0]?.focus();
+      menuItemsRef.current[initialDocumentRef.current]?.focus();
       return;
     }
     setMobileOpen(false);
@@ -111,6 +118,14 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
   };
 
   const closeMobileMenu = () => setMobileOpen(false);
+
+  const highlightDocument = (event) => {
+    const menu = documentsMenuRef.current;
+    if (!menu) return;
+    const item = event.currentTarget;
+    menu.style.setProperty("--document-top", `${item.offsetTop}px`);
+    menu.style.setProperty("--document-height", `${item.offsetHeight}px`);
+  };
 
   return (
     <header className="home-header">
@@ -182,11 +197,13 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
 
             {docsOpen && (
               <Material
+                ref={documentsMenuRef}
                 id="home-docs-menu"
                 className="home-docs-menu"
                 role="menu"
                 aria-label="Download documents"
               >
+                <span className="home-docs-highlight" aria-hidden="true" />
                 {documents.map((documentLink, index) => (
                   <a
                     ref={(node) => {
@@ -198,6 +215,8 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
                     rel="noreferrer"
                     role="menuitem"
                     className="home-docs-item pressable"
+                    onPointerEnter={highlightDocument}
+                    onFocus={highlightDocument}
                     onClick={() => {
                       setDocsOpen(false);
                       docsButtonRef.current?.focus();
@@ -206,6 +225,11 @@ const Header = ({ theme = "dark", onThemeToggle }) => {
                   >
                     <FontAwesomeIcon icon={faFileLines} aria-hidden="true" />
                     <span>{documentLink.label}</span>
+                    <FontAwesomeIcon
+                      icon={faArrowUpRightFromSquare}
+                      className="home-docs-arrow"
+                      aria-hidden="true"
+                    />
                   </a>
                 ))}
               </Material>

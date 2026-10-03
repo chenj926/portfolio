@@ -13,7 +13,7 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
   width: min(1450px, calc(100% - 8.5vw));
   min-height: 78px;
   margin-inline: auto;
@@ -34,7 +34,7 @@
 }
 .home-nav-links {
   justify-content: center;
-  gap: clamp(17px, 2vw, 34px);
+  gap: clamp(12px, 1.2vw, 22px);
 }
 .home-actions {
   gap: 12px;
@@ -96,6 +96,10 @@
 }
 .home-docs-control {
   position: relative;
+  --focus-ring: #9fc4b4;
+}
+[data-theme="light"] .home-docs-control {
+  --focus-ring: #356d58;
 }
 .home-docs-button {
   gap: 15px;
@@ -120,24 +124,73 @@
 .home-docs-menu {
   top: calc(100% + 12px);
   right: 0;
-  width: 180px;
+  width: 216px;
   z-index: 5;
 }
 .home-docs-item {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
-  min-height: 46px;
+  min-height: 51px;
   padding: 10px 14px;
   border-radius: 8px;
   color: var(--ink);
   text-decoration: none;
-  font-size: 16px;
+  font-size: 17px;
 }
-.home-docs-item:hover,
-.home-docs-item:focus-visible,
 .home-mobile-menu a:hover {
   background: var(--accent-wash);
+}
+.home-docs-highlight {
+  position: absolute;
+  pointer-events: none;
+  left: 8px;
+  right: 8px;
+  top: 0;
+  height: var(--document-height, 51px);
+  transform: translateY(var(--document-top, 8px));
+  border-radius: 10px;
+  border: 1px solid var(--hairline);
+  background: radial-gradient(
+      ellipse 70% 190% at var(--light-x) var(--light-y),
+      #d9fff42e,
+      transparent 78%
+    ),
+    #8fafae1c;
+  box-shadow: inset 0 1px 1px #ffffff38;
+  transition:
+    transform 320ms cubic-bezier(0.18, 0.92, 0.25, 1.08),
+    height 250ms;
+}
+[data-theme="light"] .home-docs-highlight {
+  background: radial-gradient(
+      ellipse 70% 190% at var(--light-x) var(--light-y),
+      #fffff6ed,
+      transparent 78%
+    ),
+    #c1c6b329;
+  box-shadow:
+    inset 0 1px 1px #fff,
+    0 3px 5px #887b6314;
+}
+.home-docs-item:hover,
+.home-docs-item:focus-visible {
+  background: transparent;
+}
+.home-docs-arrow {
+  margin-left: auto;
+  width: 13px;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition:
+    opacity 200ms,
+    transform 250ms;
+}
+.home-docs-item:hover .home-docs-arrow,
+.home-docs-item:focus-visible .home-docs-arrow {
+  opacity: 0.8;
+  transform: translateX(0);
 }
 .home-mobile-toggle,
 .home-mobile-menu {
@@ -201,10 +254,7 @@
   border: 1px solid var(--cinnabar);
   border-radius: 4px;
   color: var(--cinnabar);
-  font:
-    400 13px/1.2 "Noto Serif Name",
-    SimSun,
-    serif;
+  font: 400 13px/1.2 var(--font-chinese);
   text-align: center;
 }
 .home-copy {
@@ -235,8 +285,8 @@
   white-space: nowrap;
 }
 .home-title [lang] {
-  font-family: "Noto Serif Name", "Songti SC", SimSun, serif;
-  font-size: 0.79em;
+  font-family: var(--font-chinese);
+  font-size: 0.84em;
   font-weight: 400;
   letter-spacing: 0.035em;
   white-space: nowrap;
@@ -578,7 +628,7 @@
     height: 128px;
   }
 }
-@media (max-width: 1190px) {
+@media (max-width: 1280px) {
   .home-main-nav {
     display: none;
   }

@@ -20,15 +20,15 @@
   --glass-edge: rgba(224, 235, 237, 0.36);
   --glass-highlight: rgba(255, 255, 255, 0.24);
   --glass-shadow: 0 18px 46px rgba(0, 0, 0, 0.34);
-  --paper-fill: #e8d6b4;
-  --paper-ink: #352a1f;
-  --paper-muted: rgba(53, 42, 31, 0.72);
-  --paper-edge: #a77b45;
-  --paper-shadow: 0 22px 54px rgba(0, 0, 0, 0.32);
+  --paper-fill: #101f28;
+  --paper-ink: #efd8b6;
+  --paper-muted: #baa991;
+  --paper-edge: rgba(203, 183, 152, 0.22);
+  --paper-shadow: 0 14px 38px rgba(0, 0, 0, 0.18);
   --wood-fill: #7b4b2f;
   --wood-edge: #b78152;
   --river-deep: #092837;
-  --river-light: #1a5a69;
+  --river-light: #417b82;
   --success: #18b993;
   --warning: #e2a43b;
 
@@ -78,15 +78,15 @@
   --glass-edge: rgba(255, 255, 255, 0.72);
   --glass-highlight: rgba(255, 255, 255, 0.9);
   --glass-shadow: 0 16px 42px rgba(78, 50, 32, 0.15);
-  --paper-fill: #efe0c1;
-  --paper-ink: #30261c;
-  --paper-muted: rgba(48, 38, 28, 0.7);
-  --paper-edge: #a97742;
-  --paper-shadow: 0 20px 46px rgba(75, 48, 31, 0.2);
+  --paper-fill: #f8f3e9;
+  --paper-ink: #272e2d;
+  --paper-muted: #5c625d;
+  --paper-edge: rgba(113, 101, 79, 0.24);
+  --paper-shadow: 0 14px 38px rgba(75, 48, 31, 0.06);
   --wood-fill: #bd8e62;
   --wood-edge: #815334;
   --river-deep: #87aeb4;
-  --river-light: #c4dad8;
+  --river-light: #618c89;
   --success: #0f9f80;
   --warning: #b97a24;
 
@@ -120,6 +120,7 @@
   --section-space: clamp(4.5rem, 8vw, 8rem);
   --header-offset: 7rem;
   --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-chinese: "Ma Shan Zheng", "Noto Serif Name", "Songti SC", SimSun, serif;
   --font-body: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;

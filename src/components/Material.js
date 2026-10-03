@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import { getRefractionMapDataUrl, REFRACTION_SCALE } from "../utils/refraction";
 import "./Material.css";
+import useMaterialPress from "./useMaterialPress";
 
 const NOOP_MEDIA = { matches: false };
 
@@ -57,6 +58,8 @@ const Material = forwardRef(function Material(
     style: callerStyle,
     onPointerMove,
     onPointerLeave,
+    onPointerDown,
+    onKeyDown,
     ...nativeProps
   },
   forwardedRef,
@@ -67,14 +70,15 @@ const Material = forwardRef(function Material(
   const animationFrameRef = useRef(null);
   const pendingPointerRef = useRef(null);
   const pointerResponsiveRef = useRef(false);
+  const lensPulseRef = useRef(null);
   const pointerDefaultsRef = useRef({
-    lightX: "50%",
-    lightY: "40%",
-    tiltX: "0deg",
-    tiltY: "0deg",
+    lightX: "32%",
+    lightY: "5%",
   });
   const pointerValuesRef = useRef({ ...pointerDefaultsRef.current });
   const [lensImage, setLensImage] = useState(null);
+  const [motionAllowed, setMotionAllowed] = useState(false);
+  const animatePress = useMaterialPress(rootRef, motionAllowed);
 
   const setRootRef = useCallback(
     (element) => {
@@ -100,8 +104,9 @@ const Material = forwardRef(function Material(
     pointerValuesRef.current = { ...pointerDefaultsRef.current };
     root.style.setProperty("--light-x", pointerValuesRef.current.lightX);
     root.style.setProperty("--light-y", pointerValuesRef.current.lightY);
-    root.style.setProperty("--tilt-x", pointerValuesRef.current.tiltX);
-    root.style.setProperty("--tilt-y", pointerValuesRef.current.tiltY);
+    root.style.removeProperty("--pointer-x");
+    root.style.removeProperty("--pointer-y");
+    root.style.removeProperty("--glaze-angle");
   }, [cancelPointerFrame]);
 
   useEffect(() => {
@@ -116,10 +121,22 @@ const Material = forwardRef(function Material(
     );
     const coarsePointerQuery = getMediaQuery("(pointer: coarse)");
     const supportsLens = supportsBackdropRefraction();
+    const hasIndependentLens =
+      !root.parentElement?.closest(
+        ".material-surface:not([data-material-quiet]):not([data-material-opaque])",
+      ) || root.matches('[role="menu"], nav.material-surface');
 
     const updatePointerMode = () => {
+      setMotionAllowed(
+        !quiet &&
+          !reducedMotionQuery.matches &&
+          !reducedTransparencyQuery.matches,
+      );
       pointerResponsiveRef.current =
-        !quiet && !reducedMotionQuery.matches && !coarsePointerQuery.matches;
+        !quiet &&
+        !reducedMotionQuery.matches &&
+        !reducedTransparencyQuery.matches &&
+        !coarsePointerQuery.matches;
       if (!pointerResponsiveRef.current) resetPointerLighting();
     };
 
@@ -127,6 +144,7 @@ const Material = forwardRef(function Material(
       if (
         quiet ||
         opaque ||
+        !hasIndependentLens ||
         !supportsLens ||
         reducedTransparencyQuery.matches ||
         typeof window.ResizeObserver !== "function"
@@ -171,6 +189,7 @@ const Material = forwardRef(function Material(
     if (
       !quiet &&
       !opaque &&
+      hasIndependentLens &&
       supportsLens &&
       typeof window.ResizeObserver === "function"
     ) {
@@ -186,9 +205,13 @@ const Material = forwardRef(function Material(
       coarsePointerQuery,
       updatePointerMode,
     );
+    const updateTransparencyMode = () => {
+      updatePointerMode();
+      updateLensMap();
+    };
     const removeTransparencyListener = listenToMediaQuery(
       reducedTransparencyQuery,
-      updateLensMap,
+      updateTransparencyMode,
     );
 
     return () => {
@@ -235,19 +258,16 @@ const Material = forwardRef(function Material(
         100,
         Math.max(0, ((pointer.clientY - bounds.top) / bounds.height) * 100),
       );
-      const tiltX = Math.min(2, Math.max(-2, (50 - lightY) / 25));
-      const tiltY = Math.min(2, Math.max(-2, (lightX - 50) / 25));
-
       pointerValuesRef.current = {
         lightX: `${lightX.toFixed(2)}%`,
         lightY: `${lightY.toFixed(2)}%`,
-        tiltX: `${tiltX.toFixed(2)}deg`,
-        tiltY: `${tiltY.toFixed(2)}deg`,
       };
       root.style.setProperty("--light-x", pointerValuesRef.current.lightX);
       root.style.setProperty("--light-y", pointerValuesRef.current.lightY);
-      root.style.setProperty("--tilt-x", pointerValuesRef.current.tiltX);
-      root.style.setProperty("--tilt-y", pointerValuesRef.current.tiltY);
+      // Shared normalized coordinates keep decorative responses out of React state.
+      root.style.setProperty("--pointer-x", (lightX / 100).toFixed(3));
+      root.style.setProperty("--pointer-y", (lightY / 100).toFixed(3));
+      root.style.setProperty("--glaze-angle", `${145 + lightX * 0.5}deg`);
     });
   };
 
@@ -256,18 +276,50 @@ const Material = forwardRef(function Material(
     onPointerLeave?.(event);
   };
 
+  const pulseLens = (event) => {
+    const nearestLens = event.target.closest?.(
+      '[data-material-refraction="enabled"]',
+    );
+    if (
+      motionAllowed &&
+      nearestLens === rootRef.current &&
+      event.target.closest?.("a, button, [role='button']")
+    ) {
+      // A finite SVG animation reuses the cached field, with no JS frame loop.
+      lensPulseRef.current?.beginElement?.();
+    }
+  };
+
+  const handlePointerDown = (event) => {
+    onPointerDown?.(event);
+    if (!event.defaultPrevented && event.button === 0) {
+      animatePress(event);
+      pulseLens(event);
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    onKeyDown?.(event);
+    if (
+      !event.defaultPrevented &&
+      !event.repeat &&
+      (event.key === "Enter" || event.key === " ")
+    ) {
+      animatePress(event);
+      pulseLens(event);
+    }
+  };
+
   const Component = as;
   const activeFilter =
     lensImage && !quiet && !opaque
       ? `url(#${filterId}) blur(1.5px)`
-      : "blur(8px)";
+      : "blur(7px)";
   const style = {
     ...callerStyle,
     "--material-filter": activeFilter,
     "--light-x": pointerValuesRef.current.lightX,
     "--light-y": pointerValuesRef.current.lightY,
-    "--tilt-x": pointerValuesRef.current.tiltX,
-    "--tilt-y": pointerValuesRef.current.tiltY,
   };
 
   return React.createElement(
@@ -283,6 +335,8 @@ const Material = forwardRef(function Material(
       style,
       onPointerMove: handlePointerMove,
       onPointerLeave: handlePointerLeave,
+      onPointerDown: handlePointerDown,
+      onKeyDown: handleKeyDown,
     },
     children,
     <span className="material-lens" aria-hidden="true" />,
@@ -329,7 +383,21 @@ const Material = forwardRef(function Material(
                 scale={REFRACTION_SCALE}
                 xChannelSelector="R"
                 yChannelSelector="G"
-              />
+              >
+                {motionAllowed && (
+                  <animate
+                    ref={lensPulseRef}
+                    attributeName="scale"
+                    values={`${REFRACTION_SCALE};${REFRACTION_SCALE * 1.35};${REFRACTION_SCALE * 0.9};${REFRACTION_SCALE}`}
+                    keyTimes="0;0.22;0.65;1"
+                    calcMode="spline"
+                    keySplines="0.2 0.7 0.3 1;0.3 0 0.3 1;0.3 0 0.4 1"
+                    dur="420ms"
+                    begin="indefinite"
+                    repeatCount="1"
+                  />
+                )}
+              </feDisplacementMap>
             </filter>
           </defs>,
         )

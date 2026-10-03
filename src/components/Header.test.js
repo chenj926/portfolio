@@ -50,6 +50,10 @@ test("supports keyboard menu navigation, Escape, and activation focus return", (
   expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   expect(document.activeElement).toBe(trigger);
 
+  fireEvent.keyDown(trigger, { key: "ArrowUp" });
+  expect(screen.getByRole("menuitem", { name: "CV" })).toHaveFocus();
+  fireEvent.keyDown(document.activeElement, { key: "Escape" });
+
   fireEvent.click(trigger);
   fireEvent.click(screen.getByRole("menuitem", { name: "CV" }));
   expect(screen.queryByRole("menu")).not.toBeInTheDocument();

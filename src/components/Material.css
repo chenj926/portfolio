@@ -1,20 +1,41 @@
-/* One material contract for navigation and controls. Geometry stays with the
-   consuming component; these layers contain optics and interaction only. */
+/* The light response follows a pointer with a little fluid lag. Browsers that
+   don't interpolate registered properties still get the same static lens. */
+@property --light-x {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 32%;
+}
+@property --light-y {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 5%;
+}
+@property --glaze-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 161deg;
+}
+
+/* One translucent lens. Geometry stays with the consuming component. */
 .material-surface {
-  --light-x: 35%;
-  --light-y: 10%;
-  --tilt-x: 0deg;
-  --tilt-y: 0deg;
-  --glass-tint: rgba(125, 151, 164, 0.045);
+  --light-x: 32%;
+  --light-y: 5%;
+  --pointer-x: 0.5;
+  --pointer-y: 0.5;
+  --glaze-angle: 161deg;
+  --glass-tint: rgba(125, 151, 164, 0.06);
   --material-rim: 2px;
+  --material-light-transition: --light-x 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    --light-y 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    --glaze-angle 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
   position: relative;
   isolation: isolate;
-  border: 1px solid rgba(227, 247, 255, 0.3);
+  border: 1px solid rgba(227, 247, 255, 0.16);
   background: var(--glass-tint);
+  transition: var(--material-light-transition);
   box-shadow:
-    0 8px 20px -10px rgba(0, 0, 0, 0.52),
-    inset 0 1px 1px rgba(255, 255, 255, 0.58),
-    inset 0 -1px 1px rgba(206, 237, 248, 0.24);
+    0 12px 30px -20px rgba(0, 0, 0, 0.74),
+    inset 0 1px 0 rgba(245, 251, 255, 0.16);
   -webkit-tap-highlight-color: transparent;
 }
 .material-lens,
@@ -29,32 +50,30 @@
   overflow: hidden;
   /* Displacement maps are computed only on resize. Browsers without SVG
      backdrop support retain the same readable translucent surface. */
-  backdrop-filter: var(--material-filter, blur(8px)) saturate(1.35);
-  -webkit-backdrop-filter: var(--material-filter, blur(8px)) saturate(1.35);
+  backdrop-filter: var(--material-filter, blur(7px)) saturate(1.16);
+  -webkit-backdrop-filter: var(--material-filter, blur(7px)) saturate(1.16);
   background: linear-gradient(
-    165deg,
-    rgba(221, 243, 253, 0.055),
-    transparent 45% 65%,
-    rgba(176, 215, 233, 0.06)
+    145deg,
+    rgba(221, 243, 253, 0.065),
+    transparent 43% 72%,
+    rgba(176, 215, 233, 0.025)
   );
 }
 .material-shine {
   overflow: hidden;
   background: radial-gradient(
-      ellipse 75% 115% at var(--light-x) var(--light-y),
-      rgba(238, 250, 255, 0.13),
-      transparent 67%
+      ellipse 54% 72% at var(--light-x) var(--light-y),
+      rgba(238, 250, 255, 0.105),
+      transparent 76%
     ),
     linear-gradient(
-      172deg,
-      rgba(255, 255, 255, 0.075),
-      transparent 24% 68%,
-      rgba(205, 235, 249, 0.035)
+      160deg,
+      rgba(255, 255, 255, 0.035),
+      transparent 35% 72%,
+      rgba(205, 235, 249, 0.018)
     );
-  box-shadow:
-    inset 0 3px 4px -3px rgba(255, 255, 255, 0.72),
-    inset 0 -4px 7px -5px rgba(235, 250, 255, 0.38);
-  transition: opacity 250ms ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: opacity 220ms ease;
 }
 .material-shine::before {
   content: "";
@@ -63,28 +82,15 @@
   padding: var(--material-rim);
   border-radius: inherit;
   background: radial-gradient(
-      ellipse 5% 140% at 0% 28%,
-      rgba(235, 252, 255, 0.85),
-      rgba(218, 245, 255, 0.14) 40%,
-      transparent 78%
+      ellipse 44% 125% at var(--light-x) var(--light-y),
+      rgba(238, 252, 255, 0.64),
+      rgba(211, 239, 250, 0.12) 54%,
+      transparent 88%
     ),
     radial-gradient(
-      ellipse 4% 140% at 100% 82%,
-      rgba(238, 253, 255, 0.82),
-      rgba(195, 224, 239, 0.08) 46%,
-      transparent 80%
-    ),
-    radial-gradient(
-      ellipse 24% 65% at var(--light-x) var(--light-y),
-      rgba(255, 255, 255, 0.78),
-      rgba(211, 234, 248, 0.12) 55%,
+      ellipse 25% 60% at 88% 105%,
+      rgba(216, 245, 250, 0.32),
       transparent 90%
-    ),
-    linear-gradient(
-      170deg,
-      rgba(255, 255, 255, 0.68),
-      transparent 22% 75%,
-      rgba(220, 247, 255, 0.4)
     );
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
@@ -100,31 +106,22 @@
   position: absolute;
   inset: var(--material-rim);
   border-radius: inherit;
-  border: 0;
   background: radial-gradient(
-      ellipse 6% 90% at 0% 50%,
-      rgba(214, 242, 255, 0.1),
-      transparent
-    ),
-    radial-gradient(
-      ellipse 6% 90% at 100% 50%,
-      rgba(214, 242, 255, 0.08),
-      transparent
-    );
+    ellipse 52% 32% at 78% 112%,
+    rgba(180, 226, 238, 0.16),
+    transparent 90%
+  );
 }
 .home-nav-shell.material-surface {
-  --material-rim: 4px;
+  --material-rim: 2px;
   box-shadow:
-    0 12px 28px -13px rgba(0, 0, 0, 0.7),
-    inset 0 1px 1px rgba(255, 255, 255, 0.85),
-    inset 0 -1px 1px rgba(205, 234, 249, 0.45),
-    inset 2px 0 5px rgba(240, 249, 255, 0.16),
-    inset -2px 0 5px rgba(240, 249, 255, 0.12);
+    0 16px 38px -25px rgba(0, 0, 0, 0.78),
+    inset 0 1px 0 rgba(245, 251, 255, 0.18);
 }
 .home-nav-shell[data-scrolled="true"],
 .home-docs-menu,
 .home-mobile-menu {
-  --glass-tint: rgba(6, 20, 29, 0.82);
+  --glass-tint: rgba(6, 20, 29, 0.62);
 }
 .home-status-face.material-surface {
   --glass-tint: rgba(17, 41, 41, 0.66);
@@ -154,13 +151,13 @@
 }
 .home-connect-button.material-surface {
   --glass-tint: var(--cinnabar);
-  border-color: rgba(255, 215, 182, 0.48);
+  border-color: rgba(255, 215, 182, 0.28);
   box-shadow:
     0 9px 18px -12px rgba(143, 44, 25, 0.8),
-    inset 0 1px 2px rgba(255, 241, 220, 0.55);
+    inset 0 1px 2px rgba(255, 241, 220, 0.28);
 }
 .home-connect-button > .material-shine {
-  opacity: 0.7;
+  opacity: 0.38;
 }
 .material-surface[data-material-opaque] > .material-lens {
   backdrop-filter: none;
@@ -168,90 +165,211 @@
   background: none;
 }
 .material-surface.pressable {
-  transform: perspective(650px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+  transform: scale(1);
   transition:
-    transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 250ms ease;
+    var(--material-light-transition),
+    transform 280ms cubic-bezier(0.2, 1.18, 0.3, 1),
+    box-shadow 220ms ease;
+}
+.material-surface:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+.material-surface.pressable:focus-visible > .material-shine,
+.material-surface.pressable:active > .material-shine,
+.material-surface[data-material-pressed] > .material-shine {
+  opacity: 1;
+}
+.material-surface.pressable:focus-visible > .material-shine {
+  background-color: rgba(230, 249, 255, 0.045);
 }
 @media (hover: hover) and (pointer: fine) {
   .material-surface.pressable:hover {
-    transform: perspective(650px) translateY(-2px) rotateX(var(--tilt-x))
-      rotateY(var(--tilt-y));
     text-decoration: none;
   }
   .material-surface.pressable:hover > .material-shine {
-    background-color: rgba(230, 249, 255, 0.055);
+    opacity: 0.95;
   }
 }
 .material-surface.pressable:active {
-  transform: perspective(650px) scale(0.96) rotateX(var(--tilt-x))
-    rotateY(var(--tilt-y));
-  transition-duration: 100ms;
+  transform: scale(0.978, 0.945);
+  transition:
+    var(--material-light-transition),
+    transform 90ms cubic-bezier(0.35, 0, 0.7, 0.45),
+    box-shadow 150ms ease;
 }
 .home-docs-menu,
 .home-mobile-menu {
-  animation: material-unfold 180ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  transform-origin: top right;
+  --material-menu-origin-x: 92%;
+  animation: materialize 240ms cubic-bezier(0.2, 0.82, 0.25, 1) both;
+  clip-path: inset(0 0 0 0 round 18px);
+  transform-origin: var(--material-menu-origin-x) 0;
 }
-@keyframes material-unfold {
+.home-docs-menu {
+  --material-menu-origin-x: calc(100% - 28px);
+}
+.home-mobile-menu {
+  --material-menu-origin-x: 94%;
+}
+@keyframes materialize {
   from {
-    opacity: 0;
-    transform: translateY(-5px) scale(0.96);
+    opacity: 0.55;
+    transform: translateY(-3px) scale(0.9, 0.78);
+    clip-path: inset(0 0 82% 80% round 999px);
   }
   to {
     opacity: 1;
-    transform: none;
+    transform: translateY(0) scale(1, 1);
+    clip-path: inset(0 0 0 0 round 18px);
   }
+}
+
+/* A shell supplies the backdrop for nested controls. Keep their wells quiet at
+   rest; transient light identifies the active control without a second lens. */
+[data-theme="dark"]
+  .material-surface:not([data-material-quiet]):not([data-material-opaque])
+  .material-surface {
+  background: rgba(190, 224, 240, 0.025);
+  border-color: rgba(227, 247, 255, 0.07);
+  box-shadow:
+    inset 0 1px 1px rgba(245, 251, 255, 0.065),
+    inset 0 -1px 1px rgba(164, 199, 216, 0.035);
+}
+[data-theme="dark"]
+  .material-surface:not([data-material-quiet]):not([data-material-opaque])
+  .material-surface
+  > .material-lens {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: none;
+}
+[data-theme="dark"]
+  .material-surface:not([data-material-quiet]):not([data-material-opaque])
+  .material-surface
+  > .material-shine {
+  opacity: 0;
+  background: radial-gradient(
+    ellipse 58% 100% at var(--light-x) var(--light-y),
+    rgba(232, 249, 255, 0.09),
+    transparent 82%
+  );
+  box-shadow: none;
+}
+[data-theme="dark"]
+  .material-surface:not([data-material-quiet]):not([data-material-opaque])
+  .material-surface:hover
+  > .material-shine,
+[data-theme="dark"]
+  .material-surface:not([data-material-quiet]):not([data-material-opaque])
+  .material-surface:focus-visible
+  > .material-shine,
+[data-theme="dark"]
+  .material-surface:not([data-material-quiet]):not([data-material-opaque])
+  .material-surface:active
+  > .material-shine {
+  opacity: 1;
+}
+[data-theme="dark"] .material-surface [role="menu"].material-surface,
+[data-theme="dark"] .material-surface nav.material-surface {
+  background: var(--glass-tint);
+  border-color: rgba(227, 247, 255, 0.14);
+  box-shadow: 0 16px 34px -22px rgba(0, 0, 0, 0.8);
+}
+[data-theme="dark"]
+  .material-surface:not([data-material-quiet]):not([data-material-opaque])
+  [role="menu"].material-surface
+  > .material-lens,
+[data-theme="dark"] .material-surface nav.material-surface > .material-lens {
+  backdrop-filter: var(--material-filter, blur(7px)) saturate(1.16);
+  -webkit-backdrop-filter: var(--material-filter, blur(7px)) saturate(1.16);
+  background: linear-gradient(
+    145deg,
+    rgba(221, 243, 253, 0.065),
+    transparent 43% 72%,
+    rgba(176, 215, 233, 0.025)
+  );
+}
+[data-theme="dark"]
+  .material-surface:not([data-material-quiet]):not([data-material-opaque])
+  [role="menu"].material-surface
+  > .material-shine,
+[data-theme="dark"] .material-surface nav.material-surface > .material-shine {
+  opacity: 1;
 }
 /* Porcelain has an opaque ceramic body, a rounded lip, and a moving glaze
    reflection. The microscopic image supplies variation, never illustration. */
 [data-theme="light"] .material-surface {
   --material-rim: 4px;
-  background: #f8f5ee;
-  border-color: #dfd4c5;
+  background: #f5f3eb;
+  border-color: #d5d3c5;
   box-shadow:
-    0 5px 9px -5px rgba(83, 61, 39, 0.22),
-    inset 0 2px 2px #fff,
-    inset 2px 0 3px rgba(255, 255, 255, 0.95),
-    inset 0 -3px 4px rgba(160, 136, 101, 0.13),
-    inset -1px 0 2px rgba(156, 132, 99, 0.09);
+    0 4px 6px -3px #635b4530,
+    0 13px 26px -20px #766b4952,
+    inset 0 3px 3px #fff,
+    inset 3px 0 5px #ffffff99,
+    inset 0 -4px 5px #9caa922a,
+    inset -1px 0 2px #a99b7d29;
 }
 [data-theme="light"] .material-lens {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   background: url("../assets/decorations/porcelain-glaze.webp") center / 192px
     192px;
-  opacity: 0.65;
+  opacity: 0.82;
 }
 [data-theme="light"] .material-shine {
+  /* A tight specular reflection above a broad soft glaze: light slides across
+     the fired surface rather than washing out the content. */
   background: radial-gradient(
-      ellipse 48% 85% at var(--light-x) var(--light-y),
-      rgba(255, 255, 255, 0.96),
-      transparent 78%
+      ellipse 16% 38% at var(--light-x) var(--light-y),
+      #fffefce6,
+      #fffefc45 38%,
+      transparent 76%
     ),
-    linear-gradient(174deg, #ffffffb8, transparent 40% 62%, #c4af941c);
+    radial-gradient(
+      ellipse 55% 100% at var(--light-x) var(--light-y),
+      #fffff8b3,
+      transparent 76%
+    ),
+    linear-gradient(
+      var(--glaze-angle),
+      #ffffff80,
+      transparent 28% 54%,
+      #b6c2a626 82%,
+      #fffefa66
+    );
   box-shadow:
     inset 0 5px 6px -4px #fff,
-    inset 0 -5px 6px -4px #b9a48755;
+    inset 0 -6px 7px -4px #9eac8f49;
 }
 [data-theme="light"] .material-shine::before {
-  background: linear-gradient(
-    174deg,
-    #fff 5%,
-    #fffdf6 21%,
-    #d5c6b3 45%,
-    #fffdf6 61%,
-    #c6b094 88%,
-    #fff 99%
-  );
-  opacity: 0.65;
+  background: radial-gradient(
+      ellipse 38% 120% at var(--light-x) var(--light-y),
+      #fff 18%,
+      #fffdf580 60%,
+      transparent 90%
+    ),
+    linear-gradient(
+      var(--glaze-angle),
+      #fff 8%,
+      #fffff6 24%,
+      #cbcbb7 49%,
+      #fafcf3 65%,
+      #c1c8ab 89%,
+      #fff
+    );
+  opacity: 0.82;
 }
 [data-theme="light"] .material-shine::after {
-  border: 1px solid rgba(255, 255, 255, 0.78);
-  background: none;
+  background: radial-gradient(
+    ellipse 22% 72% at var(--light-x) var(--light-y),
+    #ffffff38,
+    transparent 74%
+  );
+  border: 1px solid #fffdf4bc;
   box-shadow:
-    inset 0 2px 2px #b6a18714,
-    inset 0 -2px 3px #fff;
+    inset 0 2px 3px #95a38112,
+    inset 0 -3px 4px #ffffff99;
 }
 [data-theme="light"] .home-nav-shell.material-surface {
   --material-rim: 6px;
@@ -280,6 +398,16 @@
 [data-theme="light"] .home-reading-surface > .material-shine {
   opacity: 0.55;
 }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .home-reading-surface:not([data-material-quiet]):hover > .material-shine {
+    opacity: 0.72;
+  }
+  [data-theme="light"]
+    .home-reading-surface:not([data-material-quiet]):hover
+    > .material-shine {
+    opacity: 0.95;
+  }
+}
 [data-theme="light"] .home-status-face.material-surface {
   background: #f1f2e8;
   border-color: rgba(var(--status-rgb), 0.32);
@@ -307,6 +435,38 @@
 [data-theme="light"] .home-connect-button > .material-shine {
   opacity: 0.28;
 }
+[data-theme="dark"] .home-connect-button.material-surface {
+  --glass-tint: rgba(115, 34, 25, 0.74);
+  background: linear-gradient(
+      135deg,
+      rgba(171, 63, 40, 0.3),
+      rgba(94, 25, 25, 0.48)
+    ),
+    var(--glass-tint);
+  border-color: rgba(249, 166, 125, 0.46);
+  box-shadow:
+    0 10px 26px -14px rgba(173, 49, 25, 0.46),
+    inset 0 1px 1px rgba(255, 220, 182, 0.55),
+    inset 0 -2px 3px rgba(255, 174, 104, 0.12);
+}
+[data-theme="dark"] .home-connect-button > .material-shine {
+  opacity: 0.8;
+}
+[data-theme="dark"] .home-connect-button > .material-shine::before {
+  background: radial-gradient(
+    ellipse 62% 150% at var(--light-x) var(--light-y),
+    #ffe0b7c7,
+    #ffcaa229 58%,
+    transparent 85%
+  );
+}
+[data-theme="dark"] .home-connect-button > .material-shine::after {
+  background: radial-gradient(
+    ellipse 55% 50% at 74% 112%,
+    #ffb8794a,
+    transparent 90%
+  );
+}
 @media (prefers-reduced-motion: reduce) {
   .material-surface,
   .material-surface *,
@@ -321,15 +481,32 @@
 }
 @media (prefers-reduced-transparency: reduce) {
   .material-surface:not([data-material-opaque]) {
-    background: var(--canvas-elevated);
+    background: var(--canvas-elevated) !important;
   }
   .material-lens {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .material-shine {
+    opacity: 0 !important;
   }
 }
 @media (forced-colors: active) {
-  .material-surface {
+  .material-surface,
+  [data-theme] .material-surface,
+  .home-nav-shell.material-surface,
+  .home-status-face.material-surface,
+  .home-reading-surface.material-surface,
+  .home-connect-button.material-surface {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  [data-theme="dark"]
+    .material-surface:not([data-material-quiet]):not([data-material-opaque])
+    .material-surface,
+  [data-theme="dark"] .material-surface [role="menu"].material-surface,
+  [data-theme="dark"] .material-surface nav.material-surface {
     border: 1px solid ButtonText;
     background: Canvas;
     box-shadow: none;

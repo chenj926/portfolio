@@ -1,0 +1,102 @@
+.organization-mark {
+  box-sizing: border-box;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--paper-edge);
+  border-radius: 12px;
+  background: var(--paper-fill);
+  color: var(--accent-secondary);
+}
+
+.organization-mark--timeline {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: inherit;
+}
+
+.organization-mark--research {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+}
+
+.organization-mark--education {
+  width: 48px;
+  height: 48px;
+  border-radius: 11px;
+}
+
+.organization-mark img {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 5px;
+}
+
+.organization-mark--jana {
+  background: #fff;
+}
+
+.organization-mark--jana.organization-mark--timeline {
+  border-radius: 50%;
+}
+
+.organization-mark--jana img {
+  object-fit: cover;
+  object-position: left center;
+  padding: 0;
+}
+
+.experience-entry__mark:has(
+    > .organization-mark--jana.organization-mark--timeline
+  ) {
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+}
+
+.organization-mark--uoft {
+  border-color: #002554;
+  background: #fff;
+}
+
+.organization-mark--sjtu {
+  border-color: rgba(178, 20, 26, 0.35);
+  border-radius: 50%;
+  background: #fff;
+}
+
+.organization-mark--sjtu img {
+  filter: brightness(0) saturate(100%) invert(15%) sepia(89%) saturate(4025%)
+    hue-rotate(346deg) brightness(89%) contrast(109%);
+}
+
+.organization-mark--monogram span {
+  font: inherit;
+}
+
+.organization-mark--research.organization-mark--monogram span {
+  font: 400 1.2rem/1 var(--font-display);
+}
+
+.organization-mark--education.organization-mark--monogram span {
+  font: 400 1.4rem/1 var(--font-display);
+}
+
+.research-entry__institution-line {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 42px;
+}
+
+.research-entry__institution-line .scholar-kicker {
+  margin: 0;
+}

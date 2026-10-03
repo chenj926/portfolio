@@ -1,85 +1,125 @@
 import React from "react";
-import { Box, Heading, Link, Text, VStack, SimpleGrid } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
-import FullScreenSection from "./FullScreenSection";
+import Material from "./Material";
+import SectionHeading from "./SectionHeading";
+import RedNoteMark from "../assets/social/rednote.png";
+import RedditMark from "../assets/social/reddit.svg";
+import ArtImage from "../assets/hobbies/Art.jpg";
+import "./PersonalSections.css";
 
 const channels = [
   {
-    title: "小红书 (RedNote)",
+    id: "rednote",
+    title: "RedNote",
     description: "Lifestyle notes, study routines, and visual storytelling.",
     url: "https://www.xiaohongshu.com/user/profile/60b414de0000000001007140",
+    mark: RedNoteMark,
   },
   {
+    id: "reddit",
     title: "Reddit",
-    description: "Sharing study experiments and engaging in creator communities.",
+    description:
+      "Sharing study experiments and engaging in creator communities.",
     url: "https://www.reddit.com/user/Every-Movie7060/",
+    mark: RedditMark,
   },
 ];
 
-const ContentSection = () => {
-  return (
-    <FullScreenSection
-      id="content-section"
-      backgroundColor="var(--bg-primary)"
-      px={{ base: 6, md: 12 }}
-      py={{ base: 12, md: 20 }}
-      alignItems="stretch"
-      spacing={8}
-    >
-      <VStack align="flex-start" spacing={3}>
-        <Text
-          fontSize="sm"
-          textTransform="uppercase"
-          letterSpacing="0.2em"
-          color="var(--accent-primary)"
-          fontWeight="600"
-        >
-          Social
-        </Text>
-        <Heading size="lg" color="var(--text-primary)">
-          Content & Community
-        </Heading>
-        <Text maxW="640px" color="var(--text-secondary)">
-          Places where I share ideas, experiments, and knowledge content.
-        </Text>
-      </VStack>
+const ChannelLink = ({ channel }) => (
+  <a
+    className="community-card__link"
+    href={channel.url}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <span>Visit {channel.title}</span>
+    <FontAwesomeIcon icon={faArrowUpRightFromSquare} aria-hidden="true" />
+  </a>
+);
 
-      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-        {channels.map((channel) => (
-          <Box key={channel.title}>
-            <Box
-              className="glass-card"
-              padding={6}
-              width="100%"
-              height="100%"
-            >
-              <Heading size="sm" mb={2} color="var(--text-primary)" fontWeight="600">
-                {channel.title}
-              </Heading>
-              <Text fontSize="sm" color="var(--text-secondary)" mb={4} lineHeight="1.7">
-                {channel.description}
-              </Text>
-              <Link
-                href={channel.url}
-                isExternal
-                color="var(--accent-primary)"
-                fontWeight="500"
-                fontSize="sm"
-                display="inline-flex"
-                alignItems="center"
-                gap={2}
-                _hover={{ color: "var(--accent-secondary)", textDecoration: "none" }}
-              >
-                Visit channel
-                <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="xs" />
-              </Link>
-            </Box>
-          </Box>
-        ))}
-      </SimpleGrid>
-    </FullScreenSection>
-  );
-};
+const RedNoteCard = ({ channel }) => (
+  <Material
+    as="article"
+    quiet
+    className="home-reading-surface community-card rednote-card"
+    aria-labelledby="rednote-title"
+  >
+    <header className="community-card__header">
+      <img className="community-card__mark" src={channel.mark} alt="" />
+      <div>
+        <h3 id="rednote-title">{channel.title}</h3>
+        <p>{channel.description}</p>
+      </div>
+    </header>
+
+    <div className="community-card__post">
+      <figure className="community-card__cover">
+        <img
+          src={ArtImage}
+          alt="Artwork from my Art collection"
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption>Art &amp; everyday life</figcaption>
+      </figure>
+      <div className="community-card__post-copy">
+        <h4>Small moments, shared.</h4>
+        <p>
+          Life outside the lab: art, study routines, and everyday observations.
+        </p>
+      </div>
+    </div>
+
+    <ChannelLink channel={channel} />
+  </Material>
+);
+
+const RedditCard = ({ channel }) => (
+  <Material
+    as="article"
+    quiet
+    className="home-reading-surface community-card reddit-card"
+    aria-labelledby="reddit-title"
+  >
+    <header className="community-card__header">
+      <img className="community-card__mark" src={channel.mark} alt="" />
+      <div>
+        <h3 id="reddit-title">{channel.title}</h3>
+        <p>{channel.description}</p>
+      </div>
+    </header>
+
+    <div className="community-card__conversation">
+      <h4>Ideas grow in conversation.</h4>
+      <p>
+        Study experiments.
+        <br />
+        Thoughtful exchanges.
+        <br />A shared curiosity.
+      </p>
+      <div className="community-card__handle">
+        <img src={channel.mark} alt="" />
+        <span>u/Every-Movie7060</span>
+      </div>
+    </div>
+
+    <ChannelLink channel={channel} />
+  </Material>
+);
+
+const ContentSection = () => (
+  <section
+    id="content-section"
+    className="scholar-section personal-section community-section"
+    aria-labelledby="content-title"
+  >
+    <SectionHeading id="content-title" title="Content & Community" />
+    <div className="community-grid">
+      <RedNoteCard channel={channels[0]} />
+      <RedditCard channel={channels[1]} />
+    </div>
+  </section>
+);
 
 export default ContentSection;
