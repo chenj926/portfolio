@@ -1,60 +1,31 @@
 {
-  "name": "portfolio",
-  "version": "0.1.0",
+  "name": "jialuo-chen-portfolio",
+  "version": "2.0.0",
   "private": true,
-  "homepage": "https://chenj926.github.io/portfolio",
-  "dependencies": {
-    "@chakra-ui/icons": "^2.2.4",
-    "@chakra-ui/react": "^2.10.4",
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@fortawesome/fontawesome-svg-core": "^6.7.2",
-    "@fortawesome/free-brands-svg-icons": "^6.7.2",
-    "@fortawesome/free-regular-svg-icons": "^6.7.2",
-    "@fortawesome/free-solid-svg-icons": "^6.7.2",
-    "@fortawesome/react-fontawesome": "^0.2.2",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.1.0",
-    "@testing-library/user-event": "^14.5.2",
-    "formik": "^2.4.6",
-    "framer-motion": "^6.5.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-scripts": "^5.0.1",
-    "web-vitals": "^4.2.4",
-    "yup": "^1.6.1"
-  },
+  "type": "module",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "next dev",
+    "prebuild": "node scripts/build-icons.mjs",
+    "build": "next build",
+    "preview": "NEXT_PUBLIC_PREVIEW=1 next build && PREVIEW_NEXT_DIR=next node scripts/relativize.mjs out preview",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "jest": {
-    "moduleNameMapper": {
-      "^@chakra-ui/utils/(.*)$": "<rootDir>/node_modules/@chakra-ui/utils/dist/cjs/$1.cjs"
-    }
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "@fontsource/albert-sans": "5.3.0",
+    "@fontsource/dm-mono": "5.3.0",
+    "@fontsource/noto-serif-sc": "5.3.1",
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "prettier": "^3.4.2"
+    "@iconify-json/logos": "1.2.21",
+    "@napi-rs/canvas": "^1.2.0",
+    "@types/node": "22.20.5",
+    "@types/react": "19.3.1",
+    "@types/react-dom": "19.3.0",
+    "simple-icons": "16.38.1",
+    "typescript": "5.9.3"
   }
 }
