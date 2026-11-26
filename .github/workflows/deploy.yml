@@ -48,22 +48,27 @@ jobs:
       - name: Install locked dependencies
         run: npm ci --no-audit --no-fund
 
-      - name: Run tests
-        run: npm test -- --watchAll=false --runInBand
+      - name: Check types
+        run: npm run typecheck
 
-      - name: Build production site
-        run: npm run build
+      - name: Build the static export
+        env:
+          # the site is served from /portfolio on GitHub Pages
+          SITE_BASE_PATH: /portfolio
+        run: |
+          npm run build
+          touch out/.nojekyll
 
       - name: Record deployed revision
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: |
-          node -e "require('node:fs').writeFileSync('build/deployment.json', JSON.stringify({ commit: process.env.GITHUB_SHA }))"
+          node -e "require('node:fs').writeFileSync('out/deployment.json', JSON.stringify({ commit: process.env.GITHUB_SHA }))"
 
       - name: Upload Pages artifact
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
-          path: build
+          path: out
           retention-days: 1
 
   deploy:

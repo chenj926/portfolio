@@ -1,0 +1,236 @@
+[
+  {
+    "file": "google-scholar.svg",
+    "set": "simple-icons (Google Scholar)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "github.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "linkedin.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "instagram.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "rednote.svg",
+    "set": "simple-icons (Xiaohongshu)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "reddit.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "python.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "pytorch.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "react.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "typescript.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "javascript.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "fastapi.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "spring.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "java.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "csharp.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "dotnet.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "postgresql.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "docker.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "git.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "linux.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "numpy.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "pandas.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "scikit-learn.svg",
+    "set": "simple-icons (scikit-learn)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "opencv.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "jupyter.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "chrome.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "claude.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "openai.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "hugging-face.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "openstreetmap.svg",
+    "set": "simple-icons (OpenStreetMap)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "qwen.svg",
+    "set": "simple-icons (QWen)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "langchain.svg",
+    "set": "simple-icons (LangChain)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "c.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "r.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "shopify.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "jira.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "meta.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "kotlin.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  },
+  {
+    "file": "cpp.svg",
+    "set": "logos (gilbarbara/logos via @iconify-json/logos)",
+    "licence": "CC0-1.0",
+    "trademark": true
+  }
+]

@@ -1,53 +1,54 @@
 ﻿# Jialuo (Eric) Chen — Portfolio
 
-AI/ML research, software projects, and contact information. React 19, Chakra UI 2, and Create React App; existing project and publication detail routes use URL hashes.
+Research, projects, CV and contact for Jialuo (Eric) Chen, live at https://chenj926.github.io/portfolio/.
+A Next.js 16 App Router site with React 19 and TypeScript, built as a static export for GitHub Pages.
 
 ## Local development
 
-Use the Node.js version in [.node-version](.node-version), which is also used by CI.
+Use the Node.js version in [.node-version](.node-version), which CI uses too.
 
-```powershell
+```bash
 npm ci
-npm start
+npm run dev        # http://localhost:3000
+npm run typecheck
+npm run build      # checks the content, then writes the static site to out/
+npm run preview    # optional: a copy in preview/ that finds its files by relative path, for any host path
 ```
 
-Open http://localhost:3000/portfolio/. To check a release:
+`npm run build` regenerates the brand icons first (`scripts/build-icons.mjs`) and then checks the content
+(`lib/validate.ts`): a missing picture, icon or page link stops the build with a plain message.
 
-```powershell
-$env:CI = "true"
-npm test -- --watchAll=false --runInBand
-npm run build
-```
+## Adding content
 
-The deployment target is [GitHub Pages](https://chenj926.github.io/portfolio/) at `/portfolio/`. Building locally does not publish the site.
+Every project, paper, research position, job, degree and news item is one entry in `content/*.ts`; the pages,
+the menus and the footer are built from those files. The templates and the steps for pictures, the CV and icons
+are in [docs/ADDING-CONTENT.md](docs/ADDING-CONTENT.md).
+
+## Layout
+
+- `app/`: the pages (home, research, projects, about, cv, and the detail pages generated from the content)
+- `components/`: the header and footer, tiles, pictures, diagrams, the hero painting and the CV reader
+- `content/`: the site's data
+- `lib/`: site helpers, the hero painter and the content check
+- `public/`: pictures, documents, icons, the site's CSS and the design kit in `public/assets`
+- `scripts/`: icons, pictures, the CV's page images and the preview copy
 
 ## Release workflow
 
-Open a pull request into `main`. The **Test and build** job rejects unresolved merge conflicts, installs the lockfile with `npm ci`, runs the tests, and builds with `CI=true`. npm downloads are cached by the lockfile; newer PR runs cancel obsolete checks.
+Open a pull request into `main`. The **Test and build** job rejects unresolved merge conflicts, installs the
+lockfile with `npm ci`, checks types and builds the static export with `SITE_BASE_PATH=/portfolio`. Newer PR runs
+cancel obsolete checks.
 
-After merging, the workflow validates `main` and uploads that build as a short-lived Pages artifact. A separate **Deploy and verify** job uses GitHub's Pages/OIDC permissions and checks that the live `deployment.json` reports the deployed commit. Production runs are serialized, so a new push cannot interrupt an active deployment. The Actions page also supports a manual run on `main`.
+After merging, the workflow builds `main` and uploads it as a short-lived Pages artifact. A separate **Deploy and
+verify** job uses GitHub's Pages/OIDC permissions and checks that the live `deployment.json` reports the deployed
+commit. Production runs are serialized, so a new push cannot interrupt an active deployment. The Actions page also
+supports a manual run on `main`.
 
-Repository configuration: **Settings → Pages → Source: GitHub Actions**; the `github-pages` environment allows deployments from the `main` branch. The repository's default workflow token is read-only, with deployment permissions granted only to the deploy job. Action versions are pinned to commit SHAs and maintained by grouped Dependabot pull requests.
+Repository configuration: **Settings → Pages → Source: GitHub Actions**; the `github-pages` environment allows
+deployments from the `main` branch. To roll back, revert the commit through a new pull request and merge it after
+validation.
 
-To roll back an application change, revert its commit through a new pull request and merge after validation. Re-running an old workflow would intentionally redeploy that old revision; use the current `main` workflow for a deployment retry.
+## Privacy
 
-## Change the current status
-
-Edit **only `profile.currentStatus` in [src/data/profile.js](src/data/profile.js)**:
-
-| Value           | Public label          |
-| --------------- | --------------------- |
-| `opportunities` | Open to opportunities |
-| `collaborate`   | Open to collaborate   |
-| `communicate`   | Open to communicate   |
-| `vacation`      | Currently on vacation |
-
-The page displays one status. Visitors cannot select a status, and it never rotates automatically. Light and dark icon materials follow the visitor's theme. Each option has a label and sprite position; there is no role subtitle. The opportunities state uses a quiet green glow and overlapping layers.
-
-The same file owns the homepage biography, email, social destinations (including Google Scholar), and document imports. The CV is `src/assets/resume/Jialuo_Chen_CV.pdf`; Resume is a separate document.
-
-## Design and assets
-
-Design drafts, publication proposals, and local review records are excluded from Git. Production artwork, document downloads, fonts, and their licenses remain versioned with the application.
-
-The production homepage uses WebP artwork and locally hosted OFL fonts. `Material` owns shared control optics and pointer feedback: opaque porcelain in light mode, translucent glass with progressive SVG edge refraction in dark mode. Small displacement maps are cached and rebuilt only on resize. Pointer work is coalesced into one animation frame; no permanent render loop or 3D dependency is added. Flowers greet briefly when first visible and respond to pointer entry; reduced motion disables both. Temporary browser screenshots are removed after review.
+The published CV and résumé leave out the phone number and street address. `scripts/doc-pages.py` refuses a PDF
+that still holds either before it renders the pages.
