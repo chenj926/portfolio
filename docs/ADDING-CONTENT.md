@@ -1,4 +1,4 @@
-# 加内容：project、research、work、学历、news
+# 加内容：project、research、work、学历、news、小项目
 
 这份是之后往网站里加东西的固定流程。每种内容都有一个 template，照着填就行。
 
@@ -13,12 +13,14 @@
 | 要加的 | 文件 | 会出现在 |
 | --- | --- | --- |
 | Paper（已发表或 manuscript） | `content/research.ts`，`kind: "paper"` | `/research/` 的 papers、home 的 Research、menu、footer、自己的 detail page |
-| 进行中的 research | `content/research.ts`，`kind: "work"` | home 的 Current research（前两条）、`/research/` 的 Current research、menu、detail page |
-| Project | `content/projects.ts` | `/projects/`（数组顺序就是页面顺序）、home 前六个、footer 前四个、detail page |
+| 进行中的 research | `content/research.ts`，`kind: "work"` | `/research/` 的 Current research、menu、footer、detail page |
+| 做完的 study（不是 paper） | `content/research.ts`，`kind: "study"` | `/research/` 的 Earlier research、footer、detail page |
+| Project | `content/projects.ts` 的 `projects` | `/projects/`（数组顺序就是页面顺序）、home 前六个、footer 前四个、detail page |
+| 小项目（课程、hackathon、自己的工具） | `content/projects.ts` 的 `builds` | `/projects/` 的 Smaller projects，没有自己的 detail page |
 | Research position | `content/experience.ts` 的 `positions` | home 的 Experience、`/research/` 的 Advisors |
 | Work（industry job） | `content/experience.ts` 的 `jobs` | home 的 Experience |
 | 学历 | `content/experience.ts` 的 `education` | hero 下面的 education band（第一条）、Experience |
-| News | `content/experience.ts` 的 `updates` | home 前四条、`/about/#news` 全部 |
+| News | `content/experience.ts` 的 `updates` | home 的 News（最新的两条带图的放大，后面几条成列表，同一个页面只链一次）、`/about/#news` 全部 |
 | CV、Résumé | `public/docs/` 和 `content/docs.ts` | hero 的两份文件、`/cv/` |
 | 学校或公司的 logo | `public/images/marks/` 和 `content/marks.ts` | position、job、education 旁边的小 plate |
 | Brand icon | `scripts/build-icons.mjs` | stack、links、header |
@@ -78,7 +80,7 @@ Projects 页 hero 里的两个 demo 窗口在 `app/projects/page.tsx` 的 `FILMS
 
 ## 一项 research
 
-在 `content/research.ts` 的 `research` 里加一条。Paper 用 `kind: "paper"`，进行中的用 `kind: "work"`。
+在 `content/research.ts` 的 `research` 里加一条。Paper 用 `kind: "paper"`，进行中的用 `kind: "work"`，已经做完、不会成为 paper 的 study 用 `kind: "study"`，`status` 写成 `"Finished in April 2026"`。
 
 ```ts
 {
@@ -117,6 +119,23 @@ Projects 页 hero 里的两个 demo 窗口在 `app/projects/page.tsx` 的 `FILMS
 ```
 
 `/research/` 页一屏放一篇 paper，两篇一个 section；第三篇会自动开第二个 section。Papers 标题旁那句 `PAPERS_RUN`（在 `app/research/page.tsx`）是手写的，加了 paper 或 status 改了时要一起改。
+
+## 一个小项目
+
+课程作业、hackathon 的数据、自己的小工具，没有 demo 和完整故事的，加在 `content/projects.ts` 的 `builds` 里，新的在前。它们只在 `/projects/` 的 Smaller projects 里列一行，没有 detail page。
+
+```ts
+{
+  name: "Travelling salesman heuristics",
+  line: "What it is and what it does, in one sentence from the README.",
+  context: "MIE250 course project", // 或 "My own tool"、"Team project"、"Hackathon dataset"
+  year: "2024", // 看不出是哪一年做的就不写
+  stack: [{ label: "Java", icon: "java" }, { label: "AMPL" }], // 没有 icon 的只写 label
+  href: "https://github.com/chenj926/...", // repo 里有别人的姓名、学号等个人信息时不放 link
+},
+```
+
+不是自己写的不放（看 git 的 author）。只是交作业模板、没有自己内容的也不放。
 
 ## 一个 research position、一份 work、一个学历、一条 news
 
@@ -159,7 +178,17 @@ Projects 页 hero 里的两个 demo 窗口在 `app/projects/page.tsx` 的 `FILMS
 
 // updates (news)
 { when: "May 2027", what: "Began research with Prof. ... on ...", href: "/research/my-paper/" },
+// 想让它在 home 的 News 里放大显示，加一张图和一句话（最新的两条带图的会放大）
+{
+  when: "June 2027",
+  what: "What happened, as a headline",
+  href: "/projects/my-project/",
+  line: "One more sentence about it.",
+  pic: { name: "my-project-news-43", widths: [600, 720], w: 720, h: 540, alt: "What the picture shows" },
+},
 ```
+
+Home 的 News 不会重复：放大的两条链到的页面，不会再出现在下面的列表里。图最好和这个 project 在别处用的封面不一样（同一个 demo 里截另一帧）。
 
 学历变成两条时，Experience 那一栏的标题会自动从学校名变成 "Education"。
 
@@ -212,5 +241,6 @@ npm run preview    # 可选：做一份用相对路径的 copy（preview/），�
 
 - Home hero 的 lead，以及各 section 标题旁边的 run（`app/page.tsx`）
 - `/research/` 的 hero lead、statement 和 `PAPERS_RUN`（`app/research/page.tsx`）
-- `/projects/` 的 hero lead（`app/projects/page.tsx`）
+- `/research/` 的 `STUDIES_RUN`（`app/research/page.tsx`）
+- `/projects/` 的 hero lead 和 description（`app/projects/page.tsx`）
 - 网站的 description（`app/layout.tsx`）

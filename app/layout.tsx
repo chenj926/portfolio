@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   title: "Jialuo Chen: AI researcher and engineer in Toronto",
   description:
-    "Jialuo (Eric) Chen, AI researcher and engineer in Toronto: first author of HMITL at IEEE ICHI 2026, working on XR World Models, Surgical DeltaNet for linear attention and Bayesian optimization under uncertainty, and builder of NeuroCommute and LineToLive.",
+    "Jialuo (Eric) Chen, AI researcher and engineer in Toronto: first author of HMITL at IEEE ICHI 2026, working on XR World Models, Surgical DeltaNet for linear attention and Bayesian optimization under uncertainty, and builder of an XR capstone with Magna, NeuroCommute and LineToLive.",
   icons: { icon: [{ url: url("/favicon.svg"), type: "image/svg+xml" }] },
   // absolute: metadataBase already holds /portfolio, so a base-path URL would double it
   openGraph: { type: "website", images: [{ url: `${SITE}/share.jpg`, width: 1200, height: 630 }] },
@@ -28,7 +28,7 @@ export const viewport: Viewport = {
   viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#f4f3ef" },
-    { media: "(prefers-color-scheme: dark)", color: "#141312" },
+    { media: "(prefers-color-scheme: dark)", color: "#141c29" },
   ],
 };
 
@@ -48,7 +48,10 @@ const BRAND = `:root {
 
 // before the first paint: the grade the visitor chose (or their system's), the hero's words waiting for
 // motion.js (motion.md), and the moments' guard (moments.md)
-const HEAD = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("jc-theme");if(t!=="light"&&t!=="dark"){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}d.dataset.theme=t}catch(e){d.dataset.theme="light"}})();document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700);document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)`;
+// The grade is kept twice: in localStorage, and in the tab's window.name, which survives the move from page to
+// page where storage is refused or forgotten (a framed preview, a private window). The tab's own last choice
+// wins, then the stored one, then the system's.
+const HEAD = `(function(){var d=document.documentElement,t=null,m=/(?:^|;)jc-theme=(light|dark)/.exec(window.name||"");if(m)t=m[1];if(!t){try{t=localStorage.getItem("jc-theme")}catch(e){}}if(t!=="light"&&t!=="dark"){try{t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}catch(e){t="light"}}d.dataset.theme=t})();document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700);document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)`;
 
 const KIT_CSS = ["/assets/system.css", "/assets/ui/cards.css", "/assets/motion/motion.css", "/assets/layout/layout.css", "/assets/icons/icon.css"];
 const KIT_JS = ["/assets/system.js", "/assets/motion/motion.js", "/assets/layout/layout.js", "/assets/moments/moments.js", "/assets/moments/lib.js"];

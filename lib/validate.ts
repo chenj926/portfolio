@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { education, jobs, positions, updates } from "@/content/experience";
 import { avatar, pastimes, portrait } from "@/content/life";
 import { marks } from "@/content/marks";
-import { projects } from "@/content/projects";
+import { builds, projects } from "@/content/projects";
 import { research } from "@/content/research";
 import type { Pic } from "@/lib/site";
 
@@ -57,8 +57,17 @@ export function validateContent() {
       p.stepVisuals.forEach((v) => ("pic" in v ? pic(at, v.pic) : !p.diagram && problems.push(`${at}: a step lights a diagram the project does not have`)));
     }
   }
+  for (const b of builds) {
+    b.stack.forEach((s) => icon(`smaller project "${b.name}"`, s.icon));
+    if (b.href && !/^https:\/\//.test(b.href)) problems.push(`smaller project "${b.name}": link to its code with a full https address`);
+  }
   for (const x of positions) if (x.research && !research.some((r) => r.slug === x.research)) problems.push(`position "${x.role}": no research page "${x.research}"`);
-  for (const u of updates) if (u.href?.startsWith("/") && !pages.has(u.href)) problems.push(`news "${u.what}": no page at ${u.href}`);
+  for (const u of updates) {
+    if (u.href?.startsWith("/") && !pages.has(u.href)) problems.push(`news "${u.what}": no page at ${u.href}`);
+    pic(`news "${u.what}"`, u.pic);
+    if (u.pic && !u.line) problems.push(`news "${u.what}": a news item with a picture leads the home's news, so give it a line too`);
+  }
+  if (updates.filter((u) => u.pic).length < 2) problems.push("news: the home's news leads with two items that have a picture; give two of them one");
   for (const [id, m] of Object.entries(marks)) if (!has(m.src.slice(1))) problems.push(`mark "${id}": public${m.src} is missing`);
   if (!education.length) problems.push("education: the hero needs at least one entry");
   if (!jobs.length) problems.push("jobs: the Experience section needs at least one entry");

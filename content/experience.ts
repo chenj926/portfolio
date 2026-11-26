@@ -1,6 +1,7 @@
 // Research positions, industry roles, education and dated news, from the CV (2026) and the previous site's
 // news. Lists run newest first; the home and the Experience section show them in this order.
 // How to add an entry: docs/ADDING-CONTENT.md.
+import type { Pic } from "@/lib/site";
 import type { MarkId } from "./marks";
 
 /** A research position: the role, where, with whom, and the research pages it led to. */
@@ -130,17 +131,36 @@ export const education: Education[] = [
 ];
 
 export interface Update {
-  when: string;
-  what: string;
+  when: string; // "November 2026", or a term: "Winter 2026"
+  what: string; // what happened, as a headline
   href?: string; // a page on this site ("/research/hmitl/") or an outside link
+  line?: string; // one sentence more, for the home's two pictured items
+  pic?: Pic; // a picture: the two newest items with one lead the home's news, the rest are a list
 }
 
-// newest first; the home shows the first four
+// newest first. The home's news shows the two newest items with a picture, then the next items as a list, each
+// page linked once; the About page lists them all.
 export const updates: Update[] = [
-  { when: "September 2026", what: "Began the MIE490 capstone as technical lead", href: "/projects/xr-capstone/" },
-  { when: "2026", what: "HMITL is published at IEEE ICHI 2026", href: "/research/hmitl/" },
-  { when: "May 2026", what: "Began XR research with Prof. Scott Sanner at UofT", href: "/research/xr-world-models/" },
+  {
+    when: "November 2026",
+    what: "The capstone's full audit loop ran on site at Magna",
+    href: "/projects/xr-capstone/",
+    line: "Scanning, the labeled 3D map, relocalization and the spoken-note summaries, in Magna's 20 × 20 m R&D lab among robot arms.",
+    pic: { name: "capstone-scan-43", widths: [600, 720], w: 720, h: 540, alt: "A frame from the capstone's demo video: the headset's view of a lab bench with a cutting machine, before any labels appear." },
+  },
+  { when: "September 2026", what: "Began the MIE490 capstone with Magna International as technical lead", href: "/projects/xr-capstone/" },
+  { when: "June 2026", what: "HMITL is published at IEEE ICHI 2026", href: "/research/hmitl/" },
+  {
+    when: "May 2026",
+    what: "Began XR World Models with Prof. Scott Sanner at UofT",
+    href: "/research/xr-world-models/",
+    line: "An egocentric world model for XR headsets; the tracker I built kept 118 of 120 identities right on lookalike items.",
+    pic: { name: "d3m-demo", widths: [584, 702], w: 702, h: 702, alt: "The XR demo: a headset view of a room with shoes on a table, each marked by the assistant with its name and details." },
+  },
+  { when: "May 2026", what: "Finished a year at JANA as a junior software developer" },
   { when: "Winter 2026", what: "Dean’s Honours List, a fourth time" },
+  { when: "April 2026", what: "Finished a hidden-state steering study on Qwen3-0.6B", href: "/research/hidden-state-steering/" },
+  { when: "April 2026", what: "Finished NeuroCommute, a route planner for Toronto transit", href: "/projects/neurocommute/" },
   { when: "January 2026", what: "Began linear-attention research with Prof. Shuai Li at SJTU, remotely", href: "/research/surgical-deltanet/" },
   { when: "December 2025", what: "AgentDS hackathon: 2nd in Commerce, 4th overall" },
   { when: "November 2025", what: "Built ADHD Scholarship Copilot at a UofT hackathon", href: "/projects/adhd-copilot/" },

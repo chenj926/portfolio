@@ -17,8 +17,11 @@ export default function ThemeToggle() {
     try {
       localStorage.setItem("jc-theme", next);
     } catch {
-      /* storage refused: the grade still changes for this visit */
+      /* storage refused: the tab's name below still carries the grade to the next page */
     }
+    // the tab keeps the choice across pages even where storage is refused or forgotten (app/layout.tsx reads it)
+    const rest = window.name.replace(/(?:^|;)jc-theme=(?:light|dark)/, "");
+    window.name = `${rest ? `${rest};` : ""}jc-theme=${next}`;
     setTheme(next);
     window.dispatchEvent(new CustomEvent("jc-theme", { detail: next }));
   }

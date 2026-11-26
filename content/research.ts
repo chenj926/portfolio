@@ -34,11 +34,11 @@ export interface ResultRow {
 
 export interface Research {
   slug: string;
-  kind: "paper" | "work"; // a paper (published or a manuscript) or research in progress
+  kind: "paper" | "work" | "study"; // a paper (published or a manuscript), research in progress, or a finished study
   short: string; // its short name in menus, the footer and window bars
   title: string; // the full title (a paper's as published)
   h1: string; // the page's headline: what it is, in plain words (55 characters at most)
-  status: string; // the venue, "Manuscript" or "In progress"
+  status: string; // the venue, "Manuscript", "In progress" or, for a study, "Finished in April 2026"
   year: string;
   period?: string; // "January 2026 to now"
   authors?: string[];
@@ -230,10 +230,43 @@ export const research: Research[] = [
       line: "Compared with Gated DeltaNet-2 and KDA on FineWeb-Edu, LAMBADA and S-NIAH needle retrieval.",
     },
   },
+  {
+    slug: "hidden-state-steering",
+    kind: "study",
+    short: "Hidden-state steering",
+    title: "Hidden-state steering for math reasoning in Qwen3-0.6B",
+    h1: "Hidden-state steering, tested against random directions",
+    status: "Finished in April 2026",
+    year: "2026",
+    period: "April 2026",
+    institution: "Shanghai Jiao Tong University",
+    advisor: "Prof. Shuai Li",
+    summary:
+      "A study of whether adding a reasoning direction to Qwen3-0.6B's hidden states helps it solve grade-school math. On all 1,319 GSM8K test problems the gains stayed within noise, and random directions of the same size did as well.",
+    statement:
+      "Steering moved GSM8K accuracy by about half a point, inside the 1.4-point standard error, and random directions of the same norm scored from 50.1% to 52.3% against a 50.9% baseline.",
+    pointsHeading: "How the study ran",
+    points: [
+      { title: "A direction from chain-of-thought", body: "Each steering vector is the difference between the model's hidden states at the end of a chain-of-thought prompt and of a plain prompt, taken per question or averaged over 32 GSM8K training questions." },
+      { title: "The vector in Qwen3-0.6B's last three layers", body: "The vector is added at strength 0.1 to the last three decoder layers of Qwen3-0.6B while it answers, and each hidden state is rescaled to its original norm." },
+      { title: "All of GSM8K's test set", body: "Every run answers the 1,319 test problems and is scored by exact match on the extracted answer, with prompts aligned to the Lighteval task definitions." },
+      { title: "Random-rotation controls", body: "Nine controls rotate the vector inside random 2D and 3D subspaces, keeping its norm, so a gain has to beat directions of the same size that point elsewhere." },
+    ],
+    card: { k: "GSM8K, against random directions", v: "Within noise" },
+    figures: [
+      { v: "1,319", k: "GSM8K test problems in every run" },
+      { v: "50.9%", k: "accuracy without steering", note: "standard error 1.4 points" },
+      { v: "9", k: "random-direction controls", note: "from 50.1% to 52.3%" },
+    ],
+    resultsHead: { title: "The study in numbers.", run: "Shanghai Jiao Tong University, remote, April 2026." },
+    links: [{ label: "See the code", href: "https://github.com/chenj926/reasoning_hidden_state", icon: "github" }],
+    diagram: "steering",
+  },
 ];
 
 export const papers = research.filter((r) => r.kind === "paper");
 export const currentWork = research.filter((r) => r.kind === "work");
+export const studies = research.filter((r) => r.kind === "study");
 export const findResearch = (slug: string) => research.find((r) => r.slug === slug);
 /** "IEEE ICHI 2026", "Manuscript, 2026", "In progress" */
 export const statusLine = (r: Research) => (r.status === "Manuscript" ? `Manuscript, ${r.year}` : r.status);

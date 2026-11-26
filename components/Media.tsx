@@ -39,7 +39,7 @@ export function Picture({
 }
 
 // a brand's real mark in its own colours (scripts/build-icons.mjs); black marks turn light on the dark grade
-const INK = new Set(["github", "openai", "instagram"]);
+const INK = new Set(["github", "openai"]);
 export function Icon({ id, size = 20, label }: { id: string; size?: number; label?: string }) {
   return (
     <img

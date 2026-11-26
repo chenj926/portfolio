@@ -4,16 +4,26 @@
    effect the wintersweet attention ground · moments letters-assemble, line-carries-colour */
 import { SiteFooter, SiteHeader } from "@/components/Chrome";
 import { h, ProjectTile, ResearchTile, SectionHead } from "@/components/Blocks";
-import { Diagram } from "@/components/Diagrams";
 import { Icon, Mark, Picture } from "@/components/Media";
 import WintersweetGround from "@/components/WintersweetGround";
 import { docHref, documents } from "@/content/docs";
 import { education, jobs, positions, updates } from "@/content/experience";
 import { avatar, pastimes } from "@/content/life";
-import { projects } from "@/content/projects";
-import { currentWork, papers } from "@/content/research";
+import { findProject, projects } from "@/content/projects";
+import { findResearch, papers } from "@/content/research";
 import { social } from "@/content/site";
 import { url } from "@/lib/site";
+
+// the news: the two newest items with a picture lead, then the next ones as a list, each page linked once
+const lead = updates.filter((u) => u.pic).slice(0, 2);
+const linked = new Set(lead.map((u) => u.href));
+const list = updates.filter((u) => !lead.includes(u) && !(u.href && linked.has(u.href))).slice(0, 6);
+/** what a news item is about, from the page it links to: "XR capstone", "XR World Models" */
+const about = (href?: string) => {
+  const m = href?.match(/^\/(projects|research)\/([^/]+)\/$/);
+  if (!m) return "";
+  return m[1] === "projects" ? (findProject(m[2])?.name ?? "") : (findResearch(m[2])?.short ?? "");
+};
 
 export default function Home() {
   const school = education[0];
@@ -26,10 +36,6 @@ export default function Home() {
           <div className="wrap">
             <div className="hero-text hero__in">
               <div>
-                <a className="pill" href={url("/research/hmitl/")}>
-                  <span>New</span>
-                  <span className="muted">HMITL is published at IEEE ICHI 2026</span>
-                </a>
                 <h1 id="hero-h">
                   <span className="h1-face">
                     <Picture pic={avatar} sizes="80px" eager />
@@ -96,31 +102,29 @@ export default function Home() {
 
         <section className="section" id="now" aria-labelledby="now-h">
           <div className="wrap">
-            <SectionHead id="now-h" title="Current research." run="Two projects in progress, and the news." mark="近况" />
+            <SectionHead id="now-h" title="News." run="What is happening now, newest first." mark="近况" />
             <div className="grid now-grid">
-              {currentWork.slice(0, 2).map((w) => (
-                <a key={w.slug} className="tile span-4" href={url(`/research/${w.slug}/`)}>
-                  <div className={`tile__media${w.figure ? "" : " tile__media--diagram"}`}>
-                    {w.figure ? (
-                      <Picture pic={w.figure} sizes="(max-width: 639px) 342px, (max-width: 1023px) 50vw, 410px" />
-                    ) : w.diagram ? (
-                      <Diagram id={w.diagram} />
-                    ) : null}
-                  </div>
-                  <div className="tile__words">
-                    <p className="tile__meta">
-                      <span>{w.institution}</span>
-                      {w.period && <span>Since {w.period.split(" to ")[0]}</span>}
-                    </p>
-                    <h3 className="tile__title">{w.tile?.title ?? w.h1}</h3>
-                    <p className="tile__line">{w.tile?.line ?? w.summary}</p>
-                  </div>
-                </a>
-              ))}
+              {lead.map((u) => {
+                const Item = u.href ? "a" : "div";
+                return (
+                  <Item key={u.what} className="tile span-4" {...(u.href ? { href: url(u.href) } : {})}>
+                    <div className="tile__media">
+                      <Picture pic={u.pic!} sizes="(max-width: 639px) 342px, (max-width: 1023px) 50vw, 410px" />
+                    </div>
+                    <div className="tile__words">
+                      <p className="tile__meta">
+                        <span>{u.when}</span>
+                        {about(u.href) && <span>{about(u.href)}</span>}
+                      </p>
+                      <h3 className="tile__title">{u.what}</h3>
+                      {u.line && <p className="tile__line">{u.line}</p>}
+                    </div>
+                  </Item>
+                );
+              })}
               <div className="span-4 updates">
-                <h3 className="updates__title">News</h3>
                 <ol className="updates__list">
-                  {updates.slice(0, 4).map((u) => (
+                  {list.map((u) => (
                     <li key={u.what}>
                       <span className="updates__when">{u.when}</span>
                       {u.href ? (
@@ -168,7 +172,7 @@ export default function Home() {
               <SectionHead
                 id="projects-h"
                 title="Engineering projects"
-                lead="From machine inspections on a Meta Quest 3 to a Toronto transit planner and a sketch-to-face GAN."
+                lead="From equipment audits with Magna on a Meta Quest 3 to a Toronto transit planner and a sketch-to-face GAN."
                 mark="作品"
                 action={
                   <a className="link" href={url("/projects/")}>

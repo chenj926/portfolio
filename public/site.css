@@ -1,23 +1,26 @@
 /*
   Jialuo Chen, page CSS on top of the taste kit (system.css, cards.css, motion.css, layout.css).
   VOICE   exact, unhurried; a researcher's notebook more than a brochure.
-  IDEA    a scroll: 宣纸 by day, 墨 by night, one wintersweet branch, a seal; everything else is type and air.
+  IDEA    a scroll: 宣纸 by day, 墨蓝 by night, one wintersweet branch, a seal; everything else is type and air.
   PICTURE the work itself (figures, demos, his photographs); the branch only in the hero.
   COLOUR  95% neutral paper and ink; wintersweet gold and seal cinnabar in small doses.
   TYPE    Albert Sans for everything, DM Mono for BibTeX, Noto Serif SC for the Chinese marks.
 */
 
-/* ------------------------------------------------------------------ the dark grade (墨), by click */
+/* ------------------------------------------------------------------ the dark grade (墨蓝), by click
+   night ink with blue in it rather than brown, so the page keeps its depth; the paper stays in the words, and
+   wintersweet gold lights the one main button the way a lantern does */
 html { color-scheme: light; }
 html[data-theme="dark"] {
   color-scheme: dark;
-  --p-bg: #141312; --p-surface: #1e1c1a; --p-ink: #ece8e0; --p-muted: #a39e95;
-  --p-accent: #ece8e0; --p-accent-ink: #141312; --p-action: #ece8e0; --p-action-ink: #141312;
-  --p-inv-bg: #ece8e0; --p-inv-surface: #e2ded6; --p-inv-ink: #141312; --p-inv-muted: #5f5a53;
-  --p-inv-accent: #141312; --p-inv-accent-ink: #ece8e0; --p-inv-action: #141312; --p-inv-action-ink: #ece8e0;
+  --p-bg: #141c29; --p-surface: #1c2537; --p-ink: #f0ede6; --p-muted: #aab3c2;
+  --p-accent: #f0ede6; --p-accent-ink: #141c29; --p-action: #f0ede6; --p-action-ink: #141c29;
+  --p-inv-bg: #f0ede6; --p-inv-surface: #e4e0d7; --p-inv-ink: #141c29; --p-inv-muted: #586070;
+  --p-inv-accent: #141c29; --p-inv-accent-ink: #f0ede6; --p-inv-action: #141c29; --p-inv-action-ink: #f0ede6;
 }
 :root { --gold: #9c6a14; --zhu: #b8321f; --plate: #fbfaf7; }
-html[data-theme="dark"] { --gold: #e2b54f; --zhu: #c8432c; --plate: #ece8e0; }
+html[data-theme="dark"] { --gold: #f2c45a; --zhu: #ee5d44; --plate: #ebe7df; }
+html[data-theme="dark"] .btn--primary { --action: var(--gold); --action-ink: #1e1704; }
 
 /* ------------------------------------------------------------------ the seal and marks */
 .seal { position: relative; display: inline-block; flex: none; }
@@ -170,20 +173,28 @@ html[data-theme="dark"] .hero--home { background-image: url("images/hero/dark-wi
   .cred__degree::after { content: ", "; }
 }
 
-/* ------------------------------------------------------------------ the icons in the bar: still at rest,
-   their own colour on hover, like ink taking colour */
+/* ------------------------------------------------------------------ the icons in the bar: in their own colours,
+   and on hover each one hops up on a spring while a soft disc gathers under it */
 .nav__social { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 2px; }
 .nav__social::after { content: ""; width: 1px; height: 20px; margin-left: var(--s-3); background: var(--line); }
-.nav__social a { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; transition: background-color 150ms var(--ease), transform 150ms var(--ease); }
-.nav__social .brand-ic { height: 18px; transition: filter 200ms var(--ease), opacity 200ms var(--ease); }
-@media (hover: hover) and (pointer: fine) {
-  .nav__social .brand-ic { filter: grayscale(1); opacity: .7; }
-  html[data-theme="dark"] .nav__social .brand-ic--ink { filter: invert(0.92) grayscale(1); }
-  .nav__social a:hover { background: color-mix(in oklab, var(--ink) 6%, transparent); transform: translateY(-1px); }
-  .nav__social a:is(:hover, :focus-visible) .brand-ic { filter: none; opacity: 1; }
-  html[data-theme="dark"] .nav__social a:is(:hover, :focus-visible) .brand-ic--ink { filter: invert(0.92) hue-rotate(180deg); }
+.nav__social a {
+  position: relative; width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%;
 }
-.nav__social a:active { transform: scale(0.94); }
+.nav__social a::before {
+  content: ""; position: absolute; inset: 3px; border-radius: 50%; background: color-mix(in oklab, var(--ink) 8%, transparent);
+  transform: scale(0.4); opacity: 0; transition: transform 260ms var(--ease), opacity 200ms var(--ease);
+}
+.nav__social .brand-ic { position: relative; height: 18px; transition: transform 380ms cubic-bezier(.34, 1.56, .64, 1); }
+@media (hover: hover) and (pointer: fine) {
+  .nav__social a:hover::before { transform: scale(1); opacity: 1; }
+  .nav__social a:hover .brand-ic { transform: translateY(-2px) scale(1.14); }
+}
+.nav__social a:focus-visible::before { transform: scale(1); opacity: 1; }
+.nav__social a:active .brand-ic { transform: scale(0.9); transition-duration: 90ms; }
+@media (prefers-reduced-motion: reduce) {
+  .nav__social .brand-ic, .nav__social a::before { transition: none; }
+  .nav__social a:hover .brand-ic { transform: none; }
+}
 @media (min-width: 1024px) and (max-width: 1279px) { .nav__social a { width: 32px; } .nav__social::after { margin-left: var(--s-2); } }
 /* the phone's sheet: the icons in a row over the buttons */
 @media (max-width: 1023px) {
@@ -244,11 +255,21 @@ a.tile .tile__media > .diagram { transition: transform 600ms var(--ease); }
 .dg-figure { font-size: 76px; font-weight: 500; letter-spacing: -0.04em; fill: var(--ink); }
 .dg-row { fill: var(--bg); stroke: color-mix(in oklab, var(--ink) 24%, transparent); stroke-width: 1; }
 .dg-row--open { fill: color-mix(in oklab, var(--gold) 12%, var(--bg)); stroke: var(--gold); stroke-width: 1.4; }
+/* the steering study's dot plot: the baseline's noise band, quiet gridlines, the steering runs in gold */
+.dg-band { fill: color-mix(in oklab, var(--gold) 13%, transparent); }
+html[data-theme="dark"] .dg-band { fill: color-mix(in oklab, var(--ink) 8%, transparent); }
+html[data-theme="dark"] .rwin .dg-band { fill: color-mix(in oklab, var(--gold) 13%, transparent); }
+.dg-grid { stroke: color-mix(in oklab, var(--ink) 10%, transparent); stroke-width: 1; }
+.dg-base { stroke: color-mix(in oklab, var(--ink) 55%, transparent); stroke-width: 1.2; stroke-dasharray: 3 3; }
+.dg-label--row { font-size: 13px; }
+.dg-dot { fill: var(--ink); stroke: var(--bg); stroke-width: 2; }
+.dg-dot--key { fill: var(--gold); }
+.dg-dot--ctl { fill: color-mix(in oklab, var(--ink) 45%, var(--bg)); }
+.rwin--diagram .dg-dot { stroke: #fbfaf7; }
 
 /* ------------------------------------------------------------------ now */
 .now-grid { row-gap: var(--s-8); }
 .updates { display: grid; align-content: start; gap: var(--s-4); }
-.updates__title { margin: 0; font-size: var(--t-card, 20px); font-weight: 500; }
 .updates__list { list-style: none; margin: 0; padding: 0; }
 .updates__list li { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: var(--s-4); padding: 14px 0; border-top: 1px solid var(--line); }
 .updates__list li:last-child { border-bottom: 1px solid var(--line); }
@@ -533,8 +554,14 @@ html[data-theme="dark"] :is(.toolkit__ic, .entry__mark, .lab__plate) .brand-ic--
 .news__photo { margin: 0; position: relative; width: 100%; height: min(540px, calc(100vh - 340px)); border-radius: var(--r-lg); overflow: hidden; }
 .news__photo > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .news__list { list-style: none; margin: 0; padding: 0; }
-.news__list li { display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: var(--s-4); padding: 11px 0; border-top: 1px solid var(--line); font-size: 16px; line-height: 1.45; }
+.news__list li { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: var(--s-3); padding: 11px 0; border-top: 1px solid var(--line); font-size: 15px; line-height: 1.45; }
 .news__list li:last-child { border-bottom: 1px solid var(--line); }
+@media (min-width: 640px) {
+  .news__list--two { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(var(--rows), auto); grid-auto-flow: column; column-gap: var(--gutter, 24px); }
+  .news__list--two li { grid-template-columns: 1fr; gap: 1px; padding: 7px 0 8px; font-size: 15px; line-height: 1.4; }
+  .news__list--two li { border-bottom: 0; }
+  .news__list--two li.news__col-end { border-bottom: 1px solid var(--line); }
+}
 .news__when { font-size: var(--t-small, 14px); color: var(--muted); padding-top: 2px; }
 .news__what { color: var(--ink); text-decoration: none; }
 a.news__what { justify-self: start; background: linear-gradient(currentColor 0 0) 0 100% / 0 1px no-repeat; transition: background-size 150ms var(--ease); }
@@ -638,7 +665,8 @@ a.news__what:is(:hover, :focus-visible) { background-size: 100% 1px; }
   .life-grid__photo { grid-column: auto / span 6; height: auto; aspect-ratio: 4 / 5; }
   .life-grid__photo--painting { grid-column: 1 / -1; aspect-ratio: 4 / 3; }
   .life-grid > .pastimes { grid-column: 1 / -1; }
-  .news__photo { display: block; height: auto; aspect-ratio: 4 / 3; }
+  /* the news list has grown past two phone screens with the portrait under it: the list alone on a phone */
+  .news__photo { display: none; }
   #more .tile__line { display: none; }
 }
 
@@ -655,4 +683,30 @@ a.news__what:is(:hover, :focus-visible) { background-size: 100% 1px; }
   .parts__visual.tile__media--diagram { aspect-ratio: 1; }
   .paper__summary { display: none; }
   .hero--collage .hero__art { min-height: 220px; }
+}
+
+/* ------------------------------------------------------------------ the smaller projects: a two-column list,
+   each with where it came from and its tools on one line, its name (a link to the code) and a line */
+.builds { list-style: none; margin: 0; padding: 0; row-gap: 0; }
+.build { display: grid; align-content: start; gap: 5px; padding: 15px 0 17px; border-top: 1px solid var(--line); }
+.build__top { display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); min-height: 26px; }
+.build .tile__meta { margin: 0; }
+.build__name { margin: 0; font-size: 19px; font-weight: 500; line-height: 1.3; letter-spacing: -0.01em; }
+.build__name a { display: inline-flex; align-items: center; gap: 8px; color: inherit; text-decoration: none; }
+.build__name a .brand-ic { height: 15px; opacity: .55; transition: opacity 150ms var(--ease), transform 200ms var(--ease); }
+@media (hover: hover) and (pointer: fine) {
+  .build__name a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .build__name a:hover .brand-ic { opacity: 1; transform: translateY(-1px); }
+}
+.build__line { margin: 0; font-size: 15px; line-height: 1.5; color: var(--ink); max-width: 64ch; }
+.build__stack { display: inline-flex; align-items: center; gap: 6px; flex: none; }
+.build__ic .brand-ic { height: 16px; }
+.build__ic { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 7px; background: var(--plate); box-shadow: inset 0 0 0 1px var(--line); }
+.build__tag { font-size: 12px; line-height: 1; color: var(--muted); padding: 6px 9px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line); }
+html[data-theme="dark"] .build__ic .brand-ic--ink { filter: none; }
+@media (max-width: 639px) {
+  .build { padding: 8px 0 12px; gap: 0; }
+  .build__name { font-size: 17px; }
+  .build__name a { min-height: 44px; }
+  .build__line { font-size: 14px; }
 }

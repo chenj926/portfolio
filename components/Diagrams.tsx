@@ -49,7 +49,63 @@ const labels = {
   multimodal: "Tables, PDF text through MiniLM and images through CLIP join in one ensemble that scores risk.",
   case: "A $78M market expansion budget; the plan placed first.",
   audit: "The XR capstone: the Quest 3 scans the site once and the workstation builds a labeled 3D map; two AprilTags relocalize each later visit, and an LLM summarizes the spoken notes for each machine.",
+  steering:
+    "GSM8K accuracy of Qwen3-0.6B on all 1,319 test problems: 50.9% without steering, 50.6% and 51.4% with a per-question vector, 51.2% with an averaged vector, and 50.1% to 52.3% for nine random rotations of the vector, nearly all inside one standard error (1.4 points) of the baseline.",
 } as const;
+
+// the hidden-state steering study's runs (github.com/chenj926/reasoning_hidden_state, runs/*_qwen3_full and
+// runs/vanilla_*): GSM8K exact-match accuracy in percent, each run on all 1,319 test problems; dy keeps close dots apart
+const STEER = {
+  base: 50.87,
+  se: 1.38,
+  rows: [
+    { label: "No steering", key: false, runs: [{ v: 50.87, dy: 0 }] },
+    { label: "Per-question vector", key: true, runs: [{ v: 50.57, dy: 0 }, { v: 51.4, dy: 0 }] },
+    { label: "Averaged vector", key: true, runs: [{ v: 51.18, dy: 0 }] },
+    {
+      label: "Random rotations",
+      key: false,
+      runs: [50.11, 50.19, 50.49, 50.64, 51.18, 51.93, 51.93, 52.01, 52.31].map((v, i) => ({ v, dy: [-7, 7, -7, 7, 0, -8, 8, 0, 0][i] })),
+    },
+  ],
+};
+const sx = (v: number) => 146 + (v - 49.5) * 57.7; // 49.5% at x 146 (clear of the row labels), 53% at x 348
+
+function SteeringChart() {
+  const { base, se, rows } = STEER;
+  return (
+    <>
+      <rect x={sx(base - se)} y={30} width={sx(base + se) - sx(base - se)} height={196} rx={6} className="dg-band" />
+      <text x={sx(base - se) + 6} y={22} className="dg-sub">
+        ±1 standard error
+      </text>
+      {[50, 51, 52, 53].map((t) => (
+        <g key={t}>
+          <line x1={sx(t)} x2={sx(t)} y1={30} y2={226} className="dg-grid" />
+          <text x={sx(t)} y={248} textAnchor="middle" className="dg-sub">
+            {t}%
+          </text>
+        </g>
+      ))}
+      <line x1={sx(base)} x2={sx(base)} y1={30} y2={226} className="dg-base" />
+      {rows.map((r, k) => {
+        const y = 60 + k * 48;
+        return (
+          <g key={r.label}>
+            <text x={8} y={y + 5} className="dg-label dg-label--row">
+              {r.label}
+            </text>
+            {r.runs.map((x, i) => (
+              <circle key={i} cx={sx(x.v)} cy={y + x.dy} r={5} className={`dg-dot${r.key ? " dg-dot--key" : k === 3 ? " dg-dot--ctl" : ""}`}>
+                <title>{`${r.label}: ${x.v.toFixed(1)}%`}</title>
+              </circle>
+            ))}
+          </g>
+        );
+      })}
+    </>
+  );
+}
 
 export type DiagramId = keyof typeof labels;
 
@@ -59,6 +115,7 @@ export function Diagram({ id, focus }: { id: DiagramId; focus?: string[] }) {
   return (
     <svg className="diagram" viewBox="0 0 360 270" role="img" aria-label={labels[id]} preserveAspectRatio="xMidYMid meet">
       <Defs />
+      {id === "steering" && <SteeringChart />}
       {id === "roles" && (
         <>
           <B x={8} y={16} w={112} h={50} label="Decision x" sub="chosen" />

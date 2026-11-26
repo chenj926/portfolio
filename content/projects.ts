@@ -47,20 +47,20 @@ export const projects: Project[] = [
   {
     slug: "xr-capstone",
     name: "XR capstone",
-    h1: "XR capstone, machine inspections on a Meta Quest 3",
-    line: "An inspector scans a site once; on later visits the headset labels the machines in view and an LLM summarizes the notes for each.",
+    h1: "XR capstone with Magna, machine audits on a Quest 3",
+    line: "Equipment audits for Magna: scan a site once, and every later visit labels the machines in view and summarizes the notes for each.",
     summary:
-      "My MIE490 capstone with an industry partner: an inspector scans the site once with a Meta Quest 3, and on later visits the headset relocalizes, labels the machines in view, and an LLM summarizes the spoken notes for each machine. I am the technical lead of a team of four, supervised by Prof. Scott Sanner, and wrote the mapping and relocalization pipeline.",
+      "My MIE490 capstone with Magna International: an inspector scans a site once with a Meta Quest 3, and on later visits the headset relocalizes, labels the machines in view and turns the spoken notes into an LLM summary for each machine. In November 2026 the full audit loop ran on site in Magna's 20 × 20 m R&D lab; I am the technical lead of a team of four, supervised by Prof. Scott Sanner, and wrote the mapping and relocalization pipeline.",
     statement:
       "An inspector scans the site once. On every later visit the headset finds its place in the labeled 3D map, names the machines in view, and an LLM turns the spoken notes into a summary for each machine.",
-    card: { k: "My role", v: "Technical lead, team of four" },
+    card: { k: "Magna's R&D lab, November 2026", v: "The full audit loop ran on site" },
     when: "September 2026 to now",
     year: "2026",
     tags: ["AI and ML", "Software"],
     facts: [
-      { label: "Headset", value: "Meta Quest 3" },
-      { label: "Team", value: "Four, as technical lead" },
-      { label: "Supervisor", value: "Prof. Scott Sanner" },
+      { label: "Partner", value: "Magna International" },
+      { label: "On-site test", value: "Magna's 20 × 20 m R&D lab, among robot arms and test equipment" },
+      { label: "Team", value: "Four, as technical lead, with Prof. Scott Sanner" },
       { label: "Benchmark", value: "6 segmenters, 2 namers, 6 datasets" },
     ],
     stepsHeading: "How an inspection runs",
@@ -310,3 +310,75 @@ export const projects: Project[] = [
 ];
 
 export const findProject = (slug: string) => projects.find((p) => p.slug === slug);
+
+/** A smaller build with no page of its own: a course project, a tool, a hackathon dataset. The Projects page
+ *  lists them under the projects, newest first. Each line comes from the repository's README or report. */
+export interface Build {
+  name: string;
+  line: string; // what it is and what it does, one sentence
+  context: string; // where it came from: "MIE262 course project", "My own tool", "Team project"
+  year?: string; // left out where the repository does not show when the work was done
+  stack: { label: string; icon?: string }[];
+  href?: string; // the code; left out where the repository holds other people's personal details
+}
+
+export const builds: Build[] = [
+  {
+    name: "POODR engineering guide",
+    line: "An architecture guide for people and coding agents after Sandi Metz's POODR, with four templates and two Agent Skills tested by evals.",
+    context: "My own guide",
+    year: "2026",
+    stack: [{ label: "Agent Skills" }, { label: "Python", icon: "python" }],
+    href: "https://github.com/chenj926/poodr-engineering-guide",
+  },
+  {
+    name: "Local Model API Runner",
+    line: "Sends a prompt file and local text, code or PDF files to OpenAI-compatible chat APIs, saves each reply and continues saved chats.",
+    context: "My own tool",
+    year: "2026",
+    stack: [{ label: "Python", icon: "python" }],
+    href: "https://github.com/chenj926/local-model-api-runner",
+  },
+  {
+    name: "SkinMatch",
+    line: "A skincare web app whose skin-type test matches products to a user's skin type and concerns, with ingredients, alternatives and reviews.",
+    context: "Team project",
+    year: "2025",
+    stack: [{ label: "Java", icon: "java" }, { label: "Spring", icon: "spring" }, { label: "React", icon: "react" }],
+    href: "https://github.com/chenj926/skinMatch",
+  },
+  {
+    name: "A* routes for cyclists",
+    line: "Cycling routes on OpenStreetMap maps of Toronto by A*, uniform-cost, greedy, BFS and DFS search, costed by distance, bike lanes and collisions.",
+    context: "Course project",
+    stack: [{ label: "Java", icon: "java" }, { label: "OpenStreetMap", icon: "openstreetmap" }],
+    href: "https://github.com/chenj926/AStar",
+  },
+  {
+    name: "Background darkness and reading time",
+    line: "24 readers each read at 0%, 40% and 80% background darkness; a repeated-measures ANOVA tested the effect on reading time.",
+    context: "MIE237 course project",
+    stack: [{ label: "R", icon: "r" }],
+  },
+  {
+    name: "Warp shoe production plan",
+    line: "A linear and integer program in AMPL, solved with Gurobi, for a shoe maker's monthly production plan; written with Tianhao Huang.",
+    context: "MIE262 course project",
+    stack: [{ label: "AMPL" }, { label: "Gurobi" }],
+  },
+  {
+    name: "Travelling salesman heuristics",
+    line: "Nearest-neighbour, first-last and node-insertion heuristics for the travelling salesman problem, compared on cost, time and success rate.",
+    context: "MIE250 course project",
+    stack: [{ label: "Java", icon: "java" }],
+    href: "https://github.com/chenj926/Travelling_Salesman",
+  },
+  {
+    name: "Canadian food prices, March 2024",
+    line: "Statistics Canada food prices for March 2024, cleaned into one table for a food-insecurity hackathon.",
+    context: "Hackathon dataset",
+    year: "2024",
+    stack: [{ label: "Python", icon: "python" }, { label: "pandas", icon: "pandas" }, { label: "Jupyter", icon: "jupyter" }],
+    href: "https://github.com/chenj926/Cleaned_Food_Price_For_2024_March",
+  },
+];

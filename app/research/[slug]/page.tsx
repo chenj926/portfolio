@@ -40,7 +40,9 @@ export default async function ResearchItem({ params }: Params) {
   const since = r.period?.split(" to ")[0];
   const where = [r.institution, r.advisor && `with ${r.advisor}`].filter(Boolean).join(", ");
   const [first, second] = r.links;
-  const others = research.filter((x) => x.slug !== r.slug);
+  // the next three entries after this one, round the list
+  const at = research.indexOf(r);
+  const others = [1, 2, 3].map((k) => research[(at + k) % research.length]);
   const tall = !!r.figure && r.figure.h > r.figure.w * 1.15;
   const cut = r.summary.search(/\.\s/);
   const lead = cut > 0 ? [r.summary.slice(0, cut + 1), r.summary.slice(cut + 2)] : [r.summary, ""];
@@ -56,7 +58,7 @@ export default async function ResearchItem({ params }: Params) {
               <div className="hero__text span-5">
                 <p className="hero__kicker">
                   <span className="dot" aria-hidden="true" />
-                  {paper ? (r.status.includes(r.year) ? r.status : `${r.status}, ${r.year}`) : `${r.status}, since ${since}`}
+                  {paper ? (r.status.includes(r.year) ? r.status : `${r.status}, ${r.year}`) : r.kind === "study" ? r.status : `${r.status}, since ${since}`}
                 </p>
                 <h1 id="hero-h">{r.h1}</h1>
                 <p className="hero__lead">

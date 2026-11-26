@@ -4,6 +4,7 @@
    not dealt to software pages): the marquee's track runs past the container
    and is cut at rest · the home's palette, type, nav, close and footer. */
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import { SiteFooter, SiteHeader } from "@/components/Chrome";
 import { SectionHead } from "@/components/Blocks";
 import { Picture } from "@/components/Media";
@@ -17,6 +18,9 @@ export const metadata: Metadata = {
   description:
     "About Jialuo (Eric) Chen, AI researcher and engineer at the University of Toronto: the guqin, oil portraits, tennis and the news from his research and work since 2025.",
 };
+
+// the news in two columns of this many rows
+const ROWS = Math.ceil(updates.length / 2);
 
 export default function AboutPage() {
   const [guqin, ...rest] = pastimes;
@@ -74,9 +78,10 @@ export default function AboutPage() {
           <div className="wrap">
             <SectionHead id="news-h" title="News." run="Research, work and awards since 2025." mark="纪事" />
             <div className="grid news">
-              <ol className="span-6 news__list">
-                {updates.map((u) => (
-                  <li key={u.what}>
+              {/* one list in two columns, newest first down the left and on down the right; the rows line up */}
+              <ol className="span-6 news__list news__list--two" style={{ "--rows": ROWS } as CSSProperties}>
+                {updates.map((u, i) => (
+                  <li key={u.what} className={i === ROWS - 1 ? "news__col-end" : undefined}>
                     <span className="news__when">{u.when}</span>
                     {u.href ? (
                       <a className="news__what" href={url(u.href)}>

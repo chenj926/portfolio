@@ -1,7 +1,7 @@
 // The header and the closing footer every page shares (system.md: one fixed opaque bar; footer.closing =
 // the dealt close, close-type, over the footer columns).
 import { mailto, nav, person, social } from "@/content/site";
-import { currentWork, papers, statusLine } from "@/content/research";
+import { currentWork, papers, statusLine, studies } from "@/content/research";
 import { projects } from "@/content/projects";
 import { url } from "@/lib/site";
 import { Arrow, Icon, Picture, Seal } from "./Media";
@@ -138,7 +138,7 @@ export function SiteFooter() {
             <div className="span-2 footer__col">
               <h3>Research</h3>
               <ul>
-                {[...papers, ...currentWork].map((r) => (
+                {[...papers, ...currentWork, ...studies].map((r) => (
                   <li key={r.slug}>
                     <a href={url(`/research/${r.slug}/`)}>{r.short}</a>
                   </li>

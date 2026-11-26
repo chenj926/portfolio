@@ -5,7 +5,7 @@ import { WintersweetPainter, type Theme } from "../lib/painter.ts";
 
 const out = process.argv[2] ?? "public/images/hero";
 mkdirSync(out, { recursive: true });
-const BG: Record<Theme, string> = { light: "#F4F3EF", dark: "#141312" };
+const BG: Record<Theme, string> = { light: "#F4F3EF", dark: "#141C29" };
 // the wide poster keeps the branch clear of the hero's foot band as the page lays it out at 1440 x 900 (its top
 // at y 604 and its right end at x 1154, both with the page's 24px gap); the live canvas measures the band itself
 const sizes: [string, number, number, number, number][] = [["wide", 1440, 900, 604, 1154], ["tall", 390, 844, 0, 0]];

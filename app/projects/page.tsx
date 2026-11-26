@@ -8,13 +8,13 @@ import { h, SectionHead } from "@/components/Blocks";
 import { Diagram } from "@/components/Diagrams";
 import { Icon, Picture } from "@/components/Media";
 import { toolkit, methods } from "@/content/life";
-import { findProject, projects, type Project } from "@/content/projects";
+import { builds, findProject, projects, type Project } from "@/content/projects";
 import { url } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Projects: Jialuo Chen, AI researcher and engineer",
   description:
-    "Projects by Jialuo (Eric) Chen: an XR capstone on a Meta Quest 3, NeuroCommute, ADHD Scholarship Copilot, LineToLive, a Multimodal Risk Predictor, a P&G business case and Personal WealthTracker.",
+    "Projects by Jialuo (Eric) Chen: an XR capstone with Magna on a Meta Quest 3, NeuroCommute, ADHD Scholarship Copilot, LineToLive, a Multimodal Risk Predictor, a P&G business case, Personal WealthTracker, and smaller builds from courses, hackathons and his own tools.",
 };
 
 const COUNT: Record<number, string> = { 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine", 10: "Ten" };
@@ -79,8 +79,8 @@ export default function ProjectsPage() {
                   Engineering projects, built and measured
                 </h1>
                 <p className="hero__lead">
-                  An XR system for machine inspections on a Meta Quest 3, a Toronto transit planner, a scholarship copilot for
-                  students with ADHD and four more, with their demos, code and decks where they are public.
+                  An XR system for equipment audits with Magna on a Meta Quest 3, a Toronto transit planner, a scholarship copilot
+                  for students with ADHD and four more, plus smaller builds from courses and hackathons.
                 </p>
                 <div className="btn-row">
                   <a className="btn btn--primary" href="#all">
@@ -130,6 +130,48 @@ export default function ProjectsPage() {
                 ))}
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="section" id="more-builds" aria-labelledby="builds-h">
+          <div className="wrap">
+            <SectionHead id="builds-h" title="Smaller projects." run="Courses, hackathons and my own tools." mark="小品" />
+            <ul className="grid builds">
+              {builds.map((b) => (
+                <li key={b.name} className="span-6 build">
+                  <div className="build__top">
+                    <p className="tile__meta">
+                      <span>{b.context}</span>
+                      {b.year && <span>{b.year}</span>}
+                    </p>
+                    <span className="build__stack">
+                      {b.stack.map((x) =>
+                        x.icon ? (
+                          <span key={x.label} className="build__ic" title={x.label}>
+                            <Icon id={x.icon} size={16} label={x.label} />
+                          </span>
+                        ) : (
+                          <span key={x.label} className="build__tag">
+                            {x.label}
+                          </span>
+                        ),
+                      )}
+                    </span>
+                  </div>
+                  <h3 className="build__name">
+                    {b.href ? (
+                      <a href={b.href} rel="noopener" aria-label={`${b.name}: see the code on GitHub`}>
+                        {b.name}
+                        <Icon id="github" size={15} />
+                      </a>
+                    ) : (
+                      b.name
+                    )}
+                  </h3>
+                  <p className="build__line">{b.line}</p>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 

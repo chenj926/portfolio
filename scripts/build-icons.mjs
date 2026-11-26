@@ -14,7 +14,7 @@ export const ICONS = {
   "google-scholar": "si:siGooglescholar",
   github: "logos:github-icon:ink",
   linkedin: "logos:linkedin-icon",
-  instagram: "logos:instagram-icon",
+  instagram: "si-gradient:siInstagram",
   rednote: "si:siXiaohongshu",
   reddit: "logos:reddit-icon",
   python: "logos:python",
@@ -64,6 +64,13 @@ for (const [name, spec] of Object.entries(ICONS)) {
     const w = ic.width ?? logos.width ?? 256, h = ic.height ?? logos.height ?? 256;
     svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}"${tone ? ' data-ic="ink"' : ""}>${ic.body}</svg>`;
     credits.push({ file: `${name}.svg`, set: "logos (gilbarbara/logos via @iconify-json/logos)", licence: "CC0-1.0", trademark: true });
+  } else if (set === "si-gradient") {
+    // the glyph in the app's own gradient (yellow at the lower left through orange and magenta to blue), as
+    // Instagram's brand pages show it; no colour mark of it exists in either set
+    const ic = si[id];
+    if (!ic) throw new Error(`simple-icons ${id} is missing`);
+    svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><defs><radialGradient id="g" cx="0.3" cy="1.07" r="1.2"><stop offset="0" stop-color="#fdf497"/><stop offset="0.05" stop-color="#fdf497"/><stop offset="0.45" stop-color="#fd5949"/><stop offset="0.6" stop-color="#d6249f"/><stop offset="0.9" stop-color="#285aeb"/></radialGradient></defs><path fill="url(#g)" d="${ic.path}"/></svg>`;
+    credits.push({ file: `${name}.svg`, set: `simple-icons (${ic.title}), in the brand's gradient`, licence: "CC0-1.0", trademark: true });
   } else {
     const ic = si[id];
     if (!ic) throw new Error(`simple-icons ${id} is missing`);
